@@ -1,0 +1,13 @@
+<!-- TEMPLATE INHERITANCE -->
+<!doctype html>
+<html>
+	<head>
+	<title>{% block title%}Flask Basics{% endblock %}</title>
+	<link rel ="stylesheet" href="/static/styles.css">
+	</head>
+
+	<body>
+	{% block content %}{% endblock %}
+	{% block scripts %}{% endblock %}
+	</body>
+</html>
