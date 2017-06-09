@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-list": "^0.8.6",
+    "react-vis": "^1.5.3"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"

@@ -1,0 +1,28 @@
+.Tweet-Header {
+  position: relative;
+  width: inherit;
+  height: 60px;
+  color:white;
+  display: flex;
+}
+
+.Tweet-Header #date {
+  position: absolute;
+  top:5px;
+  right: 30px;
+  opacity: 0.4;
+  font-weight: 300;
+}
+
+.Tweet-Header #avg-sent {
+  position: relative;
+  top:30px;
+  left:20px;
+  opacity: 0.5;
+  font-weight: 300;
+}
+
+.Tweet-Header #color-id-neg {
+  color:red;
+  font-weight: 600;
+}

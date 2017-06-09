@@ -1,0 +1,10 @@
+.Tweets-Container {
+  /*background-color: green;*/
+  margin: 10px;
+  height: 85vh;
+  padding-top: 2.5px;
+}
+
+.Tweets-Container ul {
+  padding:0px;
+}

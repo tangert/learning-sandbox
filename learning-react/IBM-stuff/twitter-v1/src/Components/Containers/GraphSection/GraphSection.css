@@ -1,0 +1,16 @@
+.Graph-Section {
+  order: 2;
+  flex: 1;
+  width: 100%;
+  /*background-color: blue;*/
+  display: flex;
+}
+
+.Graph-Wrapper {
+  order: 3;
+  flex: auto;
+  width: 100%;
+  /*background-color: white;*/
+  color:white;
+
+}
