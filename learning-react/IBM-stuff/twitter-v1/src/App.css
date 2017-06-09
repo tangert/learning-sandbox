@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 2em;
+  padding: 20px;
+  color: white;
+  width: 100%;
+  display: flex;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40px;
+  vertical-align: middle;
+}
+
+.Tweet-Section {
+  background-color: red;
+  float:left;
+  height:100vh;
+  width: 400px;
+}
+
+.Tweet-Header {
+  background-color: blue;
+  height: 100px;
+}
+
+.Tweets-Container {
+  background-color: green;
+  margin: 10px;
+  height: 85vh;
+  padding-top: 2.5px;
+}
+
+.Tweet {
+  background-color: white;
+  margin: 10px;
+  height: 75px;
+}
