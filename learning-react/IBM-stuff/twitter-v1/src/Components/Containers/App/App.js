@@ -6,13 +6,14 @@ import io from 'socket.io-client';
 import { Router, browserHistory } from 'react-router'
 import './App.css';
 
+//Socket that lives on the Express server.
 const socket = io("http://localhost:3001");
 
 class App extends Component {
-
   componentDidMount() {
       fetch('/api')
         .then(res => console.log(JSON.stringify(res.json)));
+
         socket.on('server-connect', function (data) {
           console.log('SHOULD RECEIVE A SERVER EVENT:');
           console.log(data);

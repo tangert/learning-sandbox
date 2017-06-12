@@ -5,7 +5,8 @@ const server = require('http').Server(app);
 var io = require('socket.io')(server, { origins: 'http://localhost:3000'});
 
 io.on('connection', function (socket) {
-  console.log('hello i am a socket');
+  console.log('WE GETTING CONNECTED AYYY LMAO');
+
   socket.emit('server-connect', { isConnected: 'true' });
   socket.on('client-connect', function (data) {
     console.log('SHOULD RECEIVE A CLIENT EVENT');
