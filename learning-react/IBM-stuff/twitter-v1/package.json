@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.3",
     "express": "^4.15.3",
     "foreman": "^2.0.0",
     "marked": "^0.3.6",
@@ -18,8 +19,9 @@
     "react-router-dom": "^4.1.1",
     "react-vis": "^1.5.3",
     "redux": "^3.6.0",
-    "socket.io": "^2.0.2",
-    "socketio": "^1.0.0"
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3",
+    "update": "^0.7.4"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"

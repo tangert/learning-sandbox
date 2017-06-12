@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './Components/Containers/App/App';
-
-//Routing
 import { BrowserRouter, Route } from 'react-router-dom';
-
 import './index.css';
 
 ReactDOM.render(

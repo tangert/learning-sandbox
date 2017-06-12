@@ -2,26 +2,22 @@ import React, { Component } from 'react';
 import TweetsSection from './../TweetsSection/TweetsSection';
 import GraphSection from './../GraphSection/GraphSection';
 import logo from './../../../logo.svg';
+import io from 'socket.io-client';
+import { Router, browserHistory } from 'react-router'
 import './App.css';
 
-// Routing
-import { Router, browserHistory } from 'react-router'
-
+const socket = io("http://localhost:3001");
 
 class App extends Component {
 
-  // const io = require('socket.io-client')
-  // const socket = io()
-
   componentDidMount() {
-  fetch('/api')
-    .then(res => console.log(JSON.stringify(res.json)));
-
-    //
-    // socket.on('server event', function (data) {
-    //   console.log(data);
-    //   socket.emit('client event', { socket: 'io' });
-    // });
+      fetch('/api')
+        .then(res => console.log(JSON.stringify(res.json)));
+        socket.on('server-connect', function (data) {
+          console.log('SHOULD RECEIVE A SERVER EVENT:');
+          console.log(data);
+          socket.emit('client-connect', { connectedToClient: 'true' });
+        });
   }
 
   render() {
