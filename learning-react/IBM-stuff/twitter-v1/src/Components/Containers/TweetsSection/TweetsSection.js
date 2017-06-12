@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TweetHeader from './../../Presentational/TweetHeader/TweetHeader';
-import TweetsContainer from './../TweetsContainer/TweetsContainer';
+import TweetHeader from './../../Presentational/Tweets/TweetHeader/TweetHeader';
+import TweetsContainer from './TweetsContainer/TweetsContainer';
 import './TweetsSection.css';
 
 var TWEET_DATA = [

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tweet from './../../Presentational/Tweet/Tweet';
+import Tweet from './../../../Presentational/Tweets/Tweet/Tweet.js';
 import ReactList from 'react-list';
 import './TweetsContainer.css';
 

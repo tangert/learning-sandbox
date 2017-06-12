@@ -26,7 +26,6 @@ class StockGraph extends Component {
             opacity="0.2"
             fill="none"
             strokeStyle="solid"
-            strokeWidth="1"
             data={[
               {x: 1, y: 10},
               {x: 2, y: 5},
