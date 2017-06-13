@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import App from './Components/Containers/App/App';
-import { BrowserRouter, Route } from 'react-router-dom';
+import Admin from './Components/Containers/Admin/Admin';
+import logo from './logo.svg';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './index.css';
 
+class AppHeader extends Component {
+  render(){
+    return(
+      <div className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+      </div>
+    );
+  }
+}
+
 ReactDOM.render(
-  <BrowserRouter>
+  <Router>
     <div className = "container">
-      <Route path="/" component = { App } />
-      // this is where you'll place the route for the Admin page!
+        <AppHeader/>
+        <Switch>
+          <Route exact path="/" component = { App } />
+          <Route path="/admin" component = { Admin } />
+        </Switch>
     </div>
-  </BrowserRouter>,
+  </Router>,
+
   document.getElementById('root')
 );
