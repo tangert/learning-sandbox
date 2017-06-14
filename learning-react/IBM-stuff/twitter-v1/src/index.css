@@ -1,10 +1,14 @@
 @import "/../../node_modules/react-vis/dist/style";
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Nunito:300|Quicksand|Roboto|Maven+Pro');
+
+html {
+  font-family: 'Maven Pro', sans-serif;
+}
 
 body {
   height:100%;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
 }
 
 .App-header {
@@ -14,13 +18,14 @@ body {
   color: white;
   width: 100%;
   box-shadow: 0px 50px 500px -16px rgba(255,41,41,0.5);
+
+  display: flex;
+  align-items: center;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 50px;
-  vertical-align: middle;
-  margin-top: -10px;
+  height: 35px;
   -webkit-animation: pulsate 5s ease-in-out;
   -webkit-animation-iteration-count: infinite;
 }

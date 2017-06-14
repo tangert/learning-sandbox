@@ -10,7 +10,7 @@
 
   /*display: flex;*/
   display: flex;
-  flex-direction: col;
+  flex-direction: row;
 }
 
 .tweet-container:hover {
@@ -23,9 +23,8 @@
 
 /*LEFT COLUMN OF THE TWEET*/
 .left {
-  /*flex: 1;*/
   order: 1;
-  width: 25%;
+  width: 50px;
 }
 
 .pic {
@@ -45,7 +44,7 @@
 /*RIGHT COLUMN OF THE TWEET*/
 .right {
   /*PARENT FLEX INFO*/
-  /*flex: 4;*/
+  flex: 5;
   order: 2;
 
   /*CHILD FLEX*/
@@ -53,7 +52,7 @@
   flex-direction: column;
   justify-content: flex-start;
 
-  margin-left: 10px;
+  margin-left: 20px;
   margin-right: 10px;
 }
 

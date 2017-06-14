@@ -1,28 +1,79 @@
 .Tweet-Header {
-  position: relative;
-  width: inherit;
-  height: 60px;
+  flex: 1;
+  order: 1;
   color:white;
+
+  /*background-color: blue;*/
+
+  min-height: 75px;
+
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
-.Tweet-Header #date {
-  position: absolute;
-  top:5px;
-  right: 30px;
-  opacity: 0.4;
-  font-weight: 300;
-}
+  .top {
+    /*background-color: red;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-.Tweet-Header #avg-sent {
-  position: relative;
-  top:30px;
-  left:20px;
-  opacity: 0.5;
-  font-weight: 300;
-}
+      .text-wrap {
+        /*background-color: green;*/
+        display: flex;
+        flex-direction: row;
 
-.Tweet-Header #color-id-neg {
-  color:red;
-  font-weight: 600;
-}
+        /*aligns two different text sizes to bottom*/
+        align-items: baseline;
+        justify-content: flex-start;
+      }
+      .twitter-title {
+        font-size: 25px;
+        /*background-color: red;*/
+        font-weight: bold;
+        opacity: 0.8;
+      }
+
+      .date {
+        margin-left: 10px;
+        font-size: 15px;
+
+        /*background-color: red;*/
+        opacity: 0.4;
+        font-weight: 300;
+      }
+
+  .bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-top: -10px;
+    /*background-color: rgba(0,0,0,0.5);*/
+  }
+
+      .avg-sent {
+        order: 1;
+        opacity: 0.5;
+        font-weight: 300;
+      }
+
+      .color-id-neg {
+        margin-left: 5px;
+        order: 2;
+        color:rgb(255, 97, 76);
+        font-weight: 600;
+        opacity: 0.5;
+        transition: 0.25s linear;
+      }
+
+      .color-id-neg:hover {
+        margin-left: 5px;
+        order: 2;
+        color:red;
+        font-weight: 600;
+        opacity: 0.8;
+      }

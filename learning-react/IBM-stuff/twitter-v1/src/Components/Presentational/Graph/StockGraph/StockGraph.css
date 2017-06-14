@@ -1,5 +1,4 @@
-.Stock-Graph {
-  margin-top: 50px;
-  margin-left: 20px;
-  position: relative;
+.chart {
+  padding: 20px;
+  padding-top: 30px;
 }

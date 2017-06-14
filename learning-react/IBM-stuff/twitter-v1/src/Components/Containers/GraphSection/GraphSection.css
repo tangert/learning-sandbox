@@ -1,16 +1,19 @@
 .Graph-Section {
   order: 2;
   flex: 2.5;
-  width: 100%;
+
   /*background-color: blue;*/
   display: flex;
+  flex-direction: column;
+  margin-right: 20px;
 }
 
-.Graph-Wrapper {
-  order: 3;
-  flex: auto;
-  width: 100%;
-  /*background-color: white;*/
+.graph-wrapper {
+  border-radius: 5px;
+  margin: 10px;
+  background-image: linear-gradient(to bottom right, #222 0%, rgba(63,66,54,0.1) 100%);
   color:white;
 
+  display: flex;
+  justify-content: center;
 }
