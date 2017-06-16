@@ -9,12 +9,23 @@ import './App.css';
 const socket = io("http://localhost:3001");
 
 class App extends Component {
+  //place the sentiment and stock data into state and set it on each socket EVENT
 
   componentDidMount() {
         socket.on('server-connect', function (data) {
           console.log('SHOULD RECEIVE A SERVER EVENT:');
           console.log(data);
           socket.emit('client-connect', { connectedToClient: 'true' });
+        });
+
+        socket.on('sentiment-data', function(data){
+          console.log('GETTING SENTIMENT: ');
+          console.log(data);
+        });
+
+        socket.on('stock-data', function(data){
+          console.log('GETTING STOCK: ');
+          console.log(data);
         });
   }
 
