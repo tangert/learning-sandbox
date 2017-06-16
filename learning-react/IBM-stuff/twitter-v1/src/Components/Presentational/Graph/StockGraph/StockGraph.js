@@ -48,7 +48,7 @@ class StockGraph extends Component {
   render(){
     return (
       <div className = "chart">
-      <ReactHighcharts config = {config}></ReactHighcharts>
+        <ReactHighcharts config = {config}></ReactHighcharts>
       </div>
     );
   }
