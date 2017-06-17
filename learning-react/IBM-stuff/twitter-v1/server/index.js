@@ -10,6 +10,14 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3001;
 const server = require('http').Server(app);
 
+//MongoDB
+mongoose.connect('mongodb://localhost/BaneAndOx/');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+  console.log('CONNECTED TO MONGO LOL');
+});
+
 //Socket from client
 var io = require('socket.io')(server, { origins: 'http://localhost:3000'});
 
@@ -23,68 +31,90 @@ io.on('connection', function (socket) {
   });
 });
 
+//Root websocket route
+app.get('/', function (req, res) {
+  res.status(200).send('Web socket connects here.');
+  console.log('WEB SOCKET IS WORKING!!!');
+});
+
 //Root for API
 app.get('/api', function (req, res) {
   res.status(200).send('API is working.');
   console.log('API IS WORKING!!!');
 });
 
-//Generates traffic and populates the client with certain paramters
-//Time is optional to be able to update the sentiment/stock
-//this keeps track of overlapping API requests
+
 var requestSent = false;
-app.post('/api/gen-traffic/:time?/:sentiment/:stock', function (req, res) {
-  res.send(req.params);
+var prevTimeout;
+var pollSentimentData;
+var pollStockData;
 
-  const pollTime = 1000;
+//Traffic generation
+app.use('/api/gen-traffic', function(req, res, next) {
 
-  //If there is a time parameter and no request has already been sent
-  if (req.params.time != null && !requestSent) {
-      console.log('About to start countdown!');
-      //Store a local variable that branches based on whether a request has come in or not
-      requestSent = true;
+  //Generate traffic
+  if (req.method === 'POST') {
+    console.log('About to start countdown!');
+    res.send(req.query);
 
-      //Set appropriate interval with the time (in minutes) param
-      //This will set the end release for when the socket receives server data
-      //1 :TIME
-      // SET THE TIMEOUT
-      const timeout = minutesToMs(req.params.time);
-      let timerIsRunning = true;
+    if (requestSent) {
+      clearInterval(pollSentimentData);
+      clearInterval(pollStockData);
+    }
 
-      //After the allotted period of time, timer no longer runs
-      setTimeout(() => {
-        timerIsRunning = false;
-        requestSent = false;
-      }, timeout);
+    var timerIsRunning = true;
+    const pollTime = 1000;
+    requestSent = true;
 
-      //2 :SENTIMENT
-      const pollSentimentData = setInterval(() => {
-        if (timerIsRunning) {
-          sendSentimentData(Number(req.params.sentiment), 0.5);
-        } else {
-          console.log('DONE!');
-          clearInterval(pollSentimentData);
-        }
-      }, pollTime);
+    var timeout;
+    if (req.query.time != null) {
+      timeout = minutesToMs(Number(req.query.time));
+      console.log('GOT A TIMEOUT OF: ' + timeout);
+      prevTimeout = timeout;
+    } else {
+      timeout = prevTimeout;
+    }
 
-      //3 :STOCK
-      const pollStockData = setInterval(() => {
-        if (timerIsRunning) {
-          sendStockData(Number(req.params.stock));
-        } else {
-          console.log('DONE!');
-          clearInterval(pollStockData);
-        }
-      }, pollTime);
+    //1: TIME
+    setTimeout(() => {
+      timerIsRunning = false;
+      requestSent = false;
+    }, timeout);
 
-  } else if (requestSent) {
-    console.log('API request already in progress. Please wait.\n');
-  } else {
-    //Just update the sentiment/stock otherwise
-    console.log('No time provided. Just updating sentiment and stock.\n');
+    //2: SENTIMENT
+    pollSentimentData = setInterval(() => {
+      if (timerIsRunning) {
+        sendSentimentData(Number(req.query.sentiment), 0.25);
+      } else {
+        console.log('DONE!');
+        clearInterval(pollSentimentData);
+      }
+    }, pollTime);
+
+    //3: STOCK
+    pollStockData = setInterval(() => {
+      if (timerIsRunning) {
+        sendStockData(Number(req.query.stock), 0.25);
+      } else {
+        console.log('DONE!');
+        clearInterval(pollStockData);
+      }
+    }, pollTime);
   }
 
-  //Helper functions
+  //Stop all current traffic
+  else if (req.method === 'DELETE') {
+    console.log('About to stop traffic.');
+    res.send('Stopping traffic.');
+    clearInterval(pollSentimentData);
+    clearInterval(pollStockData);
+  }
+
+  /**********************************************************************/
+  /**********************************************************************/
+  /**********************************************************************/
+
+  //Data transfer functions
   function sendSentimentData(sentiment, percent){
     // SET INTERNAL SENTIMENT RELEASE INTERVAL
     // Query mongo for tweet content whose [SENTIMENT] val is +/- :SENTIMENT
@@ -93,26 +123,55 @@ app.post('/api/gen-traffic/:time?/:sentiment/:stock', function (req, res) {
     var delta = sentiment*percent;
     var calculatedSentiment = getRandomFromRange(sentiment-delta, sentiment+delta);
     console.log('Value: ' + calculatedSentiment + "\n");
-    
-    // Send new tweet as JSON payload (handle, image, content, time) to client to render
-    var payload = {
-      handle: "woopdy woop",
-      image: "image1",
-      content: "Bane and Ox fucking rules",
-      time: Date.now(),
-      sentiment: calculatedSentiment
-    };
 
-    req.app.io.emit('sentiment-data', {key:payload});
+    var handle;
+    var content;
+    var image;
+    var payload;
+
+    //FIXME: the sentiment bug.
+
+    db.collection('TweetHandle').aggregate([{$sample: {size: 1}}],
+        function (err, res) {
+            if (err) return handleError(err);
+            handle = res;
+
+      db.collection('TweetContent').aggregate([{$sample: {size: 1}}],
+          function (err, res) {
+              if (err) return handleError(err);
+              content = res;
+
+          db.collection('Image').aggregate([{$sample: {size: 1}}],
+              function (err, res) {
+                  if (err) return handleError(err);
+                  image = res;
+
+                  // Send new tweet as JSON payload (handle, image, content, time) to client to render
+                  payload = {
+                    handle: handle,
+                    image: image,
+                    content: content,
+                    time: Date.now(),
+                    sentiment: calculatedSentiment
+                  };
+
+                  sendOverSocket('sentiment-data', payload);
+        });
+      });
+    });
   }
 
-  function sendStockData(stock){
+  function sendStockData(stock, percent){
     //SET INTERNAL STOCK RELEASE interval
-    //Simply send over numerical values for the graph to render in real time by adding points
+    //Send over numerical values for the graph to
+    //render in real time by adding points
     console.log('Sending stock data: ' + stock + "\n");
-    req.app.io.emit('stock-data', {key:stock});
+    var delta = stock*percent;
+    var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
+    sendOverSocket('stock-data', calculatedStock);
   }
 
+  //Helper functions
   function minutesToMs (min) {
     return min * 60 * 1000;
   }
@@ -122,22 +181,12 @@ app.post('/api/gen-traffic/:time?/:sentiment/:stock', function (req, res) {
     var time = Math.floor(Math.random()*(max - min) + min);
     return time;
   }
-});
 
-//Add handles to the DB
-app.post('/api/handles', function (req, res) {
-  console.log('Adding handle');
-});
+  function sendOverSocket(socket, payload) {
+    req.app.io.emit(socket, {key:payload});
+    console.log(payload);
+  }
 
-//Add tweets to the DB
-app.post('/api/tweets', function (req, res) {
-  console.log('Adding tweet');
-});
-
-//Root websocket route
-app.get('/', function (req, res) {
-  res.status(200).send('Web socket connects here.');
-  console.log('WEB SOCKET IS WORKING!!!');
 });
 
 server.listen(PORT, () => {
