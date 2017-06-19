@@ -52,6 +52,13 @@ var pollStockData;
 //Traffic generation
 app.use('/api/gen-traffic', function(req, res, next) {
 
+  //Query variables
+  const sent = Number(req.query.sentiment);
+  const sentFlux = Number(req.query.sentFlux);
+  const stock = Number(req.query.stock);
+  const stockFlux = Number(req.query.stockFlux);
+  const time = Number(req.query.time);
+
   //Generate traffic
   if (req.method === 'POST') {
     console.log('About to start countdown!');
@@ -62,13 +69,14 @@ app.use('/api/gen-traffic', function(req, res, next) {
       clearInterval(pollStockData);
     }
 
+    //Local variables
     var timerIsRunning = true;
     const pollTime = 1000;
     requestSent = true;
 
     var timeout;
-    if (req.query.time != null) {
-      timeout = minutesToMs(Number(req.query.time));
+    if (time != null) {
+      timeout = minutesToMs(time);
       console.log('GOT A TIMEOUT OF: ' + timeout);
       prevTimeout = timeout;
     } else {
@@ -82,9 +90,11 @@ app.use('/api/gen-traffic', function(req, res, next) {
     }, timeout);
 
     //2: SENTIMENT
+    //First grab all the data from the DB
+    grabSentimentSensitiveData(sent, sentFlux);
     pollSentimentData = setInterval(() => {
       if (timerIsRunning) {
-        sendSentimentData(Number(req.query.sentiment), 0.25);
+        sendSentimentData(sent);
       } else {
         console.log('DONE!');
         clearInterval(pollSentimentData);
@@ -94,12 +104,12 @@ app.use('/api/gen-traffic', function(req, res, next) {
     //3: STOCK
     pollStockData = setInterval(() => {
       if (timerIsRunning) {
-        sendStockData(Number(req.query.stock), 0.25);
+        sendStockData(stock, stockFlux);
       } else {
         console.log('DONE!');
         clearInterval(pollStockData);
       }
-    }, pollTime);
+    }, pollTime*2);
   }
 
   //Stop all current traffic
@@ -113,73 +123,53 @@ app.use('/api/gen-traffic', function(req, res, next) {
   /**********************************************************************/
   /**********************************************************************/
   /**********************************************************************/
+  //DATA TRANSFER FUNCTIONS
+  var tweet_handles = [];
+  var tweet_contents = [];
+  var images = [];
 
-  //Data transfer functions
-  function sendSentimentData(sentiment, percent){
-    // SET INTERNAL SENTIMENT RELEASE INTERVAL
-    // Query mongo for tweet content whose [SENTIMENT] val is +/- :SENTIMENT
-    // Pull random tweet HANDLE, IMAGE, and pair with CONTENT
-    console.log('Sending sentiment data: ' + sentiment);
-    var delta = sentiment*percent;
-    var calculatedSentiment = getRandomFromRange(sentiment-delta, sentiment+delta);
-    console.log('Value: ' + calculatedSentiment + "\n");
+  function sendSentimentData(sentiment){
+    var handle = getRandomElement(tweet_handles);
+    var content = getRandomElement(tweet_contents);
+    var image = getRandomElement(images);
 
-    var handle;
-    var content;
-    var image;
-    var payload;
+    var payload = {
+      handle: handle["handle"],
+      image: image["link"],
+      content: content["content"],
+      sentiment: content["sentiment"],
+      time: Date.now(),
+    };
 
-    //FIXME: the sentiment bug.
-
-    db.collection('TweetHandle').aggregate([{$sample: {size: 1}}],
-        function (err, res) {
-            if (err) return handleError(err);
-            handle = res;
-
-      db.collection('TweetContent').aggregate([{$sample: {size: 1}}],
-          function (err, res) {
-              if (err) return handleError(err);
-              content = res;
-
-          db.collection('Image').aggregate([{$sample: {size: 1}}],
-              function (err, res) {
-                  if (err) return handleError(err);
-                  image = res;
-
-                  // Send new tweet as JSON payload (handle, image, content, time) to client to render
-                  payload = {
-                    handle: handle,
-                    image: image,
-                    content: content,
-                    time: Date.now(),
-                    sentiment: calculatedSentiment
-                  };
-
-                  sendOverSocket('sentiment-data', payload);
-        });
-      });
-    });
+    sendOverSocket('sentiment-data', payload);
   }
 
   function sendStockData(stock, percent){
-    //SET INTERNAL STOCK RELEASE interval
-    //Send over numerical values for the graph to
-    //render in real time by adding points
-    console.log('Sending stock data: ' + stock + "\n");
     var delta = stock*percent;
     var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
     sendOverSocket('stock-data', calculatedStock);
   }
 
-  //Helper functions
-  function minutesToMs (min) {
-    return min * 60 * 1000;
-  }
+  function grabSentimentSensitiveData(sentiment, flux) {
+    console.log('Sending sentiment data: ' + sentiment);
+    var delta = sentiment*flux;
 
-  function getRandomFromRange(min,max){
-    console.log('Min: ' + min + " :: Max: " + max);
-    var time = Math.floor(Math.random()*(max - min) + min);
-    return time;
+    db.collection('tweet_handles').find({}).toArray().then(function(data){
+      tweet_handles = data;
+    });
+
+    db.collection('tweet_content').find({
+              $and: [
+                { sentiment: { $lte: sentiment+delta } },
+                { sentiment: { $gte: sentiment-delta } }
+                    ]
+              }).toArray().then(function(data){
+                tweet_contents = data;
+    });
+
+    db.collection('images').find({}).toArray().then(function(data){
+      images = data;
+    });
   }
 
   function sendOverSocket(socket, payload) {
@@ -192,5 +182,20 @@ app.use('/api/gen-traffic', function(req, res, next) {
 server.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
 });
+
+//Some useful helper functions
+function getRandomElement(arr) {
+  var rand = arr[Math.floor(Math.random()*arr.length)];
+  return rand;
+}
+
+function minutesToMs(min) {
+  return min * 60 * 1000;
+}
+
+function getRandomFromRange(min,max){
+  var val = Math.floor(Math.random()*(max - min) + min);
+  return val;
+}
 
 module.exports = 'app';

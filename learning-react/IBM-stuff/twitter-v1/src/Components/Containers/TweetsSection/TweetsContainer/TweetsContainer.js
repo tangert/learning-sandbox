@@ -4,6 +4,7 @@ import ReactList from 'react-list';
 import './TweetsContainer.css';
 
 class TweetsContainer extends Component {
+
   state = {
     tweets: this.props.data
   };
@@ -14,9 +15,9 @@ class TweetsContainer extends Component {
 
   renderItem(index, key) {
     return <Tweet key = {key}
-      handle={this.state.tweets[index].handle}
-      time="28m"
-      content={this.state.tweets[index].content}>
+      handle={this.state.tweets[index]["handle"]}
+      time={this.state.tweets[index]["time"]}
+      content={this.state.tweets[index]["content"]}>
     </Tweet>
   }
 

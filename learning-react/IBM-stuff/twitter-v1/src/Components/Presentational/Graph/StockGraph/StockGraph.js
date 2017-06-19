@@ -20,7 +20,7 @@ var config = {
   chart: {
     backgroundColor: "transparent",
     borderColor: "#111111",
-    width: 750
+    renderTo: 'chart'
   },
   colors: ["rgb(255, 97, 76)"],
   credits: false,
@@ -47,8 +47,8 @@ var config = {
 class StockGraph extends Component {
   render(){
     return (
-      <div className = "chart">
-        <ReactHighcharts config = {config}></ReactHighcharts>
+      <div className = "chart-wrapper">
+        <ReactHighcharts id = "chart" config = {config}></ReactHighcharts>
       </div>
     );
   }

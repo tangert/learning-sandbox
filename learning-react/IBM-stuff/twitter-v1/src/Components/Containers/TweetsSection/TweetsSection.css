@@ -1,9 +1,7 @@
 .Tweet-Section {
   order: 1;
-  /*flex: 1;*/
-  min-width: 350px;
-
-  /*background-color: green;*/
+  flex: 1;
+  min-width: 400px;
 
   display: flex;
   flex-direction: column;
