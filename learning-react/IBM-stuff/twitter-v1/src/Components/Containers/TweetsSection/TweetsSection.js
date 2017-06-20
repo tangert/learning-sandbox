@@ -8,7 +8,7 @@ class TweetsSection extends Component {
     return(
       <div className="Tweet-Section">
         <TweetHeader date="June 7,2017" sent="23.33"></TweetHeader>
-        <TweetsContainer data = {this.props.tweet_data}></TweetsContainer>
+        <TweetsContainer tweet_data = {this.props.tweet_data}></TweetsContainer>
       </div>
     );
   }

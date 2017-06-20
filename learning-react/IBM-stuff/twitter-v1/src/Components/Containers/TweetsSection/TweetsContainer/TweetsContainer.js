@@ -5,19 +5,13 @@ import './TweetsContainer.css';
 
 class TweetsContainer extends Component {
 
-  state = {
-    tweets: this.props.data
-  };
-
-  handleTweets(tweets) {
-    this.setState({tweets});
-  }
-
   renderItem(index, key) {
-    return <Tweet key = {key}
-      handle={this.state.tweets[index]["handle"]}
-      time={this.state.tweets[index]["time"]}
-      content={this.state.tweets[index]["content"]}>
+    return <Tweet
+      key = {key}
+      handle={this.props.tweet_data[index]["handle"]}
+      time={this.props.tweet_data[index]["time"]}
+      content={this.props.tweet_data[index]["content"]}
+      sentiment={this.props.tweet_data[index]["sentiment"]}>
     </Tweet>
   }
 
@@ -26,7 +20,7 @@ class TweetsContainer extends Component {
         <div className="Tweets-Container">
           <ReactList
             itemRenderer={this.renderItem.bind(this)}
-            length={this.state.tweets.length}
+            length={this.props.tweet_data.length}
             type='uniform'
             />
         </div>

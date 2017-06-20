@@ -3,8 +3,8 @@ import './Tweet.css';
 
 const Tweet = (props) => {
     return(
-      <div className="tweet-container">
-        <div className = "left">
+      <div className= {"tweet-container " + (props.sentiment < 50 ? 'neg': 'pos')}>
+          <div className = "left">
           <div className="pic"></div>
         </div>
 

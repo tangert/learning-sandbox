@@ -18,11 +18,23 @@ class App extends Component {
         {
           handle: "weep wop",
           content: "bane and ox sucks lol",
-          id: 1
+          sentiment: 25,
+          time: Date.now()
+        },
+        {
+          handle: "weep wop",
+          content: "bane and ox is alirght",
+          sentiment: 50,
+          time: Date.now()
+        },
+        {
+          handle: "weep wop",
+          content: "wow fucking love bane and ox",
+          sentiment: 55,
+          time: Date.now()
         }
       ],
-      stock_points: [
-
+      graph_data: [
       ]
     }
   }
@@ -53,14 +65,15 @@ class App extends Component {
 
   //Event handlers for socket events
   onSentimentData = (data) => {
-    console.log("GOT DATA!: " + data);
-    this.state.tweet_data.push(data);
+    this.setState(previousState => ({
+      tweet_data: [...previousState.tweet_data, data.key]
+    }));
     console.log("TWEET COUNT: \n " + this.state.tweet_data.length);
   }
 
   onStockData = (data) => {
-    console.log("GOT DATA!: " + data);
-    this.state.tweet_data.push(data);
+    console.log("GOT STOCK DATA!: " + data);
+    this.state.stock_points.push(data);
     console.log("NEW STOCK POINT COUNT: \n " + this.state.stock_points.length);
   }
 
@@ -69,7 +82,7 @@ class App extends Component {
       <div className="App">
         <div className="Content">
           <TweetsSection tweet_data = {this.state.tweet_data}/>
-          <GraphSection/>
+          <GraphSection graph_data = {this.state.graph_data}/>
         </div>
       </div>
     );

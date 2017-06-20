@@ -1,4 +1,4 @@
-.tweet-container {
+.tweet-container.neg {
   margin: 10px;
   height: 100px;
   background-image: linear-gradient(135deg, rgba(212,75,60,0.90) 0%, rgba(255,91,91,0.60) 100%);
@@ -13,7 +13,29 @@
   flex-direction: row;
 }
 
-.tweet-container:hover {
+.tweet-container.pos {
+  margin: 10px;
+  height: 100px;
+  background-image: linear-gradient(-135deg, #9FDEF3 0%, rgba(187,248,255,0.50) 100%);
+  border-radius: 8px;
+  color: white;
+  opacity: 0.9;
+
+  transition: 0.25s ease-in-out;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.tweet-container.pos:hover {
+  transform: scale(1.05);
+  margin-bottom:20px;
+  opacity: 1.0;
+  background-color: rgba(158,222,242,0.90);
+  box-shadow: 0 7px 50px 0 rgba(140,219,227,0.16);
+}
+
+.tweet-container.neg:hover {
   transform: scale(1.05);
   margin-bottom:20px;
   opacity: 1.0;
