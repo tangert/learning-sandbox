@@ -1,8 +1,28 @@
 .Tweets-Container {
-  flex: 10;
-  order: 2;
-
-  /*background-color: red;*/
+  order: 1;
   margin: 10px;
-  padding-top: 2.5px;
+  margin-top:-10px;
+  /*background-color: red;*/
+}
+
+.new_tweet-enter {
+  opacity: 0.01;
+  height: 0px;
+}
+
+.new_tweet-enter.example-enter-active {
+  opacity: 1;
+  width: 100px;
+  transition: 700ms;
+}
+
+.new_tweet-leave {
+  opacity: 1;
+  height: 100px;
+}
+
+.new_tweet-leave.example-leave-active {
+  opacity: 0.01;
+  height: 0px;
+  transition: 700ms;
 }

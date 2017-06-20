@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Tweet from './../../../Presentational/Tweets/Tweet/Tweet.js';
 import ReactList from 'react-list';
+import { CSSTransitionGroup } from 'react-transition-group'
 import './TweetsContainer.css';
 
 class TweetsContainer extends Component {
@@ -15,14 +16,28 @@ class TweetsContainer extends Component {
     </Tweet>
   }
 
+  renderGroup = (items, ref) =>
+    <CSSTransitionGroup
+      component='div'
+      ref={ref}
+      transitionName='new_tweet'
+      transitionAppear={true}
+      transitionAppearTimeout={500}
+      transitionEnterTimeout={500}
+    >
+      {items}
+    </CSSTransitionGroup>;
+
   render(){
       return (
-        <div className="Tweets-Container">
+        <div className="Tweets-Container" style={{overflow: 'auto', maxHeight: 750, minHeight: 750}}>
           <ReactList
             itemRenderer={this.renderItem.bind(this)}
-            length={this.props.tweet_data.length}
+            itemsRenderer={this.renderGroup.bind(this)}
+            length={this.props.tweet_data.length*0.75}
             type='uniform'
-            />
+            useTranslate3d="true"
+          />
         </div>
       );
   }

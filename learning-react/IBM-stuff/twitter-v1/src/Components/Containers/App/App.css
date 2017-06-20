@@ -6,15 +6,11 @@
   position: fixed;
 }
 
-/*CONTENT*/
 .Content {
-  /*Flexbox stuff*/
   display: flex;
   flex-direction: row;
 }
 
-
-/*GLOBAL VARIABLES*/
 :root {
   --detail_red: rgb(255, 97, 76);
 }

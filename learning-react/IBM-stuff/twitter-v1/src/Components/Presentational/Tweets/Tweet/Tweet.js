@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Tweet.css';
 
 const Tweet = (props) => {
+  // keep internal timer in state
     return(
       <div className= {"tweet-container " + (props.sentiment < 50 ? 'neg': 'pos')}>
           <div className = "left">

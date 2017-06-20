@@ -4,8 +4,11 @@ import GraphHeader from './../../Presentational/Graph/GraphHeader/GraphHeader';
 import StockGraph from './../../Presentational/Graph/StockGraph/StockGraph';
 
 class GraphSection extends Component {
-
-  componentDidMount() {
+  constructor(props){
+    super(props);
+    this.state = {
+      graph_data: props.graph_data
+    }
   }
 
   render(){
@@ -14,7 +17,7 @@ class GraphSection extends Component {
 
         <GraphHeader/>
         <div className = "graph-wrapper">
-          <StockGraph width = {400} height = {400}/>
+          <StockGraph data = {this.state.graph_data}/>
         </div>
 
         <div className= "More-Viz">

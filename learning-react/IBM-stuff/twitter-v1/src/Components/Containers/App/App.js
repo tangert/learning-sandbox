@@ -9,33 +9,11 @@ import './App.css';
 const socket = io("http://localhost:3001");
 
 class App extends Component {
-  //place the sentiment and stock data into state and set it on each socket EVENT
   constructor(props) {
     super(props)
     this.state ={
-      //some initial tweet data
-      tweet_data: [
-        {
-          handle: "weep wop",
-          content: "bane and ox sucks lol",
-          sentiment: 25,
-          time: Date.now()
-        },
-        {
-          handle: "weep wop",
-          content: "bane and ox is alirght",
-          sentiment: 50,
-          time: Date.now()
-        },
-        {
-          handle: "weep wop",
-          content: "wow fucking love bane and ox",
-          sentiment: 55,
-          time: Date.now()
-        }
-      ],
-      graph_data: [
-      ]
+      tweet_data: [],
+      graph_data: []
     }
   }
 
@@ -59,22 +37,23 @@ class App extends Component {
         }.bind(this));
   }
 
-  //FIXME: 1. actually learn how to render the data.
-  // Learn how to pass down changes in state and propogate to each rendered component
-  // Implement Redux.
+  //FIXME: Implement Redux.
 
   //Event handlers for socket events
   onSentimentData = (data) => {
     this.setState(previousState => ({
-      tweet_data: [...previousState.tweet_data, data.key]
+      tweet_data: [data.key, ...previousState.tweet_data]
     }));
     console.log("TWEET COUNT: \n " + this.state.tweet_data.length);
   }
 
   onStockData = (data) => {
-    console.log("GOT STOCK DATA!: " + data);
-    this.state.stock_points.push(data);
-    console.log("NEW STOCK POINT COUNT: \n " + this.state.stock_points.length);
+    this.setState(previousState => ({
+      graph_data: [...previousState.graph_data, data.key]
+    }));
+    console.log(this.state);
+    console.log("NEW STOCK POINT COUNT: \n " + this.state.graph_data.length);
+    console.log("NEW POINT: " + this.state.graph_data[this.state.graph_data.length-1]);
   }
 
   render() {
