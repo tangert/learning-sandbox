@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactHighcharts from 'react-highcharts';
-// import Highstock from 'react-highstock';
 import './StockGraph.css';
 
 
@@ -21,45 +20,82 @@ class StockGraph extends Component {
           }
         }],
         chart: {
-          type: 'area',
+          // type: 'spline',
           backgroundColor: "transparent",
           borderColor: "#111111",
           renderTo: 'chart',
-          height: "parentHeight",
         },
         colors: ["rgb(255, 97, 76)"],
         credits: false,
-        yAxis: {
-          gridLineColor: "rgba(255,255,255,0.1)",
-          gridLineDashStyle: "longdash",
-          title: {
-            enabled: false
-          },
-          tickAmount: 8
-        },
         xAxis: {
-          lineColor: "transparent",
-          tickColor: "transparent",
-          title: {
-            enabled: false
-          },
-          series: [{
-              name: 'BAO Stock Data',
-          }]
-        }
+            labels: {
+                align: 'center',
+                style: {
+                    color: '#999',
+                    fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+                    fontSize: '16px'
+                },
+                y: 30,
+            },
+            lineColor: 'rgba(255,255,255,0.2)',
+            minRange: 10 * 1000,
+            tickLength: 20,
+            tickInterval: 10000,
+            type: 'datetime',
+        },
+        yAxis: {
+            gridLineWidth: 0,
+            labels: {
+                style: {
+                    color: '#999',
+                    fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+                    fontSize: '16px',
+                },
+                x: -15,
+                y: 5
+            },
+            lineColor: 'rgba(255,255,255,0.2)',
+            lineWidth: 1,
+            min: 0,
+            max: 100,
+            tickColor: '#757575',
+            tickLength: 10,
+            tickWidth: 1,
+            title: {
+                text: null
+            }
+        },
+        series: [{
+            name: 'BAO Stock Data',
+        },
+        {
+            name: 'BAO Twitter Sentiment',
+        }]
       }
     }
   }
   componentDidMount() {
     console.log(this.props.graph_data);
-    var counter = 0;
     var chart = this.refs.chart.getChart();
     const data = this.props.graph_data;
+
     setInterval(function(){
       console.log(this.props.graph_data);
-      counter+=10;
-      chart.series[0].addPoint({x: counter, y: this.props.graph_data[this.props.graph_data.length-1]});
+      const data = this.props.graph_data;
+      const last = data.length-1;
+
+      const x = data[last].timeStamp;
+      const y =  data[last].point;
+
+      const shiftFlag =  chart.series[0].data.length > 10;
+      const point = [x,y];
+      chart.series[0].addPoint(point, false, shiftFlag);
+
+      //this allows the x axis to move
+      chart.xAxis[0].setExtremes(x - 10000, x, false);
+      chart.redraw();
     }.bind(this),2000);
+
   }
 
   render(){

@@ -76,3 +76,20 @@
         font-weight: 600;
         opacity: 0.8;
       }
+
+      .color-id-pos {
+        margin-left: 5px;
+        order: 2;
+        color:rgba(187,248,255,0.50);
+        font-weight: 600;
+        opacity: 0.5;
+        transition: 0.25s linear;
+      }
+
+      .color-id-pos:hover {
+        margin-left: 5px;
+        order: 2;
+        color:rgba(187,248,255,1);
+        font-weight: 600;
+        opacity: 0.8;
+      }

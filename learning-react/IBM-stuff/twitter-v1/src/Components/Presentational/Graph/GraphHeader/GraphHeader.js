@@ -1,12 +1,31 @@
 import React, { Component } from 'react';
+import AnimatedNumber from 'react-animated-number';
 import './GraphHeader.css';
 
-/*
-<div className = "detail current-stock">{this.props.currentStock}</div>
-<div className = "detail separator">|</div>
-<div className = "detail price-delta">{this.props.priceDelta}</div>
-<div className = "detail percent-delta">{this.props.percentDelta}%</div>
-*/
+class Clock extends React.Component {
+  constructor(props){
+    super(props);
+    const initialTime = new Date().toLocaleTimeString();
+    this.state = {
+      time: initialTime
+    }
+  }
+
+  componentDidMount(){
+    setInterval(function(){
+      const newTime = new Date().toLocaleTimeString();
+      this.setState({time: newTime});
+    }.bind(this), 1000);
+  }
+
+  render() {
+    return (
+      <div className="current-time">
+        {this.state.time}
+      </div>
+    );
+  }
+}
 
 class GraphHeader extends Component {
   render(){
@@ -16,14 +35,38 @@ class GraphHeader extends Component {
           <h1 className="stock-title">BAO
             <span className="title-detail"> Live Feed</span>
           </h1>
-          <p className="current-time">11:02:31 AM</p>
+          <Clock/>
         </div>
 
         <div className="bottom">
-          <div className = "detail current-stock">16.32</div>
-          <div className = "detail separator">|</div>
-          <div className = "detail price-delta">133.68</div>
-          <div className = "detail percent-delta">89.91%</div>
+            <div className = "detail current-stock">
+                <AnimatedNumber
+                  component="text"
+                  value={this.props.currentStock}
+                  stepPrecision={0}
+                  duration={300}
+                  />
+            </div>
+
+            <div className = "detail separator">|</div>
+
+            <div className = "detail price-delta">
+              <AnimatedNumber
+                component="text"
+                value={this.props.priceDelta}
+                stepPrecision={0}
+                duration={300}
+                />
+            </div>
+
+            <div className = "detail percent-delta">
+              <AnimatedNumber
+                component="text"
+                value={this.props.percentDelta}
+                stepPrecision={0}
+                duration={300}
+                />%
+            </div>
         </div>
       </div>
     )

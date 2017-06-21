@@ -3,14 +3,16 @@
   flex-direction: column;
   margin-left: 10px;
   margin-right: 10px;
+  width: auto;
+  /*background-color: red;*/
 }
 
   .Graph-Header .top {
-    /*background-color: red;*/
     display: flex;
     flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
+    /*background-color: green;*/
 
     color: white;
   }

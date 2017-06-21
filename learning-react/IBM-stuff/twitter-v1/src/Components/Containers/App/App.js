@@ -20,19 +20,16 @@ class App extends Component {
   componentDidMount() {
         socket.on('server-connect', function (data) {
           console.log('SHOULD RECEIVE A SERVER EVENT:');
-          console.log(data);
           socket.emit('client-connect', { connectedToClient: 'true' });
         }.bind(this));
 
         socket.on('sentiment-data', function(data){
           console.log('GETTING SENTIMENT: ');
-          console.log(data);
           this.onSentimentData(data);
         }.bind(this));
 
         socket.on('stock-data', function(data){
           console.log('GETTING STOCK: ');
-          console.log(data);
           this.onStockData(data);
         }.bind(this));
   }
@@ -48,8 +45,9 @@ class App extends Component {
   }
 
   onStockData = (data) => {
+    var newTime = new Date().getTime();
     this.setState(previousState => ({
-      graph_data: [...previousState.graph_data, data.key]
+      graph_data: [...previousState.graph_data, {point: data.key, timeStamp: newTime} ]
     }));
     console.log(this.state);
     console.log("NEW STOCK POINT COUNT: \n " + this.state.graph_data.length);

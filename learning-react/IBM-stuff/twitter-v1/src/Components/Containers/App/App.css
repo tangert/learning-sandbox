@@ -6,11 +6,9 @@
   position: fixed;
 }
 
+/*CONTENT*/
 .Content {
+  /*Flexbox stuff*/
   display: flex;
   flex-direction: row;
-}
-
-:root {
-  --detail_red: rgb(255, 97, 76);
 }
