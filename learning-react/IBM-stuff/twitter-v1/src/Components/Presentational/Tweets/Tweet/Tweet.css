@@ -1,3 +1,8 @@
+.test {
+  width: 100px;
+  background-color: white;
+}
+
 .tweet-container.neg {
   margin: 10px;
   min-height: 100px;
@@ -41,6 +46,26 @@
   opacity: 1.0;
   background-color: rgba(212,75,60,0.90);
   box-shadow: 0 7px 40px 0 rgba(188,70,70,0.50);
+}
+
+/*ANIMATIONS*/
+.new-enter {
+  opacity: 0.01;
+}
+
+.new-enter.example-enter-active {
+  opacity: 1;
+  transition: 0.2 linear;
+}
+
+.new-leave {
+  opacity: 1;
+  height: 100px;
+}
+
+.new-leave.example-leave-active {
+  opacity: 0.01;
+  transition: 0.2 linear;
 }
 
 /*LEFT COLUMN OF THE TWEET*/

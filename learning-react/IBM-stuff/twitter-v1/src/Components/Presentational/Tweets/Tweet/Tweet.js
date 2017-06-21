@@ -1,26 +1,52 @@
 import React, { Component } from 'react';
+import { CSSTransitionGroup } from 'react-transition-group'
 import './Tweet.css';
 
-const Tweet = (props) => {
-  // keep internal timer in state
-    return(
-      <div className= {"tweet-container " + (props.sentiment < 50 ? 'neg': 'pos')}>
-          <div className = "left">
-          <div className="pic"></div>
-        </div>
+class Tweet extends Component {
+    constructor(props){
+      super(props);
+      this.state = {};
+    }
 
-        <div className = "right">
-          <div className = "top-wrapper">
-            <h1 className ="handle">@{props.handle}</h1>
-            <p className="time">{props.time}</p>
-          </div>
+    componentWillMount(){
+      console.log("ABOUT TO MOUNT");
+    }
 
-          <div className = "bottom-wrapper">
-            <p className="tweet-content">{props.content}</p>
-          </div>
-        </div>
+    componentDidMount(){
+      console.log("TWEET MOUNTED");
+    }
+    //<div className = "test">WOOOO</div>
+    render(){
+      return(
+      <div>
+          <CSSTransitionGroup
+             transitionName="new"
+             transitionEnterTimeout={250}
+             transitionLeaveTimeout={250}
+             transitionAppear={true}
+             >
+             {
+               <div className= {"tweet-container " + (this.props.sentiment < 50 ? 'neg': 'pos')}>
+                   <div className = "left">
+                   <div className="pic"></div>
+                 </div>
+
+                 <div className = "right">
+                   <div className = "top-wrapper">
+                     <h1 className ="handle">@{this.props.handle}</h1>
+                     <p className="time">{this.props.time}</p>
+                   </div>
+
+                   <div className = "bottom-wrapper">
+                     <p className="tweet-content">{this.props.content}</p>
+                   </div>
+                 </div>
+               </div>
+             }
+        </CSSTransitionGroup>
       </div>
-    )
+    );
+  }
 };
 
 export default Tweet;
