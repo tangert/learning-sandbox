@@ -8,7 +8,6 @@ class StockGraph extends Component {
   constructor(props){
     super(props);
     this.state = {
-      graph_data: props.graph_data,
       config: {
         rangeSelector: {
           selected: 1
@@ -49,24 +48,24 @@ class StockGraph extends Component {
           }]
         }
       }
-    };
+    }
+  }
+  componentDidMount() {
+    console.log(this.props.graph_data);
+    var counter = 0;
+    var chart = this.refs.chart.getChart();
+    const data = this.props.graph_data;
+    setInterval(function(){
+      console.log(this.props.graph_data);
+      counter+=10;
+      chart.series[0].addPoint({x: counter, y: this.props.graph_data[this.props.graph_data.length-1]});
+    }.bind(this),2000);
   }
 
   render(){
-    var data = this.state["graph_data"];
-
-    const afterRender = (chart) => {
-      console.log("COMING FROM STOCK GRAPH" + this.state.graph_data);
-      var counter = 0;
-      setInterval(function(){
-        counter+=10;
-        chart.series[0].addPoint({x: counter, y: Math.random()*50});
-      },2000);
-    }
-
     return (
       <div id = "chartId" >
-        <ReactHighcharts ref="chart" callback = {afterRender} config = {this.state.config} isPureConfig="true" domProps = {{id: 'chartId'}}></ReactHighcharts>
+        <ReactHighcharts ref="chart" config = {this.state.config} isPureConfig="true" domProps = {{id: 'chartId'}}></ReactHighcharts>
       </div>
     );
   }

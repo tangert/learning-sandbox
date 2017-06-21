@@ -53,7 +53,6 @@ class App extends Component {
     }));
     console.log(this.state);
     console.log("NEW STOCK POINT COUNT: \n " + this.state.graph_data.length);
-    console.log("NEW POINT: " + this.state.graph_data[this.state.graph_data.length-1]);
   }
 
   render() {
