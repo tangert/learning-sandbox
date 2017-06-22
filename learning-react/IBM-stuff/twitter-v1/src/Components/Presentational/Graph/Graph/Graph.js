@@ -99,24 +99,26 @@ class Graph extends Component {
       var chart = this.refs.chart.getChart();
       setInterval(function(){
         try {
+          //Stock data
           const graph_data = this.props.graph_data;
           const last_graph_point = graph_data.length-1;
-          const x1 = graph_data[last_graph_point].timeStamp;
-          const y1 =  graph_data[last_graph_point].point;
+          const stock_x = graph_data[last_graph_point].timeStamp;
+          const stock_y =  graph_data[last_graph_point].point;
 
+          //Tweet data
           const tweet_data = this.props.tweet_data;
-          const x2 = tweet_data[0].time;
-          const y2 = tweet_data[0].sentiment;
+          const tweet_x = tweet_data[0].time;
+          const tweet_y = tweet_data[0].sentiment;
 
-          const shiftFlag =  chart.series[0].data.length > 100;
-          const shiftFlagTweets =  chart.series[1].data.length > 100;
+          const shiftFlagStock =  chart.series[0].data.length > 100;
+          const shiftFlagTweet =  chart.series[1].data.length > 100;
 
-          const point1 = [x1,y1];
-          const point2 = [x2,y2];
+          const stock_point = [stock_x,stock_y];
+          const tweet_point = [tweet_x,tweet_y];
 
           //Object options, (bool) Redraw, (bool) Shift
-          chart.series[0].addPoint(point1, false, shiftFlag);
-          chart.series[1].addPoint(point2, false, shiftFlagTweets);
+          chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+          chart.series[1].addPoint(tweet_point, false, shiftFlagTweet);
 
           chart.redraw();
         } catch(e) {

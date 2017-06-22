@@ -27,7 +27,13 @@ class TweetHeader extends Component {
   componentDidMount(){
     console.log(this.state);
     setInterval(function(){
-      this.computeAverage();
+      try {
+        this.computeAverage();
+      }
+      catch(e) {
+        console.log(e);
+        console.log("Wait for sentiment data");
+      }
     }.bind(this),1000);
   }
 
