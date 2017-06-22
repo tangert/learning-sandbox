@@ -15,7 +15,7 @@ class Tweet extends Component {
     componentDidMount(){
       console.log("TWEET MOUNTED");
     }
-    //<div className = "test">WOOOO</div>
+
     render(){
       return(
       <div>
@@ -24,6 +24,7 @@ class Tweet extends Component {
              transitionEnterTimeout={250}
              transitionLeaveTimeout={250}
              transitionAppear={true}
+             transitionAppearTimeout={500}
              >
              {
                <div className= {"tweet-container " + (this.props.sentiment < 50 ? 'neg': 'pos')}>

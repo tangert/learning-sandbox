@@ -5,10 +5,12 @@ import './TweetHeader.css';
 class TweetHeader extends Component {
   constructor(props){
     super(props);
+    const date =  new Date().toDateString();
     this.state = {
       dataCount: 0,
       dataSum: 0,
-      avgSent: 0
+      avgSent: 0,
+      date: date
     }
     this.computeAverage = this.computeAverage.bind(this);
   }
@@ -35,7 +37,7 @@ class TweetHeader extends Component {
             <div className = "top">
               <div className = "text-wrap">
                 <p className = "twitter-title"> Twitter Sentiment </p>
-                <p className="date">{this.props.date}</p>
+                <p className="date">{this.state.date}</p>
               </div>
             </div>
 
@@ -45,7 +47,7 @@ class TweetHeader extends Component {
                 <AnimatedNumber
                   component="text"
                   value={this.state.avgSent}
-                  stepPrecision={0}
+                  stepPrecision={2}
                   duration={300}
                   />%
               </div>

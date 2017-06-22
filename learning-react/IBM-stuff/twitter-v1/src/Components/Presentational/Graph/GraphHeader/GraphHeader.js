@@ -32,10 +32,14 @@ class GraphHeader extends Component {
     return(
       <div className="Graph-Header">
         <div className="top">
-          <h1 className="stock-title">BAO
+          <h1 className="stock-title">Bane&Ox
             <span className="title-detail"> Live Feed</span>
           </h1>
           <Clock/>
+        </div>
+
+        <div className = "middle">
+          NYSE BAO
         </div>
 
         <div className="bottom">
@@ -43,9 +47,10 @@ class GraphHeader extends Component {
                 <AnimatedNumber
                   component="text"
                   value={this.props.currentStock}
-                  stepPrecision={0}
+                  stepPrecision={2}
                   duration={300}
                   />
+                  <span className = "title-detail"> USD</span>
             </div>
 
             <div className = "detail separator">|</div>
@@ -54,7 +59,7 @@ class GraphHeader extends Component {
               <AnimatedNumber
                 component="text"
                 value={this.props.priceDelta}
-                stepPrecision={0}
+                stepPrecision={2}
                 duration={300}
                 />
             </div>
@@ -63,7 +68,7 @@ class GraphHeader extends Component {
               <AnimatedNumber
                 component="text"
                 value={this.props.percentDelta}
-                stepPrecision={0}
+                stepPrecision={2}
                 duration={300}
                 />%
             </div>

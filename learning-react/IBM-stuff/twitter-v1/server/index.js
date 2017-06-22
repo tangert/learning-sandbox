@@ -144,8 +144,8 @@ app.use('/api/gen-traffic', function(req, res, next) {
     sendOverSocket('sentiment-data', payload);
   }
 
-  function sendStockData(stock, percent){
-    var delta = stock*percent;
+  function sendStockData(stock, flux){
+    var delta = stock*flux;
     var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
     sendOverSocket('stock-data', calculatedStock);
   }

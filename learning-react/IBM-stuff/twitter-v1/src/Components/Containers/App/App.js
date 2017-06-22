@@ -13,7 +13,7 @@ class App extends Component {
     super(props)
     this.state ={
       tweet_data: [],
-      graph_data: []
+      graph_data: [],
     }
   }
 
@@ -35,7 +35,6 @@ class App extends Component {
   }
 
   //FIXME: Implement Redux.
-
   //Event handlers for socket events
   onSentimentData = (data) => {
     this.setState(previousState => ({
@@ -55,10 +54,12 @@ class App extends Component {
 
   render() {
     return (
+
+
       <div className="App">
         <div className="Content">
           <TweetsSection tweet_data = {this.state.tweet_data}/>
-          <GraphSection graph_data = {this.state.graph_data}/>
+          <GraphSection graph_data = {this.state.graph_data} tweet_data = {this.state.tweet_data}/>
         </div>
       </div>
     );

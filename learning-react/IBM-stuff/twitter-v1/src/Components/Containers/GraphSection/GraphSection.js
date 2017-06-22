@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './GraphSection.css';
 import GraphHeader from './../../Presentational/Graph/GraphHeader/GraphHeader';
-import StockGraph from './../../Presentational/Graph/StockGraph/StockGraph';
+import Graph from './../../Presentational/Graph/Graph/Graph';
 
 class GraphSection extends Component {
   constructor(props){
@@ -16,14 +16,23 @@ class GraphSection extends Component {
 
   componentDidMount(){
     setInterval(function(){
-      const last = this.props.graph_data.length-1;
-      console.log(this.props.graph_data[last]);
-      this.setState({
-        currentStock: this.props.graph_data[last].point,
-        priceDelta: (Math.round(Math.random()*30 * 100) / 100),
-        percentDelta: (Math.round(Math.random()*30 * 100) / 100)
-      });
-    }.bind(this),1500);
+        try{
+              const last = this.props.graph_data.length-1;
+              console.log(this.props.graph_data[last]);
+
+              this.setState({
+                currentStock: this.props.graph_data[last].point,
+                priceDelta: (Math.round(Math.random()*30 * 100) / 100),
+                percentDelta: (Math.round(Math.random()*30 * 100) / 100)
+              });
+            }
+        catch(e){
+            if(e){
+              console.log(e);
+              console.log("You need to wait for your data bro.");
+            }
+        }
+      }.bind(this),1500);
   }
 
   render(){
@@ -35,7 +44,7 @@ class GraphSection extends Component {
             percentDelta = {this.state.percentDelta}
         />
         <div className = "graph-wrapper">
-        <StockGraph graph_data = {this.props.graph_data}/>
+          <Graph className= "stock-graph" graph_data = {this.props.graph_data} tweet_data = {this.props.tweet_data}/>
         </div>
 
         <div className= "More-Viz">
@@ -45,5 +54,14 @@ class GraphSection extends Component {
     )
   }
 }
+
+
+///
+///
+///
+GraphSection.defaultProps = {
+  //placeholder
+  graph_data: [{point: 23, timeStamp: Date()}],
+};
 
 export default GraphSection;
