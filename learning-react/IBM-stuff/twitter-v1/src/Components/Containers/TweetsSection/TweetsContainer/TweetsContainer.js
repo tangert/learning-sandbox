@@ -5,8 +5,17 @@ import { CSSTransitionGroup } from 'react-transition-group'
 import './TweetsContainer.css';
 
 class TweetsContainer extends Component {
+  constructor(props){
+      super(props);
+      this.state = {
+        showChild: true,
+      }
+  }
+
   renderItem(index, key) {
+    console.log(index);
     return <Tweet
+      onTransitionEnd={this.transitionEnd} mounted={this.state.showChild}
       key = {key}
       handle={this.props.tweet_data[index]["handle"]}
       time={this.props.tweet_data[index]["time"]}
@@ -20,7 +29,7 @@ class TweetsContainer extends Component {
         <div className="Tweets-Container" style={{overflow: 'auto', maxHeight: 750, minHeight: 750}}>
           <ReactList
             itemRenderer={this.renderItem.bind(this)}
-            length={this.props.tweet_data.length*0.75}
+            length={this.props.tweet_data.length}
             type='uniform'
             useTranslate3d="true"
           />
