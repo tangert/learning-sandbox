@@ -16,14 +16,15 @@ class TweetHeader extends Component {
   }
 
   computeAverage() {
-    try {
       const data = this.props.tweet_data;
+
+      try {
       this.setState(previousState => ({
         dataCount: data.length,
         dataSum: previousState.dataSum + data[0].sentiment,
         avgSent: (this.state.dataSum + data[0].sentiment) / (this.state.dataCount + 1)
       }));
-    }catch(e) {
+      } catch(e) {
       console.log(e);
       console.log("Wait for sentiment data");
     }

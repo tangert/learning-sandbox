@@ -1,38 +1,35 @@
 import React, { Component } from 'react';
 import Tweet from './../../../Presentational/Tweets/Tweet/Tweet.js';
 import ReactList from 'react-list';
+import FlipMove from 'react-flip-move';
 import { CSSTransitionGroup } from 'react-transition-group'
 import './TweetsContainer.css';
 
 class TweetsContainer extends Component {
   constructor(props){
       super(props);
-      this.state = {
-        showChild: true,
-      }
   }
 
-  renderItem(index, key) {
-    console.log(index);
-    return <Tweet
-      onTransitionEnd={this.transitionEnd} mounted={this.state.showChild}
-      key = {key}
-      handle={this.props.tweet_data[index]["handle"]}
-      time={this.props.tweet_data[index]["time"]}
-      content={this.props.tweet_data[index]["content"]}
-      sentiment={this.props.tweet_data[index]["sentiment"]}>
-    </Tweet>;
+  renderTweets() {
+    return this.props.tweet_data.map( (data) => {
+      return (
+        <Tweet
+          key={data["time"]}
+          handle={data["handle"]}
+          time={data["time"]}
+          content={data["content"]}
+          sentiment={data["sentiment"]}>
+        </Tweet>
+        );
+    });
   }
 
   render(){
       return (
         <div className="Tweets-Container" style={{overflow: 'auto', maxHeight: 750, minHeight: 750}}>
-          <ReactList
-            itemRenderer={this.renderItem.bind(this)}
-            length={this.props.tweet_data.length}
-            type='uniform'
-            useTranslate3d="true"
-          />
+          <FlipMove duration={750} easing="ease-out">
+            { this.renderTweets() }
+          </FlipMove>
         </div>
       );
   }

@@ -17,6 +17,7 @@
     "react": "^15.5.4",
     "react-animated-number": "^0.4.3",
     "react-dom": "^15.5.4",
+    "react-flip-move": "^2.9.14",
     "react-highcharts": "^12.0.0",
     "react-highlight": "^0.10.0",
     "react-highstock": "^1.0.2",
