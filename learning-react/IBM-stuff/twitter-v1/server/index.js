@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 //Server
 const PORT = process.env.PORT || 3001;
 const server = require('http').Server(app);
+const red = {r: 212, g: 75, b: 60};
+const blue = {r: 158, g: 222, b: 242};
 
 //MongoDB
 mongoose.connect('mongodb://localhost/BaneAndOx/');
@@ -123,6 +125,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
   /**********************************************************************/
   /**********************************************************************/
   /**********************************************************************/
+  
   //DATA TRANSFER FUNCTIONS
   var tweet_handles = [];
   var tweet_contents = [];
@@ -132,13 +135,15 @@ app.use('/api/gen-traffic', function(req, res, next) {
     var handle = getRandomElement(tweet_handles);
     var content = getRandomElement(tweet_contents);
     var image = getRandomElement(images);
+    var color = convertPercentToColor(red, blue, Number(content["sentiment"]));
 
     var payload = {
       handle: handle["handle"],
       image: image["link"],
       content: content["content"],
       sentiment: content["sentiment"],
-      time: Date.now(),
+      color: color,
+      time: Date.now()
     };
 
     sendOverSocket('sentiment-data', payload);
@@ -147,6 +152,13 @@ app.use('/api/gen-traffic', function(req, res, next) {
   function sendStockData(stock, flux){
     var delta = stock*flux;
     var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
+    var color = convertPercentToColor(red, blue, calculatedStock);
+
+    var payload = {
+      color: color,
+      stock: calculatedStock
+    };
+
     sendOverSocket('stock-data', calculatedStock);
   }
 
@@ -196,6 +208,33 @@ function minutesToMs(min) {
 function getRandomFromRange(min,max){
   var val = Math.floor(Math.random()*(max - min) + min);
   return val;
+}
+
+function convertPercentToColor(color1, color2, percent) {
+  var newColor = {};
+
+  function makeChannel(a, b) {
+      return(a + Math.round((b-a)*(percent/100)));
+  }
+
+  function makeColorPiece(num) {
+      num = Math.min(num, 255);   // not more than 255
+      num = Math.max(num, 0);     // not less than 0
+      var str = num.toString(16);
+      if (str.length < 2) {
+          str = "0" + str;
+      }
+      return(str);
+  }
+
+  newColor.r = makeChannel(color1.r, color2.r);
+  newColor.g = makeChannel(color1.g, color2.g);
+  newColor.b = makeChannel(color1.b, color2.b);
+  newColor.cssColor = "#" +
+                      makeColorPiece(newColor.r) +
+                      makeColorPiece(newColor.g) +
+                      makeColorPiece(newColor.b);
+  return(newColor);
 }
 
 module.exports = 'app';

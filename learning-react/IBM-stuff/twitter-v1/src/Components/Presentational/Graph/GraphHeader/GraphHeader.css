@@ -51,8 +51,30 @@
     justify-content: flex-start;
     margin-top: 0px;
   }
+
+  .Graph-Header .bottom-neg {
+    order: 3;
+    /*background-color: green;*/
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    margin-top: 0px;
+    color: rgb(255, 97, 76);
+  }
+
+  .Graph-Header .bottom-pos {
+    order: 3;
+    /*background-color: green;*/
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    margin-top: 0px;
+    color: rgb(137, 182, 255);
+  }
+
     .detail {
-      color: rgb(255, 97, 76);
       opacity: 0.75;
       padding-right: 5px;
     }

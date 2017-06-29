@@ -5,12 +5,13 @@ import './Tweet.css';
 class Tweet extends Component {
     constructor(props){
       super(props);
+      console.log(props.color);
     }
 
     render(){
       return(
         <div>
-           <div className= {"tweet-container " + (this.props.sentiment < 50 ? 'neg': 'pos')}>
+           <div className= "tweet-container" style={{backgroundColor: this.props.color.cssColor}}>
                <div className = "left">
                <div className="pic"></div>
              </div>

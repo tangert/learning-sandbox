@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactHighcharts from 'react-highcharts';
 import './Graph.css';
 
-
 class Graph extends Component {
   constructor(props){
     super(props);
@@ -24,12 +23,10 @@ class Graph extends Component {
           crosshairs: true
         },
         chart: {
-          // type: 'areaspline',
           backgroundColor: "transparent",
           borderColor: "#111111",
           renderTo: 'chart',
         },
-        colors: ["rgb(255, 97, 76)"],
         credits: false,
         xAxis: {
             labels: {
@@ -75,6 +72,8 @@ class Graph extends Component {
         },
         {
             name: 'BAO Twitter Sentiment',
+            dashStyle: "dot",
+            type: "spline",
         }],
         responsive: {
             rules: [{
@@ -95,7 +94,6 @@ class Graph extends Component {
     }
   }
   componentDidMount() {
-
       var chart = this.refs.chart.getChart();
       setInterval(function(){
         try {
@@ -110,18 +108,24 @@ class Graph extends Component {
           const tweet_x = tweet_data[0].time;
           const tweet_y = tweet_data[0].sentiment;
 
-          const shiftFlagStock =  chart.series[0].data.length > 100;
-          const shiftFlagTweet =  chart.series[1].data.length > 100;
+          const shiftFlagStock =  chart.series[0].data.length > 50;
+          const shiftFlagTweet =  chart.series[1].data.length > 50;
 
           const stock_point = [stock_x,stock_y];
           const tweet_point = [tweet_x,tweet_y];
 
+          const tweetColor = this.props.tweet_data[0].sentiment < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+          const stockColor = this.props.graph_data[last_graph_point].point < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+
           //Object options, (bool) Redraw, (bool) Shift
           chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+          chart.series[0].color = stockColor;
+
           chart.series[1].addPoint(tweet_point, false, shiftFlagTweet);
+          chart.series[1].color = tweetColor;
 
           chart.redraw();
-        } catch(e) {
+        }  catch(e) {
           console.log(e);
           console.log("Wait for your fucking data");
         }

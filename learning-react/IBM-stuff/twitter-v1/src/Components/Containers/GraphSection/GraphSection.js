@@ -18,12 +18,13 @@ class GraphSection extends Component {
     setInterval(function(){
         try{
               const last = this.props.graph_data.length-1;
-              console.log(this.props.graph_data[last]);
-
+              const currentPoint = this.props.graph_data[last].point;
+              const priceDelta = currentPoint - this.props.graph_data[last-1].point;
+              const percentDelta = priceDelta/currentPoint;
               this.setState({
-                currentStock: this.props.graph_data[last].point,
-                priceDelta: (Math.round(Math.random()*30 * 100) / 100),
-                percentDelta: (Math.round(Math.random()*30 * 100) / 100)
+                currentStock: currentPoint,
+                priceDelta: priceDelta,
+                percentDelta: percentDelta
               });
             }
         catch(e){
@@ -55,10 +56,6 @@ class GraphSection extends Component {
   }
 }
 
-
-///
-///
-///
 GraphSection.defaultProps = {
   //placeholder
   graph_data: [{point: 23, timeStamp: Date()}],
