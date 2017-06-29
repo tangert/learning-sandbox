@@ -11,7 +11,7 @@ class AppHeader extends Component {
     return(
       <div className="App-header">
         <Link to={'/'}> <img src={logo} className="App-logo" alt="logo" /> </Link>
-        <Link to={'/admin'} className="admin">Admin</Link>
+        <Link to={'/admin'} className="admin-logo">Admin</Link>
       </div>
     );
   }
@@ -19,7 +19,7 @@ class AppHeader extends Component {
 
 ReactDOM.render(
   <Router>
-    <div className = "container">
+    <div className = "app-container">
         <AppHeader/>
         <Switch>
           <Route exact path="/" component = { App } />

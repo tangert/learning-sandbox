@@ -35,11 +35,10 @@
     opacity: 0.4;
     font-weight: 300;
     font-size: 20px;
-    /*background-color: white;*/
 
     display: flex;
     align-items: flex-start;
-    margin-top: -20px;
+    margin-top: 0px;
   }
 
   .Graph-Header .bottom {
