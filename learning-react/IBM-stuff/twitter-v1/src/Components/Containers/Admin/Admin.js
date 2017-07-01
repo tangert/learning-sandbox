@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import querystring from 'querystring';
 import Slider from 'rc-slider';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
@@ -9,6 +10,12 @@ import './Admin.css';
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider);
 const Handle = Slider.Handle;
+
+const marks = {
+  0: 'Flat',
+  50: '50%',
+  100: 'Max flux'
+};
 
 const handle = (props) => {
   const { value, dragging, index, ...restProps } = props;
@@ -29,9 +36,9 @@ class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sentValue: 0,
+      sentiment: 0,
       sentFlux: 0,
-      stockValue: 0,
+      stock: 0,
       stockFlux: 0,
       time: 0,
       isRunning: false
@@ -44,32 +51,30 @@ class Admin extends Component {
   onSentChange = (value) => {
     console.log("SENTIMENT: " + value);
     this.setState({
-      sentValue: value
+      sentiment: value
     },() => {
         console.log(this.state);
     });
   }
 
-  onSentFluxChange = (event) => {
+  onSentFluxChange = (value) => {
+    console.log("STOCK: " + value);
     this.setState({
-      sentFlux: Number(event.target.value)
-    },() => {
-        console.log(this.state);
+      sentFlux: value
     });
   }
 
   onStockChange = (value) => {
     console.log("STOCK: " + value);
     this.setState({
-      stockValue: value
+      stock: value
     });
   }
 
-  onStockFluxChange = (event) => {
+  onStockFluxChange = (value) => {
+    console.log("STOCK: " + value);
     this.setState({
-      stockFlux: Number(event.target.value)
-    },() => {
-        console.log(this.state);
+      stockFlux: value
     });
   }
 
@@ -92,21 +97,25 @@ class Admin extends Component {
     },()=>{
       console.log(this.state.isRunning);
     });
-    axios.post('http://localhost:3001/api/gen-traffic', {
-      params: {
-          time: this.state.time,
-          sentiment: this.state.sentiment,
-          sentFlux: (this.state.sentFlux)/100,
-          stock: this.state.stock,
-          stockFlux: (this.state.stockFlux)/100
-        }
-      })
-        .then(function(response) {
-            console.log(response);
-        }) .catch(function (error) {
-            console.log(error);
-        });
 
+    let HTTP_verb;
+    if (this.state.isRunning) {
+      HTTP_verb = 'put';
+    } else {
+      HTTP_verb = 'post';
+    }
+
+    axios({
+      method: 'post',
+      url: '/api/gen-traffic',
+      data: {
+        time: this.state.time,
+        sentiment: this.state.sentiment,
+        stock: this.state.stock,
+        stockFlux: this.state.stockFlux/100,
+        sentFlux: this.state.sentFlux/100
+      }
+    });
   }
 
   onStopFeed() {
@@ -117,7 +126,7 @@ class Admin extends Component {
       console.log(this.state.isRunning);
     });
 
-    //axios.post here with the current state
+    axios.delete('api/gen-traffic');
   }
 
   render(){
@@ -139,93 +148,69 @@ class Admin extends Component {
 
     return(
       <div className = "admin">
-
       <div className = "admin-container">
         <div className = "sent-part">
-          <div className = "label">
-            <h1 className="main-value"> Sentiment: <span className = "val-detail">{this.state.sentValue}</span></h1>
-            <div className ="flux">
-            +/-
-            <input
-              name="flux"
-              type="number"
-              value={this.state.sentFlux}
-              onChange={this.onSentFluxChange}
-              max = "100"
-              min = "0"
-              placeholder="WOOO"
-              >
-            </input>
-            %
+            <div className = "label">
+              <h1 className="main-value"> Sentiment: <span className = "val-detail">{this.state.sentiment}</span></h1>
+              <div className ="flux">
+                <div className = "flux-title">Flux: </div>
+                <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onSentFluxChange} defaultValue={20} />
+              </div>
             </div>
-          </div>
 
-          <Range
-            className = "range sent"
-            min={0}
-            max={100}
-            defaultValue={10}
-            value={this.state.sentValue}
-            onChange={this.onSentChange}
-            onAfterChange={this.onRangeAfterChange}
-
-            handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
-            trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
-            railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
-            tipFormatter={value => `${value}%`}
-          />
+            <Range
+              className = "range sent"
+              min={5}
+              max={100}
+              defaultValue={10}
+              value={this.state.sentiment}
+              onChange={this.onSentChange}
+              onAfterChange={this.onRangeAfterChange}
+              handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
+              trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
+              railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
+              tipFormatter={value => `${value}%`}
+            />
         </div>
 
         <div className = "stock-part">
-        <div className = "label">
-          <h1 className="main-value">Stock: <span className = "val-detail">{this.state.stockValue}</span></h1>
-          <div className ="flux">
-          +/-
-          <input
-            name="flux"
-            type="number"
-            max = "100"
-            min = "0"
-            value={this.state.stockFlux}
-            onChange={this.onStockFluxChange}
-            placeholder="0"
-            className="flux">
-          </input>
-          %
+          <div className = "label">
+            <h1 className="main-value">Stock: <span className = "val-detail">{this.state.stock}</span></h1>
+              <div className ="flux">
+                <div className = "flux-title">Flux: </div>
+                <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onStockFluxChange} defaultValue={20} />
+              </div>
           </div>
-        </div>
-          <Range
-            className = "range stock"
-            min={0}
-            max={100}
-            defaultValue={10}
-            value={this.state.stockValue}
-            onChange={this.onStockChange}
-            onAfterChange={this.onRangeAfterChange}
+            <Range
+              className = "range stock"
+              min={5}
+              max={100}
+              defaultValue={10}
+              value={this.state.stock}
+              onChange={this.onStockChange}
+              onAfterChange={this.onRangeAfterChange}
+              trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
+              railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
+              handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
+              tipFormatter={value => `${value}%`}
+            />
 
-            trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
-            railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
-            handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
-            tipFormatter={value => `${value}%`}
-          />
-
-          <div className = "time-set">
-            Generate traffic for:
-            <input
-            className ="time-input"
-              name="time"
-              type="number"
-              value={this.state.time}
-              onChange={this.onTimeChange}
-              max = "500"
-              min = "10"
-              placeholder="WOOO"
-              >
-            </input>
-            minutes
-          </div>
-
-          <div> { button_section } </div>
+            <div className = "time-set">
+              Generate traffic for:
+              <input
+              className ="time-input"
+                name="time"
+                type="number"
+                value={this.state.time != 0 ? this.state.time : ""}
+                onChange={this.onTimeChange}
+                max = "500"
+                min = "1"
+                placeholder="0"
+                >
+              </input>
+              minutes
+            </div>
+            <div> { button_section } </div>
 
         </div>
         </div>

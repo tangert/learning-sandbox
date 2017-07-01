@@ -50,6 +50,38 @@ input:focus {
     outline:none;
 }
 
+.flux {
+  display: flex;
+  flex-direction: row;
+}
+
+.flux-title {
+  margin-right: 20px;
+}
+
+.slider {
+  width: 150px;
+}
+
+
+.flux-button {
+  width: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+
+  background-color: transparent;
+  border-radius: 5px;
+  transition: 0.25s ease-in-out;
+  border-style: solid;
+  border-width: 1px;
+  color: white;
+}
+
+.flux-button:hover, .flux-button:focus {
+  background-color: white;
+  color: black;
+}
+
 .val-detail {
   opacity: 0.8;
   transition: 0.25s linear;
@@ -131,4 +163,4 @@ input:focus {
   width: 100%;
 }
 
-.button:focus {outline:0;}
+button:focus {outline:0;}

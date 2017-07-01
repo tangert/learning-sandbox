@@ -48,7 +48,21 @@ class GraphSection extends Component {
           <Graph className= "stock-graph" graph_data = {this.props.graph_data} tweet_data = {this.props.tweet_data}/>
         </div>
 
-        <div className= "More-Viz">
+        <div className= "market-info">
+          <div className = "market left">
+            <ul>
+            <li>Open</li>
+            <li>High</li>
+            <li>Low</li>
+            </ul>
+          </div>
+          <div className = "market right">
+            <ul>
+            <li>Mkt Cap</li>
+            <li>P/E Ratio</li>
+            <li>Div Yield</li>
+            </ul>
+          </div>
         </div>
 
       </div>

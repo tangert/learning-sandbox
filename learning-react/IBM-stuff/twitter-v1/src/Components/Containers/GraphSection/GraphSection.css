@@ -9,11 +9,38 @@
 
 .graph-wrapper {
   border-radius: 5px;
-  margin: 10px;
+  margin-top: 10px;
   background-image: linear-gradient(to bottom right, #222 0%, rgba(63,66,54,0.1) 100%);
   color:white;
 
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.market-info {
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+}
+  .market {
+    color: white;
+    width: 50%;
+    border-color: white;
+    border-width: 2;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-image: linear-gradient(to bottom right, #222 0%, rgba(63,66,54,0.1) 100%);
+    transition: 0.25s linear;
+  }
+
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  text-align: left;
 }

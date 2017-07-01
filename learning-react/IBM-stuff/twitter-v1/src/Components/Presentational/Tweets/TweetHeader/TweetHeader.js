@@ -16,28 +16,24 @@ class TweetHeader extends Component {
   }
 
   computeAverage() {
+    if(this.props.tweet_data.length > 0) {
       const data = this.props.tweet_data;
-      try {
-        if(data !== undefined) {
-          this.setState(prev => ({
-            dataCount: data.length,
-            dataSum: prev.dataSum + data[0].sentiment,
-            avgSent: (this.state.dataSum + data[0].sentiment) / (this.state.dataCount + 1)
-          }));
-        } else {
-          console.log("defined");
-        }
-      } catch(e) {
-      console.log(e);
-      console.log("Wait for sentiment data");
+      this.setState(prev => ({
+        dataCount: data.length,
+        dataSum: prev.dataSum + data[0].sentiment,
+        avgSent: (this.state.dataSum + data[0].sentiment) / (this.state.dataCount + 1)
+      }));
     }
   }
 
+
   componentDidMount(){
     console.log(this.state);
-    setInterval(function(){
-        this.computeAverage();
-    }.bind(this),1000);
+      setInterval(function(){
+        if(this.props.isReceivingData) {
+          this.computeAverage();
+        }
+      }.bind(this),1000);
   }
 
   render(){

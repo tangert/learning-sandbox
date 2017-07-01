@@ -5,7 +5,6 @@ import './Tweet.css';
 class Tweet extends Component {
     constructor(props){
       super(props);
-      console.log(props.color);
     }
 
     render(){

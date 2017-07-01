@@ -1,6 +1,6 @@
 'use strict';
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const app = express();
@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 3001;
 const server = require('http').Server(app);
 const red = {r: 212, g: 75, b: 60};
 const blue = {r: 158, g: 222, b: 242};
+
+app.use(bodyParser.json());
 
 //MongoDB
 mongoose.connect('mongodb://localhost/BaneAndOx/');
@@ -55,16 +57,20 @@ var pollStockData;
 app.use('/api/gen-traffic', function(req, res, next) {
 
   //Query variables
-  const sent = Number(req.query.sentiment);
-  const sentFlux = Number(req.query.sentFlux);
-  const stock = Number(req.query.stock);
-  const stockFlux = Number(req.query.stockFlux);
-  const time = Number(req.query.time);
+  const sent = Number(req.body.sentiment);
+  const sentFlux = Number(req.body.sentFlux);
+  const stock = Number(req.body.stock);
+  const stockFlux = Number(req.body.stockFlux);
+  const time = Number(req.body.time);
+
+  console.log("REQUEST BODY: ");
+  console.log(req.body);
 
   //Generate traffic
-  if (req.method === 'POST') {
+  if (req.method === 'POST' || req.method == 'PUT') {
     console.log('About to start countdown!');
-    res.send(req.query);
+    req.app.io.emit('traffic-gen', {key: { isRunning: true }});
+    res.send(req.body);
 
     if (requestSent) {
       clearInterval(pollSentimentData);
@@ -120,12 +126,13 @@ app.use('/api/gen-traffic', function(req, res, next) {
     res.send('Stopping traffic.');
     clearInterval(pollSentimentData);
     clearInterval(pollStockData);
+    req.app.io.emit('traffic-gen', {key: { isRunning: false }});
   }
 
   /**********************************************************************/
   /**********************************************************************/
   /**********************************************************************/
-  
+
   //DATA TRANSFER FUNCTIONS
   var tweet_handles = [];
   var tweet_contents = [];
@@ -135,13 +142,13 @@ app.use('/api/gen-traffic', function(req, res, next) {
     var handle = getRandomElement(tweet_handles);
     var content = getRandomElement(tweet_contents);
     var image = getRandomElement(images);
-    var color = convertPercentToColor(red, blue, Number(content["sentiment"]));
+    var color = convertPercentToColor(red, blue, Number(content.sentiment));
 
     var payload = {
-      handle: handle["handle"],
-      image: image["link"],
-      content: content["content"],
-      sentiment: content["sentiment"],
+      handle: handle.handle,
+      image: image.link,
+      content: content.content,
+      sentiment: content.sentiment,
       color: color,
       time: Date.now()
     };

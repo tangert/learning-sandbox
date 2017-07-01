@@ -14,6 +14,7 @@ class App extends Component {
     this.state ={
       tweet_data: [],
       graph_data: [],
+      isReceivingData: true
     }
   }
 
@@ -31,6 +32,10 @@ class App extends Component {
         socket.on('stock-data', function(data){
           console.log('GETTING STOCK: ');
           this.onStockData(data);
+        }.bind(this));
+
+        socket.on('traffic-gen', function(data){
+          this.onTrafficGen(data);
         }.bind(this));
   }
 
@@ -52,12 +57,30 @@ class App extends Component {
     console.log("NEW STOCK POINT COUNT: \n " + this.state.graph_data.length);
   }
 
+  onTrafficGen = (data) => {
+    if(data.key.isRunning) {
+      console.log("DATA KEY RUNNING: ")
+      console.log(data.key);
+      this.setState({
+        isReceivingData: true
+      })
+    } else {
+      console.log("DATA KEY NOT RUNNING ")
+      this.setState({
+        isReceivingData: false
+      })
+    }
+  }
+
   render() {
     return (
       <div className="App">
         <div className="Content">
-          <TweetsSection tweet_data = {this.state.tweet_data}/>
-          <GraphSection graph_data = {this.state.graph_data} tweet_data = {this.state.tweet_data}/>
+          <TweetsSection tweet_data = {this.state.tweet_data}
+                         isReceivingData = {this.state.isReceivingData}/>
+          <GraphSection graph_data = {this.state.graph_data}
+                        tweet_data = {this.state.tweet_data}
+                        isReceivingData = {this.state.isReceivingData}/>
         </div>
       </div>
     );
