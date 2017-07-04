@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './GraphSection.css';
-import GraphHeader from './../../Presentational/Graph/GraphHeader/GraphHeader';
-import Graph from './../../Presentational/Graph/Graph/Graph';
+import GraphHeader from './../../presentational/Graph/GraphHeader/GraphHeader';
+import Graph from './../../presentational/Graph/Graph/Graph';
 
 class GraphSection extends Component {
   constructor(props){
@@ -9,9 +9,10 @@ class GraphSection extends Component {
     this.state = {
       currentStock: 0,
       priceDelta: 0,
-      percentDelta: 0
+      percentDelta: 0,
+      low: 0,
+      high: 0
     }
-    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount(){
@@ -37,6 +38,11 @@ class GraphSection extends Component {
   }
 
   render(){
+
+    const points = this.props.graph_data.map((datum) => {
+      return datum.point;
+    });
+
     return(
       <div className = "Graph-Section">
         <GraphHeader
@@ -45,33 +51,62 @@ class GraphSection extends Component {
             percentDelta = {this.state.percentDelta}
         />
         <div className = "graph-wrapper">
-          <Graph className= "stock-graph" graph_data = {this.props.graph_data} tweet_data = {this.props.tweet_data}/>
+          <Graph className= "stock-graph"
+            graph_data = {this.props.graph_data}
+            tweet_data = {this.props.tweet_data}
+            isReceivingData = {this.props.isReceivingData}/>
         </div>
 
         <div className= "market-info">
-          <div className = "market left">
-            <ul>
-            <li>Open</li>
-            <li>High</li>
-            <li>Low</li>
-            </ul>
-          </div>
-          <div className = "market right">
-            <ul>
-            <li>Mkt Cap</li>
-            <li>P/E Ratio</li>
-            <li>Div Yield</li>
-            </ul>
-          </div>
-        </div>
+              <div className = "market-list-item">
+                        Open:
+                        <span className = "stock-detail-val">
+                          { points.length > 0 ? points[0] : 0 }
+                        </span>
+              </div>
 
+              <div className = "market-list-item">
+                        High:
+                        <span className = "stock-detail-val">
+                          { Math.max(...points) }
+                        </span>
+              </div>
+
+              <div className = "market-list-item">
+                        Low:
+                        <span className = "stock-detail-val">
+                          { Math.min(...points) }
+                        </span>
+              </div>
+
+              <div className = "market-list-item">
+                        Mkt Cap:
+                        <span className = "stock-detail-val">
+                        { points.length > 0 ? points[points.length-1] * 1500000 : 2000000 }
+                        </span>
+              </div>
+
+              <div className = "market-list-item">
+                        P/E Ratio:
+                        <span className = "stock-detail-val">
+                        { points.length > 0 ? (points[points.length-1] / 2.00).toFixed(2) : 0 }
+                      </span>
+              </div>
+
+              <div className = "market-list-item">
+                        Div Yield:
+                        <span className = "stock-detail-val">
+                          { points.length > 0 ? ((2.00 / points[points.length-1])*100).toFixed(2) : 0 }
+                          %
+                        </span>
+              </div>
+        </div>
       </div>
     )
   }
 }
 
 GraphSection.defaultProps = {
-  //placeholder
   graph_data: [{point: 23, timeStamp: Date()}],
 };
 

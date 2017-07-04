@@ -65,12 +65,7 @@ class GraphHeader extends Component {
             </div>
 
             <div className = "detail percent-delta">
-              <AnimatedNumber
-                component="text"
-                value={this.props.percentDelta}
-                stepPrecision={2}
-                duration={300}
-                />%
+                { this.props.percentDelta.toFixed(2) }%
             </div>
         </div>
       </div>

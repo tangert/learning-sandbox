@@ -5,6 +5,25 @@ import './Tweet.css';
 class Tweet extends Component {
     constructor(props){
       super(props);
+      this.state = {
+        time: 0
+      };
+
+      this.updateTime = this.updateTime.bind(this);
+    }
+
+    updateTime() {
+      var now = new Date().getTime();
+      var updatedTime = Math.round((now - this.props.time)/1000);
+        this.setState({
+          time: updatedTime
+        });
+    }
+
+    componentDidMount() {
+      setInterval(function(){
+        this.updateTime();
+      }.bind(this),1000);
     }
 
     render(){
@@ -18,7 +37,7 @@ class Tweet extends Component {
              <div className = "right">
                <div className = "top-wrapper">
                  <h1 className ="handle">@{this.props.handle}</h1>
-                 <p className="time">{this.props.time}</p>
+                 <p className="time">{this.state.time > 2 ? (this.state.time + "s ago"): "Just now"}</p>
                </div>
 
                <div className = "bottom-wrapper">

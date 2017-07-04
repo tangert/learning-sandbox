@@ -7,8 +7,6 @@ class TweetHeader extends Component {
     super(props);
     const date =  new Date().toDateString();
     this.state = {
-      dataCount: 0,
-      dataSum: 0,
       avgSent: 0,
       date: date
     }
@@ -17,12 +15,16 @@ class TweetHeader extends Component {
 
   computeAverage() {
     if(this.props.tweet_data.length > 0) {
-      const data = this.props.tweet_data;
-      this.setState(prev => ({
-        dataCount: data.length,
-        dataSum: prev.dataSum + data[0].sentiment,
-        avgSent: (this.state.dataSum + data[0].sentiment) / (this.state.dataCount + 1)
-      }));
+      const data_limit = 20;
+
+      //grab all of the sentiments from the tweet data
+      const sentiment_sum = this.props.tweet_data.slice(0,data_limit).map((point) => {
+        return point.sentiment;
+      }).reduce((a, b) => a + b, 0);
+
+      this.setState({
+        avgSent: sentiment_sum / data_limit
+      });
     }
   }
 

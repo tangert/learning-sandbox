@@ -131,36 +131,36 @@ input:focus {
   width: 50%;
 }
 
-.button:hover {
-  border-radius: 20px;
-}
+  .button:hover {
+    border-radius: 20px;
+  }
 
-.button.update:hover {
-  background-color: white;
-  border-color: white;
-  color: rgb(17,17,17);
-}
+  .button.update:hover {
+    background-color: white;
+    border-color: white;
+    color: rgb(17,17,17);
+  }
 
-.button.start {
-  border-color: rgb(155, 229, 130);
-}
+  .button.start {
+    border-color: rgb(155, 229, 130);
+  }
 
-.button.start:hover {
-  background-color: rgb(155, 229, 130);
-  color: white;
-}
+  .button.start:hover {
+    background-color: rgb(155, 229, 130);
+    color: white;
+  }
 
-.button.stop {
-  border-color: rgb(255, 97, 76);
-}
+  .button.stop {
+    border-color: rgb(255, 97, 76);
+  }
 
-.button.stop:hover {
-  background-color: rgb(255, 97, 76);
-  color: white;
-}
+  .button.stop:hover {
+    background-color: rgb(255, 97, 76);
+    color: white;
+  }
 
-.button:hover {
-  width: 100%;
-}
+  .button:hover {
+    width: 100%;
+  }
 
-button:focus {outline:0;}
+  button:focus {outline:0;}

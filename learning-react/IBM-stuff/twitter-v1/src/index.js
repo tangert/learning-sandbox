@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import App from './Components/Containers/App/App';
-import Admin from './Components/Containers/Admin/Admin';
+import App from './components/containers/App/App';
+import Admin from './components/containers/Admin/Admin';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './index.css';

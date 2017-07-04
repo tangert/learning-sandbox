@@ -69,11 +69,19 @@ class Graph extends Component {
         },
         series: [{
             name: 'BAO Stock Data',
+            animation: false,
+            zIndex: 2,
+            lineWidth: 5
         },
         {
             name: 'BAO Twitter Sentiment',
             dashStyle: "dot",
             type: "spline",
+            animation: false,
+            zIndex: 1,
+            area: {
+              fillOpacity: 0.5
+            }
         }],
         responsive: {
             rules: [{
@@ -97,34 +105,40 @@ class Graph extends Component {
       var chart = this.refs.chart.getChart();
       setInterval(function(){
         try {
-          //Stock data
-          const graph_data = this.props.graph_data;
-          const last_graph_point = graph_data.length-1;
-          const stock_x = graph_data[last_graph_point].timeStamp;
-          const stock_y =  graph_data[last_graph_point].point;
+            if(this.props.isReceivingData) {
+              //Stock data
+              const graph_data = this.props.graph_data;
+              const last_graph_point = graph_data.length-1;
+              const stock_x = graph_data[last_graph_point].timeStamp;
+              const stock_y =  graph_data[last_graph_point].point;
 
-          //Tweet data
-          const tweet_data = this.props.tweet_data;
-          const tweet_x = tweet_data[0].time;
-          const tweet_y = tweet_data[0].sentiment;
+              //Tweet data
+              const tweet_data = this.props.tweet_data;
+              const tweet_x = tweet_data[0].time;
+              const tweet_y = tweet_data[0].sentiment;
 
-          const shiftFlagStock =  chart.series[0].data.length > 50;
-          const shiftFlagTweet =  chart.series[1].data.length > 50;
+              const shiftFlagStock =  chart.series[0].data.length > 50;
+              const shiftFlagTweet =  chart.series[1].data.length > 50;
 
-          const stock_point = [stock_x,stock_y];
-          const tweet_point = [tweet_x,tweet_y];
+              const stock_point = [stock_x,stock_y];
+              const tweet_point = [tweet_x,tweet_y];
 
-          const tweetColor = this.props.tweet_data[0].sentiment < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
-          const stockColor = this.props.graph_data[last_graph_point].point < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+              const tweetStrokeColor = this.props.tweet_data[0].sentiment < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+              const tweetPointColor = this.props.tweet_data[0].color.cssColor;
 
-          //Object options, (bool) Redraw, (bool) Shift
-          chart.series[0].addPoint(stock_point, false, shiftFlagStock);
-          chart.series[0].color = stockColor;
+              const stockColor = this.props.graph_data[last_graph_point].point < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
 
-          chart.series[1].addPoint(tweet_point, false, shiftFlagTweet);
-          chart.series[1].color = tweetColor;
+              //Object options, (bool) Redraw, (bool) Shift
+              chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+              chart.series[0].color = stockColor;
+              chart.series[0].options.color = stockColor;
+              chart.series[0].update(chart.series[0].options);
 
-          chart.redraw();
+              chart.series[1].addPoint(tweet_point, false, shiftFlagTweet);
+              chart.series[1].color = tweetPointColor;
+              chart.series[1].options.color = tweetStrokeColor;
+              chart.series[1].update(chart.series[1].options);
+          }
         }  catch(e) {
           console.log(e);
           console.log("Wait for your fucking data");
