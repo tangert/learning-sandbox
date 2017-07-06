@@ -82,7 +82,7 @@ class GraphSection extends Component {
               <div className = "market-list-item">
                         Mkt Cap:
                         <span className = "stock-detail-val">
-                        { points.length > 0 ? points[points.length-1] * 1500000 : 2000000 }
+                        { points.length > 0 ? (points[points.length-1] * (1500000 + Math.random()*15000)).toFixed(2) : 2000000 }
                         </span>
               </div>
 
