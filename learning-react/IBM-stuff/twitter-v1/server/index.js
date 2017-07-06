@@ -49,9 +49,9 @@ app.get('/api', function (req, res) {
 
 
 var requestSent = false;
-var prevTimeout;
 var pollSentimentData;
 var pollStockData;
+var timerTimeout;
 
 //Traffic generation
 app.use('/api/gen-traffic', function(req, res, next) {
@@ -66,57 +66,50 @@ app.use('/api/gen-traffic', function(req, res, next) {
   console.log("REQUEST BODY: ");
   console.log(req.body);
 
+  if (requestSent) {
+    clearInterval(pollSentimentData);
+    clearInterval(pollStockData);
+    clearTimeout(timerTimeout);
+  }
+
   //Generate traffic
     if (req.method === 'POST' || req.method == 'PUT') {
-      console.log('About to start countdown!');
+      console.log("\n" + 'About to start countdown!');
       req.app.io.emit('traffic-gen', {key: { isRunning: true }});
       res.send(req.body);
-
-      if (requestSent) {
-        clearInterval(pollSentimentData);
-        clearInterval(pollStockData);
-      }
 
       //Local variables
       var timerIsRunning = true;
       const pollTime = 1000;
-      requestSent = true;
 
-      var timeout;
-      if (time != null) {
-        timeout = minutesToMs(time);
-        console.log('GOT A TIMEOUT OF: ' + timeout);
-        prevTimeout = timeout;
-      } else {
-        timeout = prevTimeout;
-      }
-
-      //1: TIME
-      setTimeout(() => {
+      //third placeholder variable for timeout comparisons
+      const incomingTimeout = minutesToMs(time);
+      timerTimeout = setTimeout(() => {
+        console.log("TIMED OUT");
         timerIsRunning = false;
         requestSent = false;
-      }, timeout);
+
+        clearInterval(pollSentimentData);
+        clearInterval(pollStockData);
+
+        req.app.io.emit('traffic-gen', {key: { isRunning: false }});
+      }, incomingTimeout);
+
+      requestSent = true;
 
       //2: SENTIMENT
       //First grab all the data from the DB
       grabSentimentSensitiveData(sent, sentFlux);
-      pollSentimentData = setInterval(() => {
+      pollSentimentData = setInterval(function(){
         if (timerIsRunning) {
           sendSentimentData(sent);
-        } else {
-          console.log('DONE!');
-          clearInterval(pollSentimentData);
         }
       }, pollTime);
 
       //3: STOCK
-      pollStockData = setInterval(() => {
+      pollStockData = setInterval(function(){
         if (timerIsRunning) {
           sendStockData(stock, stockFlux);
-        } else {
-          console.log('DONE!');
-          clearInterval(pollStockData);
-          req.app.io.emit('traffic-gen', {key: { isRunning: false }});
         }
       }, pollTime*2);
     }
@@ -171,7 +164,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
   }
 
   function grabSentimentSensitiveData(sentiment, flux) {
-    console.log('Sending sentiment data: ' + sentiment);
+    // console.log('Sending sentiment data: ' + sentiment);
     var delta = sentiment*flux;
 
     db.collection('tweet_handles').find({}).toArray().then(function(data){
@@ -194,7 +187,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
 
   function sendOverSocket(socket, payload) {
     req.app.io.emit(socket, {key:payload});
-    console.log(payload);
+    // console.log(payload);
   }
 
 });

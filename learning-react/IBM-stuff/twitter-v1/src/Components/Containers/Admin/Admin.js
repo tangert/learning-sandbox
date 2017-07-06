@@ -154,7 +154,7 @@ class Admin extends Component {
               <h1 className="main-value"> Sentiment: <span className = "val-detail">{this.state.sentiment}</span></h1>
               <div className ="flux">
                 <div className = "flux-title">Flux: </div>
-                <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onSentFluxChange} defaultValue={20} />
+                <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onSentFluxChange} defaultValue={0} />
               </div>
             </div>
 
@@ -162,7 +162,7 @@ class Admin extends Component {
               className = "range sent"
               min={5}
               max={100}
-              defaultValue={10}
+              defaultValue={0}
               value={this.state.sentiment}
               onChange={this.onSentChange}
               onAfterChange={this.onRangeAfterChange}
@@ -178,14 +178,14 @@ class Admin extends Component {
             <h1 className="main-value">Stock: <span className = "val-detail">{this.state.stock}</span></h1>
               <div className ="flux">
                 <div className = "flux-title">Flux: </div>
-                <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onStockFluxChange} defaultValue={20} />
+                <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onStockFluxChange} defaultValue={0} />
               </div>
           </div>
             <Range
               className = "range stock"
               min={5}
               max={100}
-              defaultValue={10}
+              defaultValue={0}
               value={this.state.stock}
               onChange={this.onStockChange}
               onAfterChange={this.onRangeAfterChange}

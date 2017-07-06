@@ -67,11 +67,11 @@ class Timeline extends Component {
     let data;
     switch(side){
       case "right":
-      data = mock_data.right;
-      break;
+        data = mock_data.right;
+        break;
       case "left":
-      data = mock_data.left;
-      break;
+        data = mock_data.left;
+        break;
       default:
       console.log("need data");
     };
