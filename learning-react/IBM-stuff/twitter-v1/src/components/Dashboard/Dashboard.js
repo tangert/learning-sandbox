@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import TweetsSection from './../TweetsSection/TweetsSection';
-import GraphSection from './../GraphSection/GraphSection';
+import TweetsSection from './TweetsSection/TweetsSection';
+import GraphSection from './GraphSection/GraphSection';
 import io from 'socket.io-client';
 import { Router, browserHistory } from 'react-router'
-import './App.css';
+import './Dashboard.css';
 
 //Socket that lives on the Express server.
 const socket = io("http://localhost:3001");
 
-class App extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props)
     this.state ={
@@ -87,4 +87,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Dashboard;

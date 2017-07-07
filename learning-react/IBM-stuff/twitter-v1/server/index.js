@@ -120,6 +120,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
     res.send('Stopping traffic.');
     clearInterval(pollSentimentData);
     clearInterval(pollStockData);
+    clearTimeout(timerTimeout);
     req.app.io.emit('traffic-gen', {key: { isRunning: false }});
   }
 

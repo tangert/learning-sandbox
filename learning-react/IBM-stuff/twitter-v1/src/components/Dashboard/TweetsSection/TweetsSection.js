@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TweetHeader from './../../presentational/Tweets/TweetHeader/TweetHeader';
+import TweetHeader from './TweetHeader/TweetHeader';
 import TweetsContainer from './TweetsContainer/TweetsContainer';
 import './TweetsSection.css';
 

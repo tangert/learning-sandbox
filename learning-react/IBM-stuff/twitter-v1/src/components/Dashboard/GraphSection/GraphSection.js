@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './GraphSection.css';
-import GraphHeader from './../../presentational/Graph/GraphHeader/GraphHeader';
-import Graph from './../../presentational/Graph/Graph/Graph';
+import GraphHeader from './GraphHeader/GraphHeader';
+import Graph from './Graph/Graph';
 
 class GraphSection extends Component {
   constructor(props){

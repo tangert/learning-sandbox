@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tweet from './../../../presentational/Tweets/Tweet/Tweet.js';
+import Tweet from './../Tweet/Tweet';
 import FlipMove from 'react-flip-move';
 import { CSSTransitionGroup } from 'react-transition-group'
 import './TweetsContainer.css';

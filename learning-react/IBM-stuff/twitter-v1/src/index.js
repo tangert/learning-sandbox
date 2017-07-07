@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/containers/App/App';
-import Admin from './components/containers/Admin/Admin';
+import Dashboard from './components/Dashboard/Dashboard';
+import Admin from './components/Admin/Admin';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './index.css';
@@ -22,7 +22,7 @@ ReactDOM.render(
     <div className = "app-container">
         <AppHeader/>
         <Switch>
-          <Route exact path="/" component = { App } />
+          <Route exact path="/" component = { Dashboard } />
           <Route path="/admin" component = { Admin } />
         </Switch>
     </div>
