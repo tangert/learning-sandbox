@@ -45,7 +45,6 @@ class Dashboard extends Component {
     this.setState(previousState => ({
       tweet_data: [data.key, ...previousState.tweet_data]
     }));
-    console.log("TWEET COUNT: \n " + this.state.tweet_data.length);
   }
 
   onStockData = (data) => {
@@ -53,8 +52,6 @@ class Dashboard extends Component {
     this.setState(previousState => ({
       graph_data: [...previousState.graph_data, {point: data.key, timeStamp: newTime} ]
     }));
-    console.log(this.state);
-    console.log("NEW STOCK POINT COUNT: \n " + this.state.graph_data.length);
   }
 
   onTrafficGen = (data) => {

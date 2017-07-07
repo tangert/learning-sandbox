@@ -87,7 +87,7 @@ class Admin extends Component {
   }
 
   onRangeAfterChange = (value) => {
-    console.log(value); //eslint-disable-line
+    console.log(value);
   }
 
   onSubmit() {
@@ -97,13 +97,6 @@ class Admin extends Component {
     },()=>{
       console.log(this.state.isRunning);
     });
-
-    let HTTP_verb;
-    if (this.state.isRunning) {
-      HTTP_verb = 'put';
-    } else {
-      HTTP_verb = 'post';
-    }
 
     axios({
       method: 'post',

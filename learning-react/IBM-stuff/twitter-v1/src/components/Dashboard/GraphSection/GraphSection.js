@@ -38,7 +38,6 @@ class GraphSection extends Component {
   }
 
   render(){
-
     const points = this.props.graph_data.map((datum) => {
       return datum.point;
     });

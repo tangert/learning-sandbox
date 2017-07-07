@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import TweetHeader from './TweetHeader/TweetHeader';
-import TweetsContainer from './TweetsContainer/TweetsContainer';
+import TweetFeedContainer from './TweetFeedContainer/TweetFeedContainer';
 import './TweetsSection.css';
 
-class TweetsSection extends Component {
-  render(){
-    return(
-      <div className="Tweet-Section">
-        <TweetHeader tweet_data = {this.props.tweet_data}
-                     date= {this.props.date}
-                     isReceivingData = {this.props.isReceivingData}>
-        </TweetHeader>
-        <TweetsContainer tweet_data = {this.props.tweet_data}></TweetsContainer>
-      </div>
-    );
-  }
+const TweetsSection = (props) => {
+  return (
+    <div className="Tweet-Section">
+      <TweetHeader tweet_data = {props.tweet_data}
+                   date= {props.date}
+                   isReceivingData = {props.isReceivingData}
+      />
+      <TweetFeedContainer tweet_data = {props.tweet_data}/>
+    </div>
+  )
 }
 
 export default TweetsSection;

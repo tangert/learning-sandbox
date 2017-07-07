@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Tweet from './../Tweet/Tweet';
 import FlipMove from 'react-flip-move';
-import { CSSTransitionGroup } from 'react-transition-group'
-import './TweetsContainer.css';
+import { CSSTransitionGroup } from 'react-transition-group';
+import './TweetFeedContainer.css';
 
-class TweetsContainer extends Component {
+class TweetFeedContainer extends Component {
   constructor(props){
       super(props);
   }
@@ -35,4 +35,5 @@ class TweetsContainer extends Component {
   }
 }
 
-export default TweetsContainer;
+
+export default TweetFeedContainer;

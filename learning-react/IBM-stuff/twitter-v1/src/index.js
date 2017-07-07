@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import history from 'history'
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+import Store from './store';
+
 import Dashboard from './components/Dashboard/Dashboard';
 import Admin from './components/Admin/Admin';
 import logo from './logo.svg';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './index.css';
 
 class AppHeader extends Component {
@@ -17,16 +22,19 @@ class AppHeader extends Component {
   }
 }
 
-ReactDOM.render(
-  <Router>
-    <div className = "app-container">
-        <AppHeader/>
-        <Switch>
-          <Route exact path="/" component = { Dashboard } />
-          <Route path="/admin" component = { Admin } />
-        </Switch>
-    </div>
-  </Router>,
+const StoreInstance = Store();
 
+ReactDOM.render(
+  <Provider store={StoreInstance}>
+    <Router history = {history}>
+      <div className = "app-container">
+          <AppHeader/>
+          <Switch>
+            <Route exact path="/" component = { Dashboard } />
+            <Route path="/admin" component = { Admin } />
+          </Switch>
+      </div>
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
