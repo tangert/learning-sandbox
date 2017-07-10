@@ -52,7 +52,6 @@
     flex-direction: row;
     align-items: baseline;
     margin-top: -35px;
-    background-color: rgba(0,0,0,0.5);
   }
 
       .avg-sent {

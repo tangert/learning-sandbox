@@ -6,6 +6,7 @@ import { Router, browserHistory } from 'react-router'
 import './Dashboard.css';
 
 //Socket that lives on the Express server.
+//FIXME: change URL to AWS/Heroku URL when deployed
 const socket = io("http://localhost:3001");
 
 class Dashboard extends Component {
@@ -56,7 +57,7 @@ class Dashboard extends Component {
 
   onTrafficGen = (data) => {
     if(data.key.isRunning) {
-      console.log("DATA KEY RUNNING: ")
+      console.log("DATA KEY RUNNING: ");
       console.log(data.key);
       this.setState({
         isReceivingData: true
@@ -68,6 +69,8 @@ class Dashboard extends Component {
       })
     }
   }
+
+  //map state to props to be able to send down data as props after connecting to the store.
 
   render() {
     return (

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Overdrive from 'react-overdrive';
 import AnimatedNumber from 'react-animated-number';
 import './GraphHeader.css';
 
@@ -31,6 +32,7 @@ class GraphHeader extends Component {
   render(){
     return(
       <div className="Graph-Header">
+
         <div className="top">
           <h1 className="stock-title">Bane&Ox
             <span className="title-detail"> Live Feed</span>

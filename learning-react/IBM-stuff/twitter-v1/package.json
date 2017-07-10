@@ -24,6 +24,7 @@
     "react-highlight": "^0.10.0",
     "react-highstock": "^1.0.2",
     "react-list": "^0.8.6",
+    "react-overdrive": "0.0.7",
     "react-rangeslider": "^2.1.0",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",

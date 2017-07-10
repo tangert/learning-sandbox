@@ -73,7 +73,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
   }
 
   //Generate traffic
-    if (req.method === 'POST' || req.method == 'PUT') {
+    if (req.method === 'POST') {
       console.log("\n" + 'About to start countdown!');
       req.app.io.emit('traffic-gen', {key: { isRunning: true }});
       res.send(req.body);
@@ -100,6 +100,16 @@ app.use('/api/gen-traffic', function(req, res, next) {
       //2: SENTIMENT
       //First grab all the data from the DB
       grabSentimentSensitiveData(sent, sentFlux);
+
+      //RANDOMIZE
+      // pollSentimentData = () => {
+      //   var rand = Math.round(Math.random()*(3000-500)) + 500;
+      //   setTimeout(function(){
+      //       if (timerIsRunning) { sendSentimentData(sent); }
+      //       pollSentimentData();
+      //   }, rand);
+      // }
+
       pollSentimentData = setInterval(function(){
         if (timerIsRunning) {
           sendSentimentData(sent);
@@ -155,10 +165,12 @@ app.use('/api/gen-traffic', function(req, res, next) {
     var delta = stock*flux;
     var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
     var color = convertPercentToColor(red, blue, calculatedStock);
+    var newTime = new Date().getTime()
 
     var payload = {
+      stock: calculatedStock,
       color: color,
-      stock: calculatedStock
+      time: newTime
     };
 
     sendOverSocket('stock-data', calculatedStock);
@@ -172,6 +184,8 @@ app.use('/api/gen-traffic', function(req, res, next) {
       tweet_handles = data;
     });
 
+    //FIXME: Doesn't return when sentiment is out of a certain range
+    //FIXME: incorporate finding hashtags
     db.collection('tweet_content').find({
               $and: [
                 { sentiment: { $lte: sentiment+delta } },
@@ -188,13 +202,8 @@ app.use('/api/gen-traffic', function(req, res, next) {
 
   function sendOverSocket(socket, payload) {
     req.app.io.emit(socket, {key:payload});
-    // console.log(payload);
   }
 
-});
-
-server.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
 });
 
 //Some useful helper functions
@@ -238,5 +247,9 @@ function convertPercentToColor(color1, color2, percent) {
                       makeColorPiece(newColor.b);
   return(newColor);
 }
+
+server.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
+});
 
 module.exports = 'app';
