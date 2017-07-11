@@ -10,6 +10,7 @@ class TweetFeedContainer extends Component {
   }
 
   renderTweets() {
+    if (this.props.tweet_data != undefined) {
     return this.props.tweet_data.slice(0,20).map( (data) => {
       return (
         <Tweet
@@ -22,6 +23,7 @@ class TweetFeedContainer extends Component {
         </Tweet>
         );
     });
+    }
   }
 
   render(){

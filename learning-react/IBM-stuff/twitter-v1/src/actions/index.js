@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
-//Action creators
+//Socket action creators
 export function updateStock(data){
   return {
     type: types.UPDATE_STOCK,

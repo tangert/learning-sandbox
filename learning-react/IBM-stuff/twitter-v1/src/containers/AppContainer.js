@@ -8,14 +8,14 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as SocketActions from './actions/index.js';
-import Store from './store';
+import * as SocketActions from '../actions/index.js';
+import Store from './../store';
 
-import Dashboard from './components/Dashboard/Dashboard';
-import Admin from './components/Admin/Admin';
-import logo from './logo.svg';
+import Dashboard from './../components/Dashboard/Dashboard';
+import Admin from './../components/Admin/Admin';
+import logo from './../logo.svg';
 import io from 'socket.io-client';
-import './index.css';
+import './../index.css';
 
 const socket = io("http://localhost:3001");
 const StoreInstance = Store();
@@ -88,4 +88,3 @@ const mapDispatchToProps = (dispatch)  => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
-ReactDOM.render( <AppContainer/>, document.getElementById('root'));

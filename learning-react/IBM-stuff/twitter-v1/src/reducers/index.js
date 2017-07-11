@@ -1,9 +1,6 @@
-import admin from './admin';
 import socket from './socket';
 import { combineReducers } from 'redux';
 
-const rootReducer = combineReducers({
-  admin, socket
-});
+const rootReducer = combineReducers({ socket });
 
 export default rootReducer;
