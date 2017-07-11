@@ -4,26 +4,20 @@ import * as types from '../constants/ActionTypes';
 export function updateStock(data){
   return {
     type: types.UPDATE_STOCK,
-    payload: {
-      data: data
-    }
+    payload: data
   }
 }
 
 export function updateSentiment(data){
   return {
     type: types.UPDATE_SENTIMENT,
-    payload: {
-      data: data
-    }
+    payload: data
   }
 }
 
-export function updateTrafficGen(data){
+export function updateTrafficGen(bool){
   return {
     type: types.UPDATE_TRAFFIC_GEN,
-    payload: {
-      data: data
-    }
+    payload: bool
   }
 }

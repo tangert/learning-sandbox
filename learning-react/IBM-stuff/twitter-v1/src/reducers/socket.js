@@ -11,15 +11,15 @@ export default function socket(state = initialState, action) {
   switch(action.type) {
     case UPDATE_STOCK:
       return {...state,
-              stock_data: [ ...state.stock_data, action.payload.data.key ]
+              stock_data: [ ...state.stock_data, action.payload ]
              }
     case UPDATE_SENTIMENT:
       return { ...state,
-              tweet_data: [ action.payload.data.key, ...state.tweet_data ]
+              tweet_data: [ action.payload, ...state.tweet_data ]
             }
     case UPDATE_TRAFFIC_GEN:
       return { ...state,
-              isReceivingData: action.payload.data.key }
+              isReceivingData: action.payload }
     default:
       return state;
   }

@@ -75,7 +75,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
   //Generate traffic
     if (req.method === 'POST') {
       console.log("\n" + 'About to start countdown!');
-      req.app.io.emit('traffic-gen', {key: { isRunning: true }});
+      req.app.io.emit('traffic-gen', true );
       res.send(req.body);
 
       //Local variables
@@ -92,7 +92,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
         clearInterval(pollSentimentData);
         clearInterval(pollStockData);
 
-        req.app.io.emit('traffic-gen', {key: { isRunning: false }});
+        req.app.io.emit('traffic-gen', false );
       }, incomingTimeout);
 
       requestSent = true;
@@ -131,7 +131,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
     clearInterval(pollSentimentData);
     clearInterval(pollStockData);
     clearTimeout(timerTimeout);
-    req.app.io.emit('traffic-gen', {key: { isRunning: false }});
+    req.app.io.emit('traffic-gen', false );
   }
 
   /**********************************************************************/
@@ -201,7 +201,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
   }
 
   function sendOverSocket(socket, payload) {
-    req.app.io.emit(socket, {key:payload});
+    req.app.io.emit(socket, payload);
   }
 
 });
