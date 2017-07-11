@@ -20,8 +20,8 @@ class GraphSection extends Component {
     setInterval(function(){
         try{
               const last = this.props.graph_data.length-1;
-              const currentPoint = this.props.graph_data[last].point;
-              const priceDelta = currentPoint - this.props.graph_data[last-1].point;
+              const currentPoint = this.props.graph_data[last].stock;
+              const priceDelta = currentPoint - this.props.graph_data[last-1].stock;
               const percentDelta = priceDelta/currentPoint;
               this.setState({
                 currentStock: currentPoint,
@@ -40,7 +40,7 @@ class GraphSection extends Component {
 
   render(){
     const points = this.props.graph_data.map((datum) => {
-      return datum.point;
+      return datum.stock;
     });
 
     return(
@@ -105,9 +105,5 @@ class GraphSection extends Component {
     )
   }
 }
-
-GraphSection.defaultProps = {
-  graph_data: [{point: 23, timeStamp: Date()}],
-};
 
 export default GraphSection;

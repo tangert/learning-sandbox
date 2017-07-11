@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import TweetsSection from './TweetsSection/TweetsSection';
 import GraphSection from './GraphSection/GraphSection';
 import { Router, browserHistory } from 'react-router'
@@ -11,6 +12,7 @@ class Dashboard extends Component {
         <div className="Content">
           <TweetsSection tweet_data = {this.props.tweet_data}
                          isReceivingData = {this.props.isReceivingData}/>
+
           <GraphSection graph_data = {this.props.graph_data}
                         tweet_data = {this.props.tweet_data}
                         isReceivingData = {this.props.isReceivingData}/>
@@ -20,4 +22,13 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+function mapStateToProps(state){
+  return {
+    graph_data: state.socket.stock_data,
+    tweet_data: state.socket.tweet_data,
+    isReceivingData: state.socket.isReceivingData
+  };
+}
+
+
+export default connect(mapStateToProps, null)(Dashboard)

@@ -109,8 +109,8 @@ class Graph extends Component {
               //Stock data
               const graph_data = this.props.graph_data;
               const last_graph_point = graph_data.length-1;
-              const stock_x = graph_data[last_graph_point].timeStamp;
-              const stock_y =  graph_data[last_graph_point].point;
+              const stock_x = graph_data[last_graph_point].time;
+              const stock_y =  graph_data[last_graph_point].stock;
 
               //Tweet data
               const tweet_data = this.props.tweet_data;
@@ -126,7 +126,7 @@ class Graph extends Component {
               const tweetStrokeColor = this.props.tweet_data[0].sentiment < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
               const tweetPointColor = this.props.tweet_data[0].color.cssColor;
 
-              const stockColor = this.props.graph_data[last_graph_point].point < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+              const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
 
               //Object options, (bool) Redraw, (bool) Shift
               chart.series[0].addPoint(stock_point, false, shiftFlagStock);

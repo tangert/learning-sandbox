@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Overdrive from 'react-overdrive';
 import axios from 'axios';
 import querystring from 'querystring';
@@ -216,4 +217,12 @@ class Admin extends Component {
   }
 }
 
-export default Admin;
+function mapStateToProps(state){
+  return {
+    graph_data: state.socket.stock_data,
+    tweet_data: state.socket.tweet_data,
+    isReceivingData: state.socket.isReceivingData
+  };
+}
+
+export default connect(mapStateToProps, null)(Admin)

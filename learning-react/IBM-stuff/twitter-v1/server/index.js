@@ -165,7 +165,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
     var delta = stock*flux;
     var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
     var color = convertPercentToColor(red, blue, calculatedStock);
-    var newTime = new Date().getTime()
+    var newTime = new Date().getTime();
 
     var payload = {
       stock: calculatedStock,
@@ -173,7 +173,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
       time: newTime
     };
 
-    sendOverSocket('stock-data', calculatedStock);
+    sendOverSocket('stock-data', payload);
   }
 
   function grabSentimentSensitiveData(sentiment, flux) {

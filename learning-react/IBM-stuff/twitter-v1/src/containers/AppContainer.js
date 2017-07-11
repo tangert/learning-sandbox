@@ -8,7 +8,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as SocketActions from '../actions/index.js';
+import * as SocketActions from './../actions/index.js';
 import Store from './../store';
 
 import Dashboard from './../components/Dashboard/Dashboard';
@@ -18,7 +18,6 @@ import io from 'socket.io-client';
 import './../index.css';
 
 const socket = io("http://localhost:3001");
-const StoreInstance = Store();
 
 class AppContainer extends Component {
   componentDidMount(){
@@ -28,24 +27,20 @@ class AppContainer extends Component {
     }.bind(this));
 
     socket.on('sentiment-data', function(data){
-      console.log(data);
-      this.props.updateSentiment(data);
+      this.props.actions.updateSentiment(data);
     }.bind(this));
 
     socket.on('stock-data', function(data){
-      console.log(data);
-      this.props.updateStock(data);
+      this.props.actions.updateStock(data);
     }.bind(this));
 
     socket.on('traffic-gen', function(data){
-      console.log(data);
-      this.props.updateTrafficGen(data);
+      this.props.actions.updateTrafficGen(data);
     }.bind(this));
   }
 
   render(){
     return(
-      <Provider store={StoreInstance}>
         <Router history = {history}>
           <div className = "app-container">
               <div className="App-header">
@@ -54,37 +49,19 @@ class AppContainer extends Component {
               </div>
 
               <Switch>
-                  <Route exact path='/' render={(props) =>
-                      (<Dashboard {...props}
-                        tweet_data= {props.tweet_data}
-                        graph_data = {props.graph_data}
-                        isReceivingData = {props.isReceivingData}
-                        />
-                      )}/>
-
-                    <Route exact path='/admin' render={(props) =>
-                      (<Admin {...props}
-                        tweet_data= {props.tweet_data}
-                        graph_data = {props.graph_data}
-                        isReceivingData = {props.isReceivingData}
-                        />
-                      )}/>
+                  <Route exact path='/' component= { Dashboard }/>
+                  <Route exact path='/admin' component= { Admin }/>
               </Switch>
           </div>
         </Router>
-      </Provider>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  graph_data: state.graph_data,
-  tweet_data: state.tweet_data,
-  isReceivingData: state.isReceivingData
-});
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(SocketActions, dispatch)
+  };
+}
 
-const mapDispatchToProps = (dispatch)  => ({
-  actions: bindActionCreators(SocketActions, dispatch)
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+export default connect(null, mapDispatchToProps)(AppContainer)
