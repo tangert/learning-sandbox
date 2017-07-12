@@ -21,3 +21,26 @@ export function updateTrafficGen(bool){
     payload: bool
   }
 }
+
+//API Request
+export function sendRequest(data) {
+  return {
+    type: types.SEND_REQUEST,
+    payload: data
+  }
+}
+
+//Pinned tweet container
+export function createPinnedTweet(data) {
+  return {
+    type: types.CREATE_PINNED_TWEET,
+    payload: data
+  }
+}
+
+export function deletePinnedTweet(id) {
+  return {
+    type: types.DELETE_PINNED_TWEET,
+    payload: id
+  }
+}

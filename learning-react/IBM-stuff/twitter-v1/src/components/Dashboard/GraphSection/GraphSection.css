@@ -4,7 +4,7 @@
 
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  margin-right: 30px;
 }
 
 .graph-wrapper {
@@ -18,41 +18,50 @@
   align-items: center;
 }
 
+.graph-switch {
+  margin-top: 10px;
+}
+
+.under-graph {
+  display: flex;
+  flex-direction: column;
+}
+
+  .under-graph-header {
+    order: 1;
+    display: flex;
+    flex-direction: row;
+
+    color: rgba(255,255,255,0.5);
+    margin-top: 10px;
+  }
+
+    .under-graph-title {
+      color: rgba(255,255,255,0.5);
+      margin-top: 10px;
+    }
+
+    .under-graph-trend {
+      margin-left: 10px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 10px;
+    }
+
+  .under-graph-viz {
+    order: 2;
+    margin-top: 10px;
+    height: 100px;
+    z-index: -1;
+    border-radius: 15px;
+    background-image: linear-gradient(to bottom right, #222 0%, rgba(63,66,54,0.1) 100%);
+  }
+
 .market-info {
   display: flex;
   flex-direction: row;
   text-decoration: none;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 
-  margin-top: 30px;
-  margin-left: 50px;
-  margin-right: 50px;
-}
-
-  .market-list-item {
-    color: rgba(255,255,255,0.5);
-    padding: 20px;
-    margin: 10px;
-    background-image: linear-gradient(to bottom right, #222 0%, rgba(255,255,255,0.1) 100%);
-    border-radius: 5px;
-    transition: 0.25s ease-in-out;
-  }
-
-  .market-list-item:hover {
-    background-color: rgba(255,255,255,0.2);
-    transform: scale(1.2);
-    border-radius: 10px;
-  }
-
-.stock-detail-val {
-  opacity: 0.5;
-  transition: 0.2s linear;
-}
-
-.stock-detail-val:hover {
-  opacity: 1.0;
-  font-weight: 600;
-  /*FIXME: DYNAMIC*/
-  font-size: 23px;
+  margin-top: 10px;
 }

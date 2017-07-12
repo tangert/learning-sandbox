@@ -1,0 +1,6 @@
+:root {
+  --background_black: rgb(17, 17, 17);
+  --gb_gradient: linear-gradient(to bottom right, #222 0%, rgba(63,66,54,0.1) 100%);
+  --red: rgb(212,75,60);
+  --blue: rgb(158,222,242);
+}

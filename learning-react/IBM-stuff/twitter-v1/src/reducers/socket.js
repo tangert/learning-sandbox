@@ -3,8 +3,8 @@ import { UPDATE_STOCK, UPDATE_SENTIMENT, UPDATE_TRAFFIC_GEN } from '../constants
 const initialState = {
     tweet_data: [],
     stock_data: [],
-    isReceivingData: true
-  };
+    isReceivingData: false,
+};
 
 //Socket reducer.
 export default function socket(state = initialState, action) {

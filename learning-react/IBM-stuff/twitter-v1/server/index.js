@@ -35,6 +35,10 @@ io.on('connection', function (socket) {
   });
 });
 
+io.on('send-request', function(socket){
+  socket.emit('')
+});
+
 //Root websocket route
 app.get('/', function (req, res) {
   res.status(200).send('Web socket connects here.');
@@ -76,6 +80,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
     if (req.method === 'POST') {
       console.log("\n" + 'About to start countdown!');
       req.app.io.emit('traffic-gen', true );
+      req.app.io.emit('send-request', req.body);
       res.send(req.body);
 
       //Local variables

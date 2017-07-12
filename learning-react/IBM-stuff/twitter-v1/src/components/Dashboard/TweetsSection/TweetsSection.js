@@ -9,6 +9,7 @@ const TweetsSection = (props) => {
       <TweetHeader tweet_data = {props.tweet_data}
                    date= {props.date}
                    isReceivingData = {props.isReceivingData}
+                   last_request_body = {props.last_request_body}
       />
       <TweetFeedContainer tweet_data = {props.tweet_data}/>
     </div>

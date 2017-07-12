@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as SocketActions from './actions/index.js';
-import Store from './store';
+import GlobalStore from './store';
 
 import Dashboard from './components/Dashboard/Dashboard';
 import Admin from './components/Admin/Admin';
@@ -19,8 +19,7 @@ import AppContainer from './containers/AppContainer';
 import './index.css';
 
 const socket = io("http://localhost:3001");
-const StoreInstance = Store();
 ReactDOM.render(
-    <Provider store = {StoreInstance}>
+    <Provider store = {GlobalStore}>
       <AppContainer/>
     </Provider>, document.getElementById('root'));

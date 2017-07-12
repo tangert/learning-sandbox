@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Overdrive from 'react-overdrive';
-import './GraphSection.css';
 import GraphHeader from './GraphHeader/GraphHeader';
 import Graph from './Graph/Graph';
+import MarketListItem from './MarketListItem/MarketListItem';
+import './GraphSection.css';
+
 
 class GraphSection extends Component {
   constructor(props){
@@ -18,6 +20,7 @@ class GraphSection extends Component {
 
   componentDidMount(){
     setInterval(function(){
+      if(this.props.isReceivingData) {
         try{
               const last = this.props.graph_data.length-1;
               const currentPoint = this.props.graph_data[last].stock;
@@ -35,6 +38,7 @@ class GraphSection extends Component {
               console.log("You need to wait for your data bro.");
             }
         }
+      }
       }.bind(this),1500);
   }
 
@@ -50,6 +54,7 @@ class GraphSection extends Component {
             priceDelta = {this.state.priceDelta}
             percentDelta = {this.state.percentDelta}
         />
+
         <div className = "graph-wrapper">
           <Graph className= "stock-graph"
             graph_data = {this.props.graph_data}
@@ -57,49 +62,24 @@ class GraphSection extends Component {
             isReceivingData = {this.props.isReceivingData}/>
         </div>
 
+        <div className = "under-graph">
+          <div className = "under-graph-header">
+            <div className = "under-graph-title">Trading Volume</div>
+            <div className = "under-graph-trend">+50%</div>
+          </div>
+
+          <div className = "under-graph-viz">
+
+          </div>
+        </div>
+
         <div className= "market-info">
-              <div className = "market-list-item">
-                        Open:
-                        <span className = "stock-detail-val">
-                          { points.length > 0 ? points[0] : 0 }
-                        </span>
-              </div>
-
-              <div className = "market-list-item">
-                        High:
-                        <span className = "stock-detail-val">
-                          { Math.max(...points) }
-                        </span>
-              </div>
-
-              <div className = "market-list-item">
-                        Low:
-                        <span className = "stock-detail-val">
-                          { Math.min(...points) }
-                        </span>
-              </div>
-
-              <div className = "market-list-item">
-                        Mkt Cap:
-                        <span className = "stock-detail-val">
-                        { points.length > 0 ? (points[points.length-1] * (1500000 + Math.random()*15000)).toFixed(2) : 2000000 }
-                        </span>
-              </div>
-
-              <div className = "market-list-item">
-                        P/E Ratio:
-                        <span className = "stock-detail-val">
-                        { points.length > 0 ? (points[points.length-1] / 2.00).toFixed(2) : 0 }
-                      </span>
-              </div>
-
-              <div className = "market-list-item">
-                        Div Yield:
-                        <span className = "stock-detail-val">
-                          { points.length > 0 ? ((2.00 / points[points.length-1])*100).toFixed(2) : 0 }
-                          %
-                        </span>
-              </div>
+            <MarketListItem type = 'OPEN' data = {points} title = 'Open'/>
+            <MarketListItem type = 'HIGH' data = {points} title = 'High'/>
+            <MarketListItem type = 'LOW' data = {points} title = 'Low'/>
+            <MarketListItem type = 'MKT_CAP' data = {points} title = 'Mkt Cap'/>
+            <MarketListItem type = 'PE_RATIO' data = {points} title = 'P/E Ratio'/>
+            <MarketListItem type = 'DIV_YIELD' data = {points} title = 'Div Yield'/>
         </div>
       </div>
     )

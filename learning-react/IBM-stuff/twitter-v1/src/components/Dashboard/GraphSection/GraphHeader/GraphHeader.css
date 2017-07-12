@@ -1,8 +1,6 @@
 .Graph-Header {
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
-  margin-right: 10px;
   width: auto;
   /*background-color: red;*/
 }

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group'
 import './Tweet.css';
 
+let updateInterval;
+
 class Tweet extends Component {
     constructor(props){
       super(props);
@@ -21,9 +23,17 @@ class Tweet extends Component {
     }
 
     componentDidMount() {
-      setInterval(function(){
-        this.updateTime();
-      }.bind(this),1000);
+      this.setState({mounted:  true});
+      if(this.state.mounted) {
+        updateInterval = setInterval(function(){
+          this.updateTime();
+        }.bind(this),1000);
+      }
+    }
+
+    componentWillUnmount() {
+       this.setState({mounted:  false});
+       clearInterval(updateInterval);
     }
 
     render(){

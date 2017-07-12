@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import * as Actions from './../../actions/index.js';
+
+import io from 'socket.io-client';
 import Overdrive from 'react-overdrive';
 import axios from 'axios';
 import querystring from 'querystring';
@@ -33,6 +37,8 @@ const handle = (props) => {
     </Tooltip>
   );
 };
+
+const socket = io("http://localhost:3001");
 
 class Admin extends Component {
   constructor(props) {
@@ -100,16 +106,18 @@ class Admin extends Component {
       console.log(this.state.isRunning);
     });
 
+    let requestBody = {
+      time: this.state.time,
+      sentiment: this.state.sentiment,
+      stock: this.state.stock,
+      stockFlux: this.state.stockFlux/100,
+      sentFlux: this.state.sentFlux/100
+    };
+
     axios({
       method: 'post',
       url: '/api/gen-traffic',
-      data: {
-        time: this.state.time,
-        sentiment: this.state.sentiment,
-        stock: this.state.stock,
-        stockFlux: this.state.stockFlux/100,
-        sentFlux: this.state.sentFlux/100
-      }
+      data: requestBody
     });
   }
 
@@ -217,12 +225,19 @@ class Admin extends Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(Actions, dispatch)
+  };
+}
+
 function mapStateToProps(state){
   return {
     graph_data: state.socket.stock_data,
     tweet_data: state.socket.tweet_data,
-    isReceivingData: state.socket.isReceivingData
+    isReceivingData: state.socket.isReceivingData,
+    last_request_body: state.api.last_request_body
   };
 }
 
-export default connect(mapStateToProps, null)(Admin)
+export default connect(mapStateToProps, mapDispatchToProps)(Admin)

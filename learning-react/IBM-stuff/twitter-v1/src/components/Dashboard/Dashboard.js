@@ -11,7 +11,8 @@ class Dashboard extends Component {
       <div className="App">
         <div className="Content">
           <TweetsSection tweet_data = {this.props.tweet_data}
-                         isReceivingData = {this.props.isReceivingData}/>
+                         isReceivingData = {this.props.isReceivingData}
+                         last_request_body = {this.props.last_request_body}/>
 
           <GraphSection graph_data = {this.props.graph_data}
                         tweet_data = {this.props.tweet_data}
@@ -26,7 +27,8 @@ function mapStateToProps(state){
   return {
     graph_data: state.socket.stock_data,
     tweet_data: state.socket.tweet_data,
-    isReceivingData: state.socket.isReceivingData
+    isReceivingData: state.socket.isReceivingData,
+    last_request_body: state.api.last_request_body
   };
 }
 

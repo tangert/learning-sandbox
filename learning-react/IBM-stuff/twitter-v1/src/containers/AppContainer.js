@@ -5,11 +5,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import history from 'history'
 
 import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as SocketActions from './../actions/index.js';
-import Store from './../store';
+import * as Actions from './../actions/index.js';
 
 import Dashboard from './../components/Dashboard/Dashboard';
 import Admin from './../components/Admin/Admin';
@@ -37,6 +35,12 @@ class AppContainer extends Component {
     socket.on('traffic-gen', function(data){
       this.props.actions.updateTrafficGen(data);
     }.bind(this));
+
+    socket.on('send-request', function(data){
+      console.log("REQUEST SENT!");
+      console.log(data);
+      this.props.actions.sendRequest(data);
+    }.bind(this));
   }
 
   render(){
@@ -50,7 +54,7 @@ class AppContainer extends Component {
 
               <Switch>
                   <Route exact path='/' component= { Dashboard }/>
-                  <Route exact path='/admin' component= { Admin }/>
+                  <Route exact path='/admin' component = { Admin }/>
               </Switch>
           </div>
         </Router>
@@ -58,10 +62,19 @@ class AppContainer extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state){
   return {
-    actions: bindActionCreators(SocketActions, dispatch)
+    graph_data: state.socket.stock_data,
+    tweet_data: state.socket.tweet_data,
+    isReceivingData: state.socket.isReceivingData,
+    last_request_body: state.api.last_request_body
   };
 }
 
-export default connect(null, mapDispatchToProps)(AppContainer)
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(Actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer)
