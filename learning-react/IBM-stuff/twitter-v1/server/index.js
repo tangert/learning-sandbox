@@ -35,9 +35,11 @@ io.on('connection', function (socket) {
   });
 });
 
-io.on('send-request', function(socket){
-  socket.emit('')
-});
+//Global variables for traffic generation
+var requestSent = false;
+var pollSentimentData;
+var pollStockData;
+var timerTimeout;
 
 //Root websocket route
 app.get('/', function (req, res) {
@@ -51,13 +53,38 @@ app.get('/api', function (req, res) {
   console.log('API IS WORKING!!!');
 });
 
+/*******************************************************************/
+/***********************TWEET DB ROUTES*****************************/
+/*******************************************************************/
+//Standard DB Crud Operations with Mongo.
+//Get all tweets
+app.get('/api/tweets',function(req,res){
 
-var requestSent = false;
-var pollSentimentData;
-var pollStockData;
-var timerTimeout;
+});
 
-//Traffic generation
+//Gets a specific tweet
+app.get('/api/tweets/:id',function(req,res){
+
+});
+
+//Edit a specific tweet
+app.put('api/tweets/edit/:id', function(req,res){
+
+});
+
+//Create a tweet
+app.post('/api/tweets/create', function(req,res) {
+
+});
+
+//Delete a tweet
+app.delete('api/tweets/delete/:id', function(req,res){
+
+});
+
+/*******************************************************************/
+/**********************TRAFFIC GENERATION***************************/
+/*******************************************************************/
 app.use('/api/gen-traffic', function(req, res, next) {
 
   //Query variables
@@ -192,7 +219,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
     //FIXME: Doesn't return when sentiment is out of a certain range
     //FIXME: incorporate finding hashtags
     db.collection('tweet_content').find({
-              $and: [
+              $or: [
                 { sentiment: { $lte: sentiment+delta } },
                 { sentiment: { $gte: sentiment-delta } }
                     ]

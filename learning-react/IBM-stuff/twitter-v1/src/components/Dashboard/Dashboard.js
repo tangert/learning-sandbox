@@ -25,9 +25,9 @@ class Dashboard extends Component {
 
 function mapStateToProps(state){
   return {
-    graph_data: state.socket.stock_data,
-    tweet_data: state.socket.tweet_data,
-    isReceivingData: state.socket.isReceivingData,
+    graph_data: state.dashboard.stock_data,
+    tweet_data: state.dashboard.tweet_data,
+    isReceivingData: state.dashboard.isReceivingData,
     last_request_body: state.api.last_request_body
   };
 }

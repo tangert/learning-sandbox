@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import TweetHeader from './TweetHeader/TweetHeader';
 import TweetFeedContainer from './TweetFeedContainer/TweetFeedContainer';
+import PinnedTweetsContainer from './PinnedTweetsContainer/PinnedTweetsContainer';
+import ToggleDisplay from './../../../modules/ToggleDisplay';
 import './TweetsSection.css';
 
 const TweetsSection = (props) => {
@@ -11,7 +13,9 @@ const TweetsSection = (props) => {
                    isReceivingData = {props.isReceivingData}
                    last_request_body = {props.last_request_body}
       />
-      <TweetFeedContainer tweet_data = {props.tweet_data}/>
+    <PinnedTweetsContainer pinned_tweets = {props.tweet_data}/>
+    <div className = "tweet-feed-separator"></div>
+    <TweetFeedContainer tweet_data = {props.tweet_data}/>
     </div>
   )
 }

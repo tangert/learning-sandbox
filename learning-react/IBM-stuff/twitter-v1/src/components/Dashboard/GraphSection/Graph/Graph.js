@@ -117,6 +117,23 @@ class Graph extends Component {
               const tweet_x = tweet_data[0].time;
               const tweet_y = tweet_data[0].sentiment;
 
+              const timeFlag = this.props.graph_data[last_graph_point].time - this.props.graph_data[last_graph_point-1].time;
+              if (timeFlag > 5000) {
+                console.log("TIME FLAG: ",timeFlag);
+
+                for(var i = 0; i < chart.series[0].length; i++) {
+                  chart.series[0].removePoint(i);
+                }
+
+                for(var i = 0; i < chart.series[1].length; i++) {
+                  chart.series[1].removePoint(i);
+                }
+
+              }
+
+              console.log(this.props.graph_data[last_graph_point]);
+              console.log("DISTANCE BETWEEN LAST TWO POINTS: ", timeFlag);
+
               const shiftFlagStock =  chart.series[0].data.length > 50;
               const shiftFlagTweet =  chart.series[1].data.length > 50;
 
@@ -134,7 +151,7 @@ class Graph extends Component {
               chart.series[0].options.color = stockColor;
               chart.series[0].update(chart.series[0].options);
 
-              chart.series[1].addPoint(tweet_point, false, shiftFlagTweet);
+              chart.series[1].addPoint(tweet_point, false, shiftFlagStock);
               chart.series[1].color = tweetPointColor;
               chart.series[1].options.color = tweetStrokeColor;
               chart.series[1].update(chart.series[1].options);

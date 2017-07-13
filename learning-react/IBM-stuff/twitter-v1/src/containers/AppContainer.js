@@ -24,6 +24,8 @@ class AppContainer extends Component {
       socket.emit('client-connect', { connectedToClient: 'true' });
     }.bind(this));
 
+    //Connections for Admin -> Dashboard Redux Management
+    //Standard Socket actions
     socket.on('sentiment-data', function(data){
       this.props.actions.updateSentiment(data);
     }.bind(this));
@@ -36,11 +38,11 @@ class AppContainer extends Component {
       this.props.actions.updateTrafficGen(data);
     }.bind(this));
 
+    //API Requests
     socket.on('send-request', function(data){
-      console.log("REQUEST SENT!");
-      console.log(data);
       this.props.actions.sendRequest(data);
     }.bind(this));
+
   }
 
   render(){
@@ -62,19 +64,10 @@ class AppContainer extends Component {
   }
 }
 
-function mapStateToProps(state){
-  return {
-    graph_data: state.socket.stock_data,
-    tweet_data: state.socket.tweet_data,
-    isReceivingData: state.socket.isReceivingData,
-    last_request_body: state.api.last_request_body
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(Actions, dispatch)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer)
+export default connect(null, mapDispatchToProps)(AppContainer)

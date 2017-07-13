@@ -1,27 +1,5 @@
 .Tweets-Container {
-  order: 1;
+  order: 4;
   margin: 10px;
   margin-top:-10px;
-}
-
-.new_tweet-enter {
-  opacity: 0.01;
-  height: 0px;
-}
-
-.new_tweet-enter.example-enter-active {
-  opacity: 1;
-  width: 100px;
-  transition: 700ms;
-}
-
-.new_tweet-leave {
-  opacity: 1;
-  height: 100px;
-}
-
-.new_tweet-leave.example-leave-active {
-  opacity: 0.01;
-  height: 0px;
-  transition: 700ms;
 }

@@ -71,6 +71,7 @@ class GraphSection extends Component {
           <div className = "under-graph-viz">
 
           </div>
+
         </div>
 
         <div className= "market-info">

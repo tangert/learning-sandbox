@@ -39,7 +39,9 @@ class TweetHeader extends Component {
 
   playButtonHandler(){
     console.log("play button");
-    if(!this.props.isReceivingData && this.props.last_request_body != {}){
+    const requestExists = Object.keys(this.props.last_request_body).length > 0;
+
+    if(!this.props.isReceivingData && requestExists){
       axios({
         method: 'post',
         url: '/api/gen-traffic',

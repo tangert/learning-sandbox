@@ -7,7 +7,7 @@ const initialState = {
 };
 
 //Socket reducer.
-export default function socket(state = initialState, action) {
+export default function dashboard(state = initialState, action) {
   switch(action.type) {
     case UPDATE_STOCK:
       return {...state,
