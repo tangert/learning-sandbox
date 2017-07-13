@@ -151,16 +151,61 @@ class Admin extends Component {
 
     return(
       <div className = "admin">
-
-            <div className = "admin-nested-routes">
-              <div className = "admin-route-buttons">
-                <button className = "admin-button">Feed Control</button>
-                <button className = "admin-button">Data Management</button>
-              </div>
-            </div>
-
             <div className = "content-container">
-              <div className = "on-fly-control">
+
+              <div className = "social-media-container">
+                <div className = "social-media-title">
+                  <div>Social Media</div>
+                </div>
+
+                <div className = "social-media-content">
+
+                  <div className = "social-media-filters">
+                    <div className = "label-control-header">
+                      <div className = "corner-label">FILTERS</div>
+                      <button className = "add-new-button">+</button>
+                    </div>
+                  </div>
+
+                  <div className = "social-media-pinned-tweets">
+                    <div className = "label-control-header">
+                      <div className = "corner-label">PINNED TWEETS</div>
+                      <button className = "add-new-button">+</button>
+                    </div>                  </div>
+                </div>
+              </div>
+
+
+
+
+              <div className = "presets-container">
+                <div className = "presets-title">Presets</div>
+                <div className = "presets-content">
+                </div>
+              </div>
+
+
+
+
+              <div className = "live-injection-container">
+                <div className = "live-injection-title">Current Feed</div>
+
+                <div className = "live-injection-header">
+                  <div className = "live-injection-header-timer"></div>
+
+                  <div className = "live-injection-header-dataviz">
+                      <div className = "live-inection-header-stock"></div>
+                        <div className = "live-injection-separator"></div>
+                      <div className = "live-inection-header-sentiment"></div>
+                  </div>
+                </div>
+
+                <div className = "live-injection-content">
+
+                <div className = "label-control-header">
+                  <div className = "corner-label">FULL INJECT</div>
+                </div>
+
                 <div className = "sent-part">
                     <div className = "label">
                       <h1 className="main-value"> Sentiment: <span className = "val-detail">{this.state.sentiment}</span></h1>
@@ -207,6 +252,31 @@ class Admin extends Component {
                       handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
                       tipFormatter={value => `${value}%`}
                     />
+                  </div>
+
+                  <div className = "trading-volume-part">
+                    <div className = "label">
+                      <h1 className="main-value" style={{color:"white"}}>Trading Volume: <span className = "val-detail">{this.state.stock}</span></h1>
+                        <div className ="flux">
+                          <div className = "flux-title" style={{color:"white"}}>Flux: </div>
+                          <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.onStockFluxChange} defaultValue={0} />
+                        </div>
+                    </div>
+                      <Range
+                        className = "range stock"
+                        min={5}
+                        max={100}
+                        defaultValue={0}
+                        value={this.state.stock}
+                        onChange={this.onStockChange}
+                        onAfterChange={this.onRangeAfterChange}
+                        trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
+                        railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
+                        handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
+                        tipFormatter={value => `${value}%`}
+                      />
+                    </div>
+
 
                     <div className = "time-set">
                       Generate traffic for:
@@ -224,7 +294,7 @@ class Admin extends Component {
                       minutes
                     </div>
                     <div> { button_section } </div>
-                  </div>
+                </div>
                 </div>
             </div>
       </div>

@@ -8,7 +8,10 @@
 .admin-nested-routes {
   display: flex;
   height: 50px;
-  background-color: rgba(23, 23, 23, 0.5);
+  background-color: green;
+  text-align: center;
+  align-self: center;
+
   align-items: center;
   justify-content: center;
 }
@@ -39,159 +42,288 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: column;
   align-self: center;
-  background-color: red;
+  flex-direction: row;
 }
 
-.on-fly-control {
-  background-color: green;
+  .social-media-container {
+    display: flex;
+    flex-direction: column;
+
+    order: 1;
+    background-color: blue;
+    flex: 1;
+
+    margin: 10px;
+    height: 90%;
+
+  }
+      .social-media-title {
+        display: flex;
+        background-color: red;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+      }
+
+      .social-media-content {
+        height: 100%;
+        background-color: yellow;
+        display: flex;
+        flex-direction: column;
+      }
+        .social-media-filters {
+          flex: 1;
+          background-color: blue;
+          margin: 10px;
+          border-radius: 5px;
+        }
+
+        .social-media-pinned-tweets {
+          flex: 4;
+          background-color: blue;
+          margin: 10px;
+          border-radius: 5px;
+        }
+
+  .presets-container{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    order: 3;
+    /*background-color: white;*/
+
+    margin: 10px;
+    height: 90%;
+    border-radius: 10px;
+  }
+      .presets-title {
+        display: flex;
+        background-color: red;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+      }
+
+      .presets-content {
+        height: 100%;
+        background-color: yellow;
+        border-radius: 5px;
+      }
+
+  .live-injection-container {
+    flex: 1.25;
+    order: 2;
+    background-color: green;
+
+    height: 100%;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+
+    transition: 0.2s ease-in-out;
+    }
+
+      .live-injection-header {
+        background-color: blue;
+        flex: 1;
+        margin: 10px;
+        border-radius: 5px;
+      }
+
+      .live-injection-title {
+        display: flex;
+        background-color: red;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+      }
+
+      .live-injection-content {
+        margin: 10px;
+        background-color: gray;
+        border-radius: 5px;
+        flex: 7;
+      }
+
+      .stock-part, .sent-part {
+        width: 100%;
+        color: white;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .label {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+
+
+      h1 {
+        margin-bottom: 0;
+      }
+
+      .main-value {
+        font-size: 20px;
+      }
+
+      input {
+        background-color: transparent;
+        color: white;
+        border-color: transparent;
+        font-size: 30px;
+        text-align: right;
+        appearance: none;
+      }
+
+      input:focus {
+          outline:none;
+      }
+
+      .flux {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .flux-title {
+        margin-right: 20px;
+      }
+
+      .slider {
+        width: 150px;
+      }
+
+
+      .flux-button {
+        width: 30px;
+        margin-left: 5px;
+        margin-right: 5px;
+
+        background-color: transparent;
+        border-radius: 5px;
+        transition: 0.25s ease-in-out;
+        border-style: solid;
+        border-width: 1px;
+        color: white;
+      }
+
+      .flux-button:hover, .flux-button:focus {
+        background-color: white;
+        color: black;
+      }
+
+      .val-detail {
+        opacity: 0.8;
+        transition: 0.25s linear;
+      }
+
+      .val-detail:hover {
+        opacity: 1.0;
+      }
+
+      .range {
+        padding-bottom: 20px;
+        margin: 10px;
+        width: 100%;
+        /*background-color: white;*/
+      }
+
+      .time-set  {
+        color: white;
+        font-size: 30px;
+        padding: 30px;
+        align-self: flex-start;
+      }
+
+      .time-set input {
+        text-align: right;
+      }
+
+      .button-section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .button {
+        align-self: center;
+        display: inline-block;
+        padding: 30px;
+        margin-left: 20px;
+        margin-right: 20px;
+        background: transparent;
+        border-style: solid;
+        color: white;
+        font-size: 30px;
+        border-radius: 50px;
+        transition: 0.25s ease-in-out;
+        width: 50%;
+      }
+
+        .button:hover {
+          border-radius: 20px;
+        }
+
+        .button.update:hover {
+          background-color: white;
+          border-color: white;
+          color: rgb(17,17,17);
+        }
+
+        .button.start {
+          border-color: rgb(155, 229, 130);
+        }
+
+        .button.start:hover {
+          background-color: rgb(155, 229, 130);
+          color: white;
+        }
+
+        .button.stop {
+          border-color: rgb(255, 97, 76);
+        }
+
+        .button.stop:hover {
+          background-color: rgb(255, 97, 76);
+          color: white;
+        }
+
+        .button:hover {
+          width: 100%;
+        }
+
+        button:focus {outline:0;}
+
+
+
+/*MISC*/
+.label-control-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+  .add-new-button {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border-style: solid;
+    background-color: transparent;
+    color: white;
+    font-size: 1em;
+    margin: 10px;
+
   }
 
-    .stock-part, .sent-part {
-      width: 100%;
-      color: white;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .label {
-      display: flex;
-      flex-direction: row;
-      align-items: baseline;
-      justify-content: space-between;
-    }
-
-
-    h1 {
-      margin-bottom: 0;
-    }
-
-    input {
-      background-color: transparent;
-      color: white;
-      border-color: transparent;
-      font-size: 30px;
-      text-align: right;
-      appearance: none;
-    }
-
-    input:focus {
-        outline:none;
-    }
-
-    .flux {
-      display: flex;
-      flex-direction: row;
-    }
-
-    .flux-title {
-      margin-right: 20px;
-    }
-
-    .slider {
-      width: 150px;
-    }
-
-
-    .flux-button {
-      width: 30px;
-      margin-left: 5px;
-      margin-right: 5px;
-
-      background-color: transparent;
-      border-radius: 5px;
-      transition: 0.25s ease-in-out;
-      border-style: solid;
-      border-width: 1px;
-      color: white;
-    }
-
-    .flux-button:hover, .flux-button:focus {
-      background-color: white;
-      color: black;
-    }
-
-    .val-detail {
-      opacity: 0.8;
-      transition: 0.25s linear;
-    }
-
-    .val-detail:hover {
-      opacity: 1.0;
-    }
-
-    .range {
-      padding-bottom: 20px;
-      margin: 10px;
-      width: 100%;
-      /*background-color: white;*/
-    }
-
-    .time-set  {
-      color: white;
-      font-size: 30px;
-      padding: 30px;
-      align-self: flex-start;
-    }
-
-    .time-set input {
-      text-align: right;
-    }
-
-    .button-section {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .button {
-      align-self: center;
-      display: inline-block;
-      padding: 30px;
-      margin-left: 20px;
-      margin-right: 20px;
-      background: transparent;
-      border-style: solid;
-      color: white;
-      font-size: 30px;
-      border-radius: 50px;
-      transition: 0.25s ease-in-out;
-      width: 50%;
-    }
-
-      .button:hover {
-        border-radius: 20px;
-      }
-
-      .button.update:hover {
-        background-color: white;
-        border-color: white;
-        color: rgb(17,17,17);
-      }
-
-      .button.start {
-        border-color: rgb(155, 229, 130);
-      }
-
-      .button.start:hover {
-        background-color: rgb(155, 229, 130);
-        color: white;
-      }
-
-      .button.stop {
-        border-color: rgb(255, 97, 76);
-      }
-
-      .button.stop:hover {
-        background-color: rgb(255, 97, 76);
-        color: white;
-      }
-
-      .button:hover {
-        width: 100%;
-      }
-
-      button:focus {outline:0;}
+  .corner-label {
+    background-color: red;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 2.5px;
+    display: inline-block;
+  }

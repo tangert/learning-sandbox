@@ -56,7 +56,6 @@ app.get('/api', function (req, res) {
 /*******************************************************************/
 /***********************TWEET DB ROUTES*****************************/
 /*******************************************************************/
-//Standard DB Crud Operations with Mongo.
 //Get all tweets
 app.get('/api/tweets',function(req,res){
 
