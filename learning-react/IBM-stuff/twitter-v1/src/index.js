@@ -19,6 +19,7 @@ import AppContainer from './containers/AppContainer';
 import './index.css';
 
 const socket = io("http://localhost:3001");
+
 ReactDOM.render(
     <Provider store = {GlobalStore}>
       <AppContainer/>

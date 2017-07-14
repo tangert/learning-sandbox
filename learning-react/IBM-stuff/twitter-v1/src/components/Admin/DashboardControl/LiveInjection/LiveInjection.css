@@ -1,0 +1,95 @@
+.live-injection-container {
+  flex: 1.25;
+  order: 2;
+  background-color: green;
+
+  height: 100%;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+
+  }
+
+    .live-injection-title {
+      display: flex;
+      background-color: red;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+    }
+
+    .live-injection-content {
+      margin: 10px;
+      background-color: gray;
+      border-radius: 5px;
+      flex: 7;
+      transition: 0.2s ease-in-out;
+    }
+
+    .time-set  {
+      color: white;
+      font-size: 30px;
+      padding: 30px;
+      align-self: flex-start;
+    }
+
+    .time-set input {
+      text-align: right;
+    }
+
+    .button-section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button {
+      align-self: center;
+      display: inline-block;
+      padding: 30px;
+      margin-left: 20px;
+      margin-right: 20px;
+      background: transparent;
+      border-style: solid;
+      color: white;
+      font-size: 30px;
+      border-radius: 50px;
+      transition: 0.25s ease-in-out;
+      width: 50%;
+    }
+
+      .button:hover {
+        border-radius: 20px;
+      }
+
+      .button.update:hover {
+        background-color: white;
+        border-color: white;
+        color: rgb(17,17,17);
+      }
+
+      .button.start {
+        border-color: rgb(155, 229, 130);
+      }
+
+      .button.start:hover {
+        background-color: rgb(155, 229, 130);
+        color: white;
+      }
+
+      .button.stop {
+        border-color: rgb(255, 97, 76);
+      }
+
+      .button.stop:hover {
+        background-color: rgb(255, 97, 76);
+        color: white;
+      }
+
+      .button:hover {
+        width: 100%;
+      }
+
+      button:focus {outline:0;}

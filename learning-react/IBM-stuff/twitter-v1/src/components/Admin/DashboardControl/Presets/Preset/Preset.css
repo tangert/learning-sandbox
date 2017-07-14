@@ -1,0 +1,88 @@
+.preset-container {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+
+    margin: 10px;
+    background-color: transparent;
+    border-color: gray;
+    border-style: solid;
+    border-width: 1;
+    border-radius: 10px;
+
+    transition: 0.2s ease-in-out;
+
+  }
+
+.preset-container:hover {
+  transform: scale(1.025);
+  background-color: rgba(255,255,255,0.1);
+}
+
+    .preset-top {
+      display: flex;
+      flex-direction: row;
+      text-transform: uppercase;
+      margin: 10px;
+      justify-content: space-between;
+    }
+
+      .preset-left {
+        display: flex;
+        flex-direction: row;
+      }
+
+        .preset-label {
+          background-color: gray;
+          padding: 5px;
+          border-radius: 2.5px;
+          color: white;
+          margin-right: 10px;
+          letter-spacing: 2.5px;
+        }
+
+        .preset-time {
+          padding: 5px;
+          color: white;
+        }
+
+    .preset-right {
+      margin-top: -10px;
+      margin-right: 10px;
+    }
+
+      .preset-more {
+        background-color: transparent;
+        border-style: none;
+        color: rgba(255,255,255,0.6);
+        font-size: 25px;
+      }
+
+    .preset-bottom {
+    /*   background-color: green; */
+      margin: 10px;
+      font-size: 18px;
+      color: rgba(255,255,255,0.6);
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .preset-selection {
+      height: 30px;
+      width: 30px;
+      border-color: gray;
+      border-style: solid;
+      border-width: 2px;
+      border-radius: 5px;
+      margin-right: 10px;
+      background-color: transparent;
+
+      transition: 0.25s linear;
+    }
+
+    .preset-selection:hover {
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 25px;
+    }

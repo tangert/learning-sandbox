@@ -49,7 +49,7 @@ class AppContainer extends Component {
     return(
         <Router history = {history}>
           <div className = "app-container">
-              <div className="App-header">
+              <div className="App-header-1">
                 <Link to={'/'}> <img src={logo} className="App-logo" alt="logo" /> </Link>
                 <Link to={'/admin'} className="admin-logo">Admin</Link>
               </div>

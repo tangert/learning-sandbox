@@ -1,0 +1,40 @@
+.add-new-popover {
+  display: flex;
+  flex-direction: row;
+}
+
+  .content-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  align-self: center;
+  flex-direction: row;
+  }
+
+
+.label-control-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+  .add-new-button {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border-style: solid;
+    background-color: transparent;
+    color: white;
+    font-size: 1em;
+    margin: 10px;
+
+  }
+
+  .corner-label {
+    background-color: red;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 2.5px;
+    display: inline-block;
+  }
