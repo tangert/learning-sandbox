@@ -15,7 +15,10 @@ class Admin extends Component {
   render(){
     return(
       <div className = "admin">
-        <DashboardControl/>
+        <DashboardControl tweet_data = {this.props.tweet_data}
+                          graph_data = {this.props.graph_data}
+                          isReceivingData = {this.props.isReceivingData}
+                          last_request_body = {this.props.last_request_body}/>
       </div>
     );
   }

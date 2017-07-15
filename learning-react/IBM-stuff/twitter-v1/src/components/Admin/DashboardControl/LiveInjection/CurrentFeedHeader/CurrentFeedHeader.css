@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row;
 
-  background-color: blue;
+  background-color: #222;
   flex: 1;
   margin: 10px;
   border-radius: 5px;
@@ -11,10 +11,10 @@
 .current-feed-header-timer {
   display: flex;
   flex: 1;
-  background-color: red;
+  /*background-color: red;*/
   align-items: center;
   justify-content: center;
-  font-size: 4em;
+  font-size: 3.5em;
   font-weight: bold;
   color: white;
 }
@@ -23,9 +23,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: yellow;
+  /*background-color: yellow;*/
 }
 
   .current-feed-separator {
     height: 2.5px;
+    background-color: rgba(255, 255, 255, 0.1);
   }

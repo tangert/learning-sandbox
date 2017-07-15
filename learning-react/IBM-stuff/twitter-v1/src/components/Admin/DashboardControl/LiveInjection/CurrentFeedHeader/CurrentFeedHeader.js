@@ -7,9 +7,7 @@ class CurrentFeedHeader extends React.Component {
   render () {
     return(
       <div className = "current-feed-header-container">
-        <div className = "current-feed-header-timer">
-          3:00:00
-        </div>
+        <div className = "current-feed-header-timer">{this.props.time}</div>
 
         <div className = "current-feed-header-dataviz">
               <SparklineViz title = "Stock" value = "52"></SparklineViz>

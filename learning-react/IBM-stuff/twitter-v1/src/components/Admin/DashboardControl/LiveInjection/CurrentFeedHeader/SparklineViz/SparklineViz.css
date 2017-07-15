@@ -1,5 +1,5 @@
 .sparkline-viz-container {
-  background-color: blue;
+  /*background-color: blue;*/
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -7,6 +7,10 @@
   align-items: center;
   justify-content: space-between;
   color: white;
+  font-weight: bold;
+  margin: 5px;
+  border-radius: 5px;
+
 }
 
 .sparkline-viz-info {

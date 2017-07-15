@@ -1,7 +1,7 @@
 .live-injection-container {
   flex: 1.25;
   order: 2;
-  background-color: green;
+  /*background-color: green;*/
 
   height: 100%;
   margin: 10px;
@@ -13,18 +13,27 @@
 
     .live-injection-title {
       display: flex;
-      background-color: red;
       justify-content: center;
       align-items: center;
       height: 50px;
+
+      /*background-color: red;*/
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      color: white;
     }
 
     .live-injection-content {
       margin: 10px;
-      background-color: gray;
+      background-color: #222;
       border-radius: 5px;
       flex: 7;
       transition: 0.2s ease-in-out;
+    }
+
+    .sliders-container {
+      margin-left: 25px;
+      margin-right: 35px;
     }
 
     .time-set  {

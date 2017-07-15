@@ -3,7 +3,7 @@
   flex-direction: row;
 }
 
-  .content-container {
+  .dashboard-content-container {
   height: 100%;
   display: flex;
   align-items: center;
@@ -32,7 +32,9 @@
   }
 
   .corner-label {
-    background-color: red;
+    opacity: 0.6;
+    background-color: rgba(255,255,255,0.2);
+    color: white;
     margin: 10px;
     padding: 5px;
     border-radius: 2.5px;

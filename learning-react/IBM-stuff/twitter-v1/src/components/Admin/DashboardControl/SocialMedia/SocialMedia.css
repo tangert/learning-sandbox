@@ -3,7 +3,6 @@
   flex-direction: column;
 
   order: 1;
-  background-color: blue;
   flex: 1;
 
   margin: 10px;
@@ -12,29 +11,33 @@
 }
     .social-media-title {
       display: flex;
-      background-color: red;
       justify-content: center;
       align-items: center;
       height: 50px;
+
+      /*background-color: red;*/
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      color: white;
     }
 
     .social-media-content {
       height: 100%;
-      background-color: yellow;
+      /*background-color: yellow;*/
       display: flex;
       flex-direction: column;
       transition: 0.2s ease-in-out
     }
       .social-media-filters {
         flex: 1;
-        background-color: blue;
+        background-color: #222;
         margin: 10px;
         border-radius: 5px;
       }
 
       .social-media-pinned-tweets {
         flex: 4;
-        background-color: blue;
+        background-color: #222;
         margin: 10px;
         border-radius: 5px;
       }

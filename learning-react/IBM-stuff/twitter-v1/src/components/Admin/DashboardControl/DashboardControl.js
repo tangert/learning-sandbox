@@ -48,7 +48,7 @@ class DashboardControl extends Component {
 
   render () {
     return(
-      <div className = "content-container">
+      <div className = "dashboard-content-container">
 
         <SocialMedia updateHighlight = {this.updateHighlight}
                      isHighlighted = {this.state.social_media_highlighted}/>
@@ -57,7 +57,8 @@ class DashboardControl extends Component {
                  isHighlighted = {this.state.presets_highlighted} />
 
         <LiveInjection updateHighlight = {this.updateHighlight}
-                       isHighlighted = {this.state.live_injection_highlighted}/>
+                       isHighlighted = {this.state.live_injection_highlighted}
+                       isReceivingData = {this.props.isReceivingData}/>
       </div>
     );
   }
