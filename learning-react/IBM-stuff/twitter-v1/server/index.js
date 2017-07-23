@@ -44,13 +44,11 @@ var timerTimeout;
 //Root websocket route
 app.get('/', function (req, res) {
   res.status(200).send('Web socket connects here.');
-  console.log('WEB SOCKET IS WORKING!!!');
 });
 
 //Root for API
 app.get('/api', function (req, res) {
   res.status(200).send('API is working.');
-  console.log('API IS WORKING!!!');
 });
 
 /*******************************************************************/
@@ -73,12 +71,38 @@ app.put('api/tweets/edit/:id', function(req,res){
 
 //Create a tweet
 app.post('/api/tweets/create', function(req,res) {
-
+  //parse through the request body and place each individual part into each
 });
 
 //Delete a tweet
 app.delete('api/tweets/delete/:id', function(req,res){
 
+});
+
+/*******************************************************************/
+/***********************PRESET DB ROUTES*****************************/
+/*******************************************************************/
+app.get('/api/presets', function(req,res){
+  //return all the presets from the db as an array
+});
+
+app.post('/api/presets/create', function(req,res){
+  const newPreset =req.body;
+  //get new preset in terms of a json object
+  //create a new mongoose model
+  //update the db
+  //send a socket event to the store with the same object
+});
+
+app.put('/api/presets/edit/:id', function(req,res){
+  //grab the appropriate preset from DB according to the id
+  //reassign the mdoel to the new req body
+  //save the model!
+});
+
+app.delete('/api/presets/delete/:id', function(req,res){
+  //grab the appropriate preset from DB according to the id
+  //delete it
 });
 
 /*******************************************************************/
@@ -89,8 +113,12 @@ app.use('/api/gen-traffic', function(req, res, next) {
   //Query variables
   const sent = Number(req.body.sentiment);
   const sentFlux = Number(req.body.sentFlux);
+  const sentTimeRelease = Number(req.body.sentTimeRelease) * 1000 * 60;
+
   const stock = Number(req.body.stock);
   const stockFlux = Number(req.body.stockFlux);
+  const stockTimeRelease = Number(req.body.stockTimeRelease) * 1000 * 60;
+
   const time = Number(req.body.time);
 
   console.log("REQUEST BODY: ");
@@ -145,14 +173,14 @@ app.use('/api/gen-traffic', function(req, res, next) {
         if (timerIsRunning) {
           sendSentimentData(sent);
         }
-      }, pollTime);
+      }, sentTimeRelease);
 
       //3: STOCK
       pollStockData = setInterval(function(){
         if (timerIsRunning) {
           sendStockData(stock, stockFlux);
         }
-      }, pollTime*2);
+      }, stockTimeRelease);
     }
 
   //Stop all current traffic
@@ -218,11 +246,12 @@ app.use('/api/gen-traffic', function(req, res, next) {
     //FIXME: Doesn't return when sentiment is out of a certain range
     //FIXME: incorporate finding hashtags
     db.collection('tweet_content').find({
-              $or: [
-                { sentiment: { $lte: sentiment+delta } },
-                { sentiment: { $gte: sentiment-delta } }
-                    ]
+        $and: [
+        { sentiment: { $lte: sentiment+delta } },
+        { sentiment: { $gte: sentiment-delta } }
+            ]
               }).toArray().then(function(data){
+                console.log("FOUND SENTIMENT DATA: ", data);
                 tweet_contents = data;
     });
 

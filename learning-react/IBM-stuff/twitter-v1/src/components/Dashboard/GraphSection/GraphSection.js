@@ -62,18 +62,6 @@ class GraphSection extends Component {
             isReceivingData = {this.props.isReceivingData}/>
         </div>
 
-        <div className = "under-graph">
-          <div className = "under-graph-header">
-            <div className = "under-graph-title">Trading Volume</div>
-            <div className = "under-graph-trend">+50%</div>
-          </div>
-
-          <div className = "under-graph-viz">
-
-          </div>
-
-        </div>
-
         <div className= "market-info">
             <MarketListItem type = 'OPEN' data = {points} title = 'Open'/>
             <MarketListItem type = 'HIGH' data = {points} title = 'High'/>

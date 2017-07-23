@@ -12,10 +12,21 @@ def insertContent():
         next(f)
         reader = csv.reader(f)
         for row in reader:
-            post = { "content": row[0], "sentiment": row[1] }
+            post = { "content": row[0], "sentiment": int(row[1]) }
             posts.append(post)
 
 	db.tweet_content.insert_many(posts)
+
+def insertUsernames():
+    handles = []
+    with open('../data/usernames.csv', 'rb') as f:
+        next(f)
+        reader = csv.reader(f)
+        for row in reader:
+            post = { "handle": row[0] }
+            handles.append(post)
+
+    db.tweet_handles.insert_many(posts)
 
 def clearDB():
 	for col in db.collection_names():

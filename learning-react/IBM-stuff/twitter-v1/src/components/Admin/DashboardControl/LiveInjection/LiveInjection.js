@@ -1,31 +1,31 @@
 import React, { PropTypes } from 'react'
-import CurrentFeedHeader from './CurrentFeedHeader/CurrentFeedHeader'
 import CustomRange from './CustomRange/CustomRange'
 import LastUpdatePanel from './LastUpdatePanel/LastUpdatePanel'
 import axios from 'axios';
 import './LiveInjection.css'
 
-var updateCountdownInterval;
-
 class LiveInjection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      time: 0,
       sentiment: 0,
       sentFlux: 0,
+      sentTimeRelease: 1,
       stock: 0,
       stockFlux: 0,
-      time: 0,
-      isRunning: false,
-      open: false,
+      stockTimeRelease: 1,
       last_request_body: {},
-      timeLeft: 0
+      isRunning: false,
+      open: false
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onStopFeed = this.onStopFeed.bind(this);
-    this.startCountdown = this.startCountdown.bind(this);
-    this.parseMSIntoReadableTime = this.parseMSIntoReadableTime.bind(this);
+  }
+
+  componentDidMount(){
+    //get last request body
   }
 
   onSentChange = (value) => {
@@ -56,6 +56,21 @@ class LiveInjection extends React.Component {
     });
   }
 
+  onSentTimeReleaseChange = (value) => {
+    console.log("CHANGING");
+    //in seconds
+    this.setState({
+      sentTimeRelease: value
+    });
+  }
+
+  onStockTimeReleaseChange = (value) => {
+    //in seconds
+    this.setState({
+      stockTimeRelease: value
+    });
+  }
+
   onTimeChange = (event) => {
     this.setState({
       time: Number(event.target.value)
@@ -73,20 +88,26 @@ class LiveInjection extends React.Component {
 
     let requestBody = {
       time: this.state.time,
+
       sentiment: this.state.sentiment,
+      sentFlux: this.state.sentFlux/100,
+      sentTimeRelease: this.state.sentTimeRelease,
+
       stock: this.state.stock,
-      stockFlux: this.state.stockFlux/100,
-      sentFlux: this.state.sentFlux/100
+      stockFlux: this.state.stockFlux/500,
+      stockTimeRelease: this.state.stockTimeRelease
     };
+
+    this.props.startCountdown();
 
     this.setState({
       last_request_body: requestBody,
       isRunning: true
     },()=>{
         if(this.state.isRunning) {
-          clearInterval(updateCountdownInterval);
+          this.props.updateCountdown();
         }
-        this.startCountdown(this.state.last_request_body.time);
+        this.props.startCountdown(this.state.last_request_body.time);
     });
 
     axios({
@@ -102,48 +123,11 @@ class LiveInjection extends React.Component {
       isRunning: false
     },()=>{
       console.log(this.state.isRunning);
-      clearInterval(updateCountdownInterval);
-      this.setState({
-        timeLeft: 0
-      });
+      this.props.updateCountdown();
     });
 
     axios.delete('api/gen-traffic');
   }
-
-  //Format timer function
-  startCountdown(time) {
-      console.log("STARTING COUNTDOWN WITH: ", time);
-      var ms = (time)*60*1000;
-
-      updateCountdownInterval = setInterval(function(){
-          this.setState({
-            timeLeft: ms
-          });
-          ms-=1000;
-          console.log("TIME LEFT: ",this.state.timeLeft);
-        }.bind(this),1000);
-    }
-
-  parseMSIntoReadableTime = (milliseconds) => {
-    //Get hours from milliseconds
-    var hours = milliseconds / (1000*60*60);
-    var absoluteHours = Math.floor(hours);
-    var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
-
-    //Get remainder from hours and convert to minutes
-    var minutes = (hours - absoluteHours) * 60;
-    var absoluteMinutes = Math.floor(minutes);
-    var m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
-
-    //Get remainder from minutes and convert to seconds
-    var seconds = (minutes - absoluteMinutes) * 60;
-    var absoluteSeconds = Math.floor(seconds);
-    var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
-
-    return (h + ':' + m + ':' + s);
-  }
-
 
   render() {
     let button_section;
@@ -164,12 +148,6 @@ class LiveInjection extends React.Component {
 
     return(
       <div className = "live-injection-container">
-
-        <div className = "live-injection-title">Current Feed</div>
-
-        <CurrentFeedHeader time = {this.parseMSIntoReadableTime(this.state.timeLeft)}
-                           isRunning = {this.state.isRunning}/>
-
         <div className = "live-injection-content"
              onMouseOver = {()=>this.props.updateHighlight('LIVE_INJECTION')}
              style ={ this.props.isHighlighted ? {opacity: 1} : {opacity: 0.5}}>
@@ -184,23 +162,23 @@ class LiveInjection extends React.Component {
                              trading = {this.state.last_request_body.stock}/>
 
             <div className = "sliders-container">
-              <CustomRange title = "Sentiment"
-                           value = {this.state.sentiment}
-                           onFluxChange = {this.onSentFluxChange}
-                           onValueChange = {this.onSentChange}
-                           onRangeChange = {this.onRangeAfterChange} />
+               <CustomRange title = "Sentiment"
+                 timeValue = {this.state.sentTimeRelease}
+                 value = {this.state.sentiment}
+                 onFluxChange = {this.onSentFluxChange}
+                 onValueChange = {this.onSentChange}
+                 onRangeChange = {this.onRangeAfterChange}
+                 onTimeChange = {this.onSentTimeReleaseChange}
+                 />
 
-              <CustomRange title = "Stock"
-                           value = {this.state.stock}
-                           onFluxChange = {this.onStockFluxChange}
-                           onValueChange = {this.onStockChange}
-                           onRangeChange = {this.onRangeAfterChange} />
-
-              <CustomRange title = "Trading Volume"
-                             value = {this.state.stock}
-                             onFluxChange = {this.onStockFluxChange}
-                             onValueChange = {this.onStockChange}
-                             onRangeChange = {this.onRangeAfterChange} />
+               <CustomRange title = "Stock"
+                 timeValue = {this.state.stockTimeRelease}
+                 value = {this.state.stock}
+                 onFluxChange = {this.onStockFluxChange}
+                 onValueChange = {this.onStockChange}
+                 onRangeChange = {this.onRangeAfterChange}
+                 onTimeChange = {this.onStockTimeReleaseChange}
+                 />
             </div>
 
 

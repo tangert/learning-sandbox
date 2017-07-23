@@ -4,10 +4,6 @@
 
   order: 1;
   flex: 1;
-
-  margin: 10px;
-  height: 90%;
-
 }
     .social-media-title {
       display: flex;
@@ -28,16 +24,25 @@
       flex-direction: column;
       transition: 0.2s ease-in-out
     }
+
+    .social-media-content-container {
+      margin: 10px;
+      /*background-color: blue;*/
+      display: flex;
+      flex-direction: column;
+      transition: 0.2s ease-in-out
+    }
+
       .social-media-filters {
         flex: 1;
         background-color: #222;
-        margin: 10px;
         border-radius: 5px;
+        margin: 5px;
       }
 
       .social-media-pinned-tweets {
         flex: 4;
         background-color: #222;
-        margin: 10px;
+        margin: 5px;
         border-radius: 5px;
       }

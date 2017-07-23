@@ -8,10 +8,6 @@ import DashboardControl from './DashboardControl/DashboardControl'
 import './Admin.css';
 
 class Admin extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render(){
     return(
       <div className = "admin">

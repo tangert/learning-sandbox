@@ -4,15 +4,19 @@ import './CurrentFeedHeader.css'
 
 
 class CurrentFeedHeader extends React.Component {
+  constructor(props){
+    super(props);
+  }
+
   render () {
     return(
       <div className = "current-feed-header-container">
         <div className = "current-feed-header-timer">{this.props.time}</div>
 
         <div className = "current-feed-header-dataviz">
-              <SparklineViz title = "Stock" value = "52"></SparklineViz>
+              <SparklineViz title = "Stock" value = {this.props.lastStock}></SparklineViz>
               <div className = "current-feed-separator" ></div>
-              <SparklineViz title = "Sentiment" value ="48"></SparklineViz>
+              <SparklineViz title = "Sentiment" value ={this.props.lastSentiment}></SparklineViz>
         </div>
       </div>
     )

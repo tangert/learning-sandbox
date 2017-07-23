@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group'
 import './Tweet.css';
 
-let updateInterval;
-
 class Tweet extends Component {
     constructor(props){
       super(props);
       this.state = {
-        time: 0
+        mounted: false,
+        time: 0,
+        formattedTime: "Just now"
       };
 
+      var updateInterval;
       this.updateTime = this.updateTime.bind(this);
+      this.formatTime = this.formatTime.bind(this);
     }
 
     updateTime() {
@@ -22,18 +24,32 @@ class Tweet extends Component {
         });
     }
 
-    componentDidMount() {
-      this.setState({mounted:  true});
-      if(this.state.mounted) {
-        updateInterval = setInterval(function(){
-          this.updateTime();
-        }.bind(this),1000);
+    formatTime(time) {
+      let newTime;
+      if(time < 3) {
+        newTime = "Just now";
+      } else if (time < 60) {
+        newTime = this.state.time + "s ago";
+      } else {
+        newTime = Math.floor(this.state.time / 60) + "m ago";
       }
+
+      this.setState({
+        formattedTime: newTime
+      });
+    }
+
+    componentDidMount() {
+      this.setState({mounted:  true},() => {
+          this.updateInterval = setInterval(function(){
+            this.updateTime();
+            this.formatTime(this.state.time);
+          }.bind(this),1000);
+      });
     }
 
     componentWillUnmount() {
-       this.setState({mounted:  false});
-       clearInterval(updateInterval);
+       clearInterval(this.updateInterval);
     }
 
     render(){
@@ -47,7 +63,7 @@ class Tweet extends Component {
              <div className = "right">
                <div className = "top-wrapper">
                  <h1 className ="handle">@{this.props.handle}</h1>
-                 <p className="time">{this.state.time > 2 ? (this.state.time + "s ago"): "Just now"}</p>
+                 <p className="time">{this.state.formattedTime}</p>
                </div>
 
                <div className = "bottom-wrapper">

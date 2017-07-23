@@ -68,7 +68,8 @@ TIME CREATED
   flex-direction: row;
   justify-content: space-between;
   order: 1;
-  margin-bottom: -20px;
+  /*background-color: blue;*/
+
 }
 
 .handle {
@@ -90,9 +91,15 @@ TIME CREATED
 }
 
 .bottom-wrapper {
+  display: flex;
+  margin-top: -20px;
   order: 2;
+  /*background-color: green;*/
 }
 
 .tweet-content {
+  font-size: 0.9em;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

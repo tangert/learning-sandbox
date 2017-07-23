@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@blueprintjs/core": "^1.22.0",
+    "@blueprintjs/core": "^1.23.1",
     "@blueprintjs/datetime": "^1.18.0",
     "axios": "^0.16.2",
     "body-parser": "^1.17.2",

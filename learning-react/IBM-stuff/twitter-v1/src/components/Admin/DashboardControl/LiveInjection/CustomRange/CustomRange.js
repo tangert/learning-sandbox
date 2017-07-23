@@ -32,6 +32,19 @@ const handle = (props) => {
 };
 
 class CustomRange extends React.Component {
+  constructor(props){
+    super(props);
+    this.formatTime = this.formatTime.bind(this);
+  }
+
+  formatTime(time) {
+    if(time < 1) {
+      return this.props.timeValue*60 + "s";
+    } else {
+      return this.props.timeValue + "m";
+    }
+  }
+
   render () {
     return(
       <div className = "slider-container">
@@ -42,18 +55,35 @@ class CustomRange extends React.Component {
               <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.props.onFluxChange} defaultValue={0} />
             </div>
         </div>
+
+        <Range
+          className = "range stock"
+          min={5}
+          max={100}
+          defaultValue={0}
+          value={this.props.value}
+          onChange={this.props.onValueChange}
+          onAfterChange={this.props.onRangeChange}
+          trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
+          railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
+          handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
+          tipFormatter={value => `${value}%`}
+        />
+
+      <div>Time release: {this.formatTime(this.props.timeValue)}</div>
           <Range
-            className = "range stock"
-            min={5}
-            max={100}
-            defaultValue={0}
-            value={this.props.value}
-            onChange={this.props.onValueChange}
-            onAfterChange={this.props.onRangeChange}
-            trackStyle={{ backgroundColor: 'rgb(137, 182, 255)', height: 10 }}
-            railStyle={{ backgroundColor: 'rgb(255, 97, 76)', height: 10 }}
-            handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 20, height: 20 }]}
-            tipFormatter={value => `${value}%`}
+            className = "range time"
+            min={0.05}
+            max={5}
+            step={0.05}
+            defaultValue={0.1}
+            value={this.props.timeValue}
+            onChange={this.props.onTimeChange}
+            onAfterChange={this.props.onAfterTimeChange}
+            trackStyle={{ backgroundColor: 'rgba(255,255,255,0.5)', height: 5 }}
+            railStyle={{ backgroundColor: 'rgba(255,255,255,0.1)', height: 5 }}
+            handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 10, height: 10 }]}
+            tipFormatter={value => `${value}m`}
           />
         </div>
     );
