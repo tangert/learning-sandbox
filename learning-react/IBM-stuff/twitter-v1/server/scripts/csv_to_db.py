@@ -23,15 +23,18 @@ def insertUsernames():
         next(f)
         reader = csv.reader(f)
         for row in reader:
-            post = { "handle": row[0] }
+            post = { "id": int(row[0]), "handle": row[1] }
             handles.append(post)
 
-    db.tweet_handles.insert_many(posts)
+    db.tweet_handles.insert_many(handles)
 
 def clearDB():
 	for col in db.collection_names():
 		db[col].delete_many({})
 
 if __name__ == '__main__':
+    db.tweet_handles.delete_many({})
     db.tweet_content.delete_many({})
+
     insertContent()
+    insertUsernames()

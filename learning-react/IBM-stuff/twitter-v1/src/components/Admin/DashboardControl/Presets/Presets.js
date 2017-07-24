@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import Preset from './Preset/Preset'
 import './Presets.css'
 
-class Presets extends React.Component {
+class Presets extends Component {
   //map this.props.presets (from mongo) to container
   render () {
     return(
@@ -13,7 +13,6 @@ class Presets extends React.Component {
 
           <div className = "label-control-header">
             <div className = "corner-label">PRESETS</div>
-            <button className = "add-new-button">+</button>
           </div>
 
           <Preset label = "incident" description = "Show after boom." time = "10:00" color = "#FF5757"/>

@@ -17,6 +17,7 @@ class TweetFeedContainer extends Component {
           key={data.time}
           handle={data.handle}
           time={data.time}
+          image = {data.image}
           content={data.content}
           sentiment={data.sentiment}
           color = {data.color}>

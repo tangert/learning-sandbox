@@ -205,12 +205,12 @@ app.use('/api/gen-traffic', function(req, res, next) {
   function sendSentimentData(sentiment){
     var handle = getRandomElement(tweet_handles);
     var content = getRandomElement(tweet_contents);
-    var image = getRandomElement(images);
+    var image_id = getRandomElement([0,1,2,3,4,5,6,7]);
     var color = convertPercentToColor(red, blue, Number(content.sentiment));
 
     var payload = {
       handle: handle.handle,
-      image: image.link,
+      image: image_id,
       content: content.content,
       sentiment: content.sentiment,
       color: color,

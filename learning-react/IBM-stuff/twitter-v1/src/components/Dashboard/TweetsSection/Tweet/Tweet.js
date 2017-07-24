@@ -55,9 +55,9 @@ class Tweet extends Component {
     render(){
       return(
         <div>
-           <div className= "tweet-container" style={{backgroundColor: this.props.color.cssColor}}>
+           <div className= "tweet-container" style={{borderColor: this.props.color.cssColor, backgroundColor: this.props.color.cssColor}}>
                <div className = "left">
-               <div className="pic"></div>
+               <div className="pic"><img src= {require('../../../../static/profile-pics/image' + this.props.image + '.jpeg')}/></div>
              </div>
 
              <div className = "right">
@@ -70,6 +70,8 @@ class Tweet extends Component {
                  <p className="tweet-content">{this.props.content}</p>
                </div>
              </div>
+
+             <div className = "tweet-container-background" style={{backgroundColor: this.props.color.cssColor}}></div>
            </div>
       </div>
     );

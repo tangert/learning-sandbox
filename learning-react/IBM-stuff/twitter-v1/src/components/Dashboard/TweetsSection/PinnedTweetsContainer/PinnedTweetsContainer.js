@@ -30,7 +30,6 @@ class PinnedTweetsContainer extends Component {
     return(
       <div className = "pinned-tweets-container">
         <FlipMove duration={750} easing="ease-in-out" style={{overflow: 'auto', maxHeight: 400}}>
-          { this.renderTweets() }
         </FlipMove>
       </div>
     );
