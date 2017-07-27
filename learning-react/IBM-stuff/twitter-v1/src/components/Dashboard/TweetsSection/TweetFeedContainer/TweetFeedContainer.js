@@ -14,13 +14,13 @@ class TweetFeedContainer extends Component {
     return this.props.tweet_data.slice(0,20).map( (data) => {
       return (
         <Tweet
-          key={data.time}
+          key={data.id}
           handle={data.handle}
           time={data.time}
           image = {data.image}
           content={data.content}
           sentiment={data.sentiment}
-          color = {data.color}>
+          color = {data.color.cssColor}>
         </Tweet>
         );
     });

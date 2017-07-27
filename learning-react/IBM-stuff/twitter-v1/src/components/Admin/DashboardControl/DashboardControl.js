@@ -3,6 +3,8 @@ import CurrentFeedHeader from './CurrentFeedHeader/CurrentFeedHeader'
 import Presets from './Presets/Presets'
 import LiveInjection from './LiveInjection/LiveInjection'
 import SocialMedia from './SocialMedia/SocialMedia'
+import ButtonPanel from './ButtonPanel/ButtonPanel'
+import axios from 'axios';
 import './DashboardControl.css'
 
 var updateCountdownInterval;
@@ -12,6 +14,15 @@ class DashboardControl extends Component {
     super(props);
 
     this.state = {
+      time: 0,
+      sentiment: 0,
+      sentFlux: 0,
+      sentTimeRelease: 1,
+      stock: 0,
+      stockFlux: 0,
+      stockTimeRelease: 1,
+      last_request_body: {},
+
       social_media_highlighted: false,
       presets_highlighted: false,
       live_injection_highlighted: false,
@@ -20,9 +31,14 @@ class DashboardControl extends Component {
     };
 
     this.updateHighlight = this.updateHighlight.bind(this);
+
     this.updateCountdown = this.updateCountdown.bind(this);
     this.startCountdown = this.startCountdown.bind(this);
     this.parseMSIntoReadableTime = this.parseMSIntoReadableTime.bind(this);
+
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onStopFeed = this.onStopFeed.bind(this);
+    this.onClearStore = this.onClearStore.bind(this);
   }
 
   componentDidMount() {
@@ -105,12 +121,125 @@ class DashboardControl extends Component {
     return (h + ':' + m + ':' + s);
   }
 
+
+  /******** SLIDER FUNCTIONS *********/
+
+  onSentChange = (value) => {
+    console.log("SENTIMENT: " + value);
+    this.setState({
+      sentiment: value
+    });
+  }
+
+  onSentFluxChange = (value) => {
+    console.log("SENT FLUX: " + value);
+    this.setState({
+      sentFlux: value
+    });
+  }
+
+  onStockChange = (value) => {
+    console.log("STOCK: " + value);
+    this.setState({
+      stock: value
+    });
+  }
+
+  onStockFluxChange = (value) => {
+    console.log("STOCK FLUX: " + value);
+    this.setState({
+      stockFlux: value
+    });
+  }
+
+  onSentTimeReleaseChange = (value) => {
+    console.log("CHANGING");
+    //in seconds
+    this.setState({
+      sentTimeRelease: value
+    });
+  }
+
+  onStockTimeReleaseChange = (value) => {
+    //in seconds
+    this.setState({
+      stockTimeRelease: value
+    });
+  }
+
+  onTimeChange = (event) => {
+    this.setState({
+      time: Number(event.target.value)
+    },() => {
+        console.log(this.state);
+    });
+  }
+
+  onRangeAfterChange = (value) => {
+    console.log(value);
+  }
+
+  onSubmit() {
+    console.log("ABOUT TO UPDATE DATA");
+
+    let requestBody = {
+      time: this.state.time,
+
+      sentiment: this.state.sentiment,
+      sentFlux: this.state.sentFlux/100,
+      sentTimeRelease: this.state.sentTimeRelease,
+
+      stock: this.state.stock,
+      stockFlux: this.state.stockFlux/500,
+      stockTimeRelease: this.state.stockTimeRelease
+    };
+
+    this.startCountdown();
+
+    this.setState({
+      last_request_body: requestBody,
+      isRunning: true
+    },()=>{
+        if(this.state.isRunning) {
+          this.updateCountdown();
+        }
+        this.startCountdown(this.state.last_request_body.time);
+    });
+
+    axios({
+      method: 'post',
+      url: '/api/gen-traffic',
+      data: requestBody
+    });
+  }
+
+  onStopFeed() {
+    console.log("ABOUT TO STOP DATA");
+    this.setState({
+      isRunning: false
+    },()=>{
+      console.log(this.state.isRunning);
+      this.updateCountdown();
+    });
+
+    axios.delete('api/gen-traffic');
+  }
+
+  onClearStore() {
+    this.onStopFeed();
+    axios.delete('api/clear-store');
+  }
+
   render () {
     return(
       <div className = "dashboard-content-container">
 
         <div className = "dashboard-content-left">
-            <div className = "current-feed-title">FEED CONTROL</div>
+
+            <div className = "dashboard-content-title-section">
+              <div className = "current-feed-title">FEED CONTROL</div>
+              <button className = "reset-feed-button" onClick = {this.onClearStore}>RESET</button>
+            </div>
 
             <CurrentFeedHeader time = { this.props.isReceivingData ? this.parseMSIntoReadableTime(this.state.timeLeft) : this.updateCountdown() }
                                graph_data = {this.props.graph_data.length > 0 ? this.props.graph_data : 0}
@@ -126,12 +255,37 @@ class DashboardControl extends Component {
                              isReceivingData = {this.props.isReceivingData}
                              updateCountdown = {this.updateCountdown}
                              startCountdown = {this.startCountdown}
+
+                             last_request_body = {this.state.last_request_body}
+                             time = {this.state.time}
+                             onTimeChange = {this.onTimeChange}
+
+                             sentTimeRelease = {this.state.sentTimeRelease}
+                             sentiment = {this.state.sentiment}
+                             onSentFluxChange = {this.onSentFluxChange}
+                             onSentChange = {this.onSentChange}
+                             onRangeAfterChange = {this.onRangeAfterChange}
+                             onSentTimeReleaseChange = {this.onSentTimeReleaseChange}
+
+                             stockTimeRelease = {this.state.stockTimeRelease}
+                             stock = {this.state.stock}
+                             onStockFluxChange = {this.onStockFluxChange}
+                             onStockChange = {this.onStockChange}
+                             onRangeAfterChange = {this.onRangeAfterChange}
+                             onStockTimeReleaseChange = {this.onStockTimeReleaseChange}
                              />
 
              <Presets updateHighlight = {this.updateHighlight}
                     isHighlighted = {this.state.presets_highlighted} />
 
            </div>
+
+           <ButtonPanel
+             isReceivingData = {this.props.isReceivingData}
+             onSubmit = {this.onSubmit}
+             onStopFeed = {this.onStopFeed}
+             />
+
         </div>
 
         <SocialMedia updateHighlight = {this.updateHighlight}

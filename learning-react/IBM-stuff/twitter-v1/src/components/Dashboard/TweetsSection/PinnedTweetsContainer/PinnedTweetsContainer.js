@@ -5,31 +5,27 @@ import { CSSTransitionGroup } from 'react-transition-group'
 import './PinnedTweetContainer.css'
 
 class PinnedTweetsContainer extends Component {
-  constructor(props){
-    super(props);
-  }
-
   renderTweets() {
-    if (this.props.pinned_tweets != undefined) {
     return this.props.pinned_tweets.map( (data) => {
       return (
-        <Tweet
-          key={data.time}
-          handle={data.handle}
-          time={data.time}
-          content={data.content}
-          sentiment={data.sentiment}
-          color = {data.color}>
-        </Tweet>
+          <Tweet
+            key= {data.id}
+            handle= {data.handle}
+            time= {data.time}
+            image = {data.image}
+            content={data.content}
+            sentiment={data.sentiment}
+            color = {data.color.cssColor}>
+          </Tweet>
         );
     });
-    }
   }
 
   render() {
     return(
       <div className = "pinned-tweets-container">
-        <FlipMove duration={750} easing="ease-in-out" style={{overflow: 'auto', maxHeight: 400}}>
+        <FlipMove duration={750} easing="ease-in-out" style={{overflow: 'auto', maxHeight: 330}}>
+          {this.renderTweets()}
         </FlipMove>
       </div>
     );

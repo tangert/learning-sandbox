@@ -13,7 +13,7 @@ const TweetsSection = (props) => {
                    isReceivingData = {props.isReceivingData}
                    last_request_body = {props.last_request_body}
       />
-    <PinnedTweetsContainer pinned_tweets = {props.tweet_data}/>
+    <PinnedTweetsContainer pinned_tweets = {props.pinned_tweets}/>
     <div className = "tweet-feed-separator"></div>
     <TweetFeedContainer tweet_data = {props.tweet_data}/>
     </div>

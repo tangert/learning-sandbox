@@ -103,39 +103,23 @@ class Graph extends Component {
   }
   componentDidMount() {
       var chart = this.refs.chart.getChart();
+
       setInterval(function(){
         try {
             if(this.props.isReceivingData) {
-              //Stock data
               const graph_data = this.props.graph_data;
+              const tweet_data = this.props.tweet_data;
               const last_graph_point = graph_data.length-1;
               const stock_x = graph_data[last_graph_point].time;
               const stock_y =  graph_data[last_graph_point].stock;
 
-              //Tweet data
-              const tweet_data = this.props.tweet_data;
               const tweet_x = tweet_data[0].time;
               const tweet_y = tweet_data[0].sentiment;
 
               const timeFlag = this.props.graph_data[last_graph_point].time - this.props.graph_data[last_graph_point-1].time;
-              if (timeFlag > 5000) {
-                console.log("TIME FLAG: ",timeFlag);
 
-                for(var i = 0; i < chart.series[0].length; i++) {
-                  chart.series[0].removePoint(i);
-                }
-
-                for(var i = 0; i < chart.series[1].length; i++) {
-                  chart.series[1].removePoint(i);
-                }
-
-              }
-
-              console.log(this.props.graph_data[last_graph_point]);
-              console.log("DISTANCE BETWEEN LAST TWO POINTS: ", timeFlag);
-
-              const shiftFlagStock =  chart.series[0].data.length > 50;
-              const shiftFlagTweet =  chart.series[1].data.length > 50;
+              const shiftFlagStock =  chart.series[0].data.length > 150;
+              const shiftFlagTweet =  chart.series[1].data.length > 150;
 
               const stock_point = [stock_x,stock_y];
               const tweet_point = [tweet_x,tweet_y];

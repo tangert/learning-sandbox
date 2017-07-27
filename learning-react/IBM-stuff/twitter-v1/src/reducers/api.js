@@ -5,7 +5,6 @@ const initialState = {
 }
 
 export default function api(state = initialState, action) {
-  console.log("FROM REDUCER: ", action);
   switch(action.type) {
     case SEND_REQUEST:
       return { last_request_body: action.payload }

@@ -9,7 +9,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 50px;
+      height: 40px;
 
       /*background-color: red;*/
       text-transform: uppercase;
@@ -46,3 +46,29 @@
         margin: 5px;
         border-radius: 5px;
       }
+
+  .new-pinned-tweet-entry {
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  .new-pinned-tweet-submit {
+    border-style: solid;
+    background-color: transparent;
+    border-color: white;
+    border-width: 2px;
+    margin-left: 20px;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .pinned-tweet-input {
+    background-color: rgba(255,255,255,0.1);
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+  }

@@ -22,6 +22,13 @@ export function updateTrafficGen(bool){
   }
 }
 
+//Clear store
+export function clearStore(){
+  return {
+    type: types.CLEAR_STORE,
+  }
+}
+
 //API Request
 export function sendRequest(data) {
   return {
@@ -34,13 +41,20 @@ export function sendRequest(data) {
 export function createPinnedTweet(data) {
   return {
     type: types.CREATE_PINNED_TWEET,
-    payload: data
+    payload: data,
   }
 }
 
-export function deletePinnedTweet(id) {
+export function deletePinnedTweet(data) {
   return {
     type: types.DELETE_PINNED_TWEET,
-    payload: id
+    payload: data,
+  }
+}
+
+export function editPinnedTweet(data) {
+  return {
+    type: types.EDIT_PINNED_TWEET,
+    payload: data,
   }
 }

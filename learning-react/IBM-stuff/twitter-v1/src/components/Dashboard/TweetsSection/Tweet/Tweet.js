@@ -26,12 +26,15 @@ class Tweet extends Component {
 
     formatTime(time) {
       let newTime;
-      if(time < 3) {
+
+      if (time < 5) {
         newTime = "Just now";
       } else if (time < 60) {
         newTime = this.state.time + "s ago";
-      } else {
+      } else if (time < 3600){
         newTime = Math.floor(this.state.time / 60) + "m ago";
+      } else {
+        newTime = Math.floor(this.state.time / 3600) + "h ago";
       }
 
       this.setState({
@@ -41,10 +44,20 @@ class Tweet extends Component {
 
     componentDidMount() {
       this.setState({mounted:  true},() => {
+
+          let interval_time = 5000;
+
           this.updateInterval = setInterval(function(){
+
             this.updateTime();
             this.formatTime(this.state.time);
-          }.bind(this),1000);
+
+            if (this.state.time > 60) {
+              interval_time = 60000;
+            } else if (this.state.time > 3600) {
+              interval_time = 3600000;
+            }
+          }.bind(this),interval_time);
       });
     }
 
@@ -55,7 +68,7 @@ class Tweet extends Component {
     render(){
       return(
         <div>
-           <div className= "tweet-container" style={{borderColor: this.props.color.cssColor, backgroundColor: this.props.color.cssColor}}>
+           <div className= "tweet-container" style={{backgroundColor: this.props.color}}>
                <div className = "left">
                <div className="pic"><img src= {require('../../../../static/profile-pics/image' + this.props.image + '.jpeg')}/></div>
              </div>

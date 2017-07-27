@@ -25,24 +25,48 @@ class AppContainer extends Component {
     }.bind(this));
 
     //Connections for Admin -> Dashboard Redux Management
-    //Standard Socket actions
-    socket.on('sentiment-data', function(data){
-      this.props.actions.updateSentiment(data);
-    }.bind(this));
+      //Standard Socket actions
+      socket.on('sentiment-data', function(data){
+        this.props.actions.updateSentiment(data);
+      }.bind(this));
 
-    socket.on('stock-data', function(data){
-      this.props.actions.updateStock(data);
-    }.bind(this));
+      socket.on('stock-data', function(data){
+        this.props.actions.updateStock(data);
+      }.bind(this));
 
-    socket.on('traffic-gen', function(data){
-      this.props.actions.updateTrafficGen(data);
-    }.bind(this));
+      socket.on('traffic-gen', function(data){
+        this.props.actions.updateTrafficGen(data);
+      }.bind(this));
 
-    //API Requests
-    socket.on('send-request', function(data){
-      this.props.actions.sendRequest(data);
-    }.bind(this));
+      //API Requests
+      socket.on('send-request', function(data){
+        this.props.actions.sendRequest(data);
+      }.bind(this));
 
+      //Reset store
+      socket.on('clear-store', function(data){
+        console.log('CLEARING STORE CLIENT SIDE');
+        this.props.actions.clearStore();
+      }.bind(this));
+
+      //Pinned tweets
+      socket.on('pinned-tweets', function(data){
+        console.log("client side pinned tweets called");
+        console.log(data);
+        switch(data.action) {
+          case 'CREATE':
+            this.props.actions.createPinnedTweet(data.payload);
+            break;
+          case 'EDIT':
+            this.props.actions.editPinnedTweet(data.payload);
+            break;
+          case 'DELETE':
+            this.props.actions.deletePinnedTweet(data.payload);
+            break;
+          default:
+              return;
+        }
+      }.bind(this));
   }
 
   render(){

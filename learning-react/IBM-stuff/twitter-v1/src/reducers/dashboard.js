@@ -1,12 +1,17 @@
-import { UPDATE_STOCK, UPDATE_SENTIMENT, UPDATE_TRAFFIC_GEN } from '../constants/ActionTypes';
+import { UPDATE_STOCK,
+         UPDATE_SENTIMENT,
+         UPDATE_TRAFFIC_GEN,
+         CREATE_PINNED_TWEET,
+         EDIT_PINNED_TWEET,
+         DELETE_PINNED_TWEET } from '../constants/ActionTypes';
 
 const initialState = {
+    pinned_tweets: [],
     tweet_data: [],
     stock_data: [],
     isReceivingData: false,
 };
 
-//Socket reducer.
 export default function dashboard(state = initialState, action) {
   switch(action.type) {
     case UPDATE_STOCK:
@@ -20,6 +25,10 @@ export default function dashboard(state = initialState, action) {
     case UPDATE_TRAFFIC_GEN:
       return { ...state,
               isReceivingData: action.payload }
+    case CREATE_PINNED_TWEET:
+      return { ...state,
+                pinned_tweets: [ action.payload, ...state.pinned_tweets ]
+              }
     default:
       return state;
   }

@@ -11,6 +11,7 @@ class Dashboard extends Component {
       <div className="App">
         <div className="Content">
           <TweetsSection tweet_data = {this.props.tweet_data}
+                         pinned_tweets = {this.props.pinned_tweets}
                          isReceivingData = {this.props.isReceivingData}
                          last_request_body = {this.props.last_request_body}/>
 
@@ -27,6 +28,7 @@ function mapStateToProps(state){
   return {
     graph_data: state.dashboard.stock_data,
     tweet_data: state.dashboard.tweet_data,
+    pinned_tweets: state.dashboard.pinned_tweets,
     isReceivingData: state.dashboard.isReceivingData,
     last_request_body: state.api.last_request_body
   };

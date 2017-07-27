@@ -5,16 +5,22 @@ import * as Actions from './../../actions/index.js';
 
 import Overdrive from 'react-overdrive';
 import DashboardControl from './DashboardControl/DashboardControl'
-import './Admin.css';
+import io from 'socket.io-client'
+import './Admin.css'
 
 class Admin extends Component {
+  constructor(props){
+    super(props);
+  }
+
   render(){
     return(
       <div className = "admin">
         <DashboardControl tweet_data = {this.props.tweet_data}
                           graph_data = {this.props.graph_data}
                           isReceivingData = {this.props.isReceivingData}
-                          last_request_body = {this.props.last_request_body}/>
+                          last_request_body = {this.props.last_request_body}
+        />
       </div>
     );
   }

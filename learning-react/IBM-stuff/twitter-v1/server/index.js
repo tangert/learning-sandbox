@@ -35,11 +35,16 @@ io.on('connection', function (socket) {
   });
 });
 
+
 //Global variables for traffic generation
 var requestSent = false;
 var pollSentimentData;
 var pollStockData;
 var timerTimeout;
+var tweet_handles = [];
+var tweet_contents = [];
+
+
 
 //Root websocket route
 app.get('/', function (req, res) {
@@ -50,6 +55,53 @@ app.get('/', function (req, res) {
 app.get('/api', function (req, res) {
   res.status(200).send('API is working.');
 });
+
+//clear store
+app.delete('/api/clear-store', function(req, res)  {
+  console.log("ABOUT TO CLEAR STORE");
+  req.app.io.emit('clear-store', { clearingStore: 'true' });
+});
+
+
+/*******************************************************************/
+/***********************PINNED TWEET ROUTES*************************/
+/*******************************************************************/
+app.post('/api/pinned-tweets',function(req,res){
+
+  var sent = Number(req.body.sentiment);
+
+  var payload = {
+    id: generateId(),
+    handle: verifyHandle(),
+    image: getRandomElement([0,1,2,3,4,5,6,7]),
+    content: req.body.content,
+    sentiment: sent,
+    color: convertPercentToColor(red, blue, sent),
+    time: Date.now()
+  };
+
+  console.log("PAYLOAD PINNED TWEET: ", payload);
+
+  let data = { action: 'CREATE', payload: payload };
+  req.app.io.emit('pinned-tweets', data);
+});
+
+app.put('/api/pinned-tweets/edit/:id', function(req,res){
+  let new_tweet = req.body.content;
+  let data = { action: 'EDIT', payload: new_tweet };
+});
+
+app.delete('/api/pinned-tweets/delete/:id', function(req,res){
+  let data = { action: 'DELETE', payload: req.body.id };
+});
+
+function verifyHandle() {
+  if (tweet_handles === undefined) {
+    return '';
+  } else {
+    getRandomElement(tweet_handles)
+  }
+}
 
 /*******************************************************************/
 /***********************TWEET DB ROUTES*****************************/
@@ -87,7 +139,7 @@ app.get('/api/presets', function(req,res){
 });
 
 app.post('/api/presets/create', function(req,res){
-  const newPreset =req.body;
+  const newPreset = req.body;
   //get new preset in terms of a json object
   //create a new mongoose model
   //update the db
@@ -159,16 +211,6 @@ app.use('/api/gen-traffic', function(req, res, next) {
       //2: SENTIMENT
       //First grab all the data from the DB
       grabSentimentSensitiveData(sent, sentFlux);
-
-      //RANDOMIZE
-      // pollSentimentData = () => {
-      //   var rand = Math.round(Math.random()*(3000-500)) + 500;
-      //   setTimeout(function(){
-      //       if (timerIsRunning) { sendSentimentData(sent); }
-      //       pollSentimentData();
-      //   }, rand);
-      // }
-
       pollSentimentData = setInterval(function(){
         if (timerIsRunning) {
           sendSentimentData(sent);
@@ -197,9 +239,6 @@ app.use('/api/gen-traffic', function(req, res, next) {
   /**********************************************************************/
   /**********************************************************************/
 
-  //DATA TRANSFER FUNCTIONS
-  var tweet_handles = [];
-  var tweet_contents = [];
   var images = [];
 
   function sendSentimentData(sentiment){
@@ -214,7 +253,8 @@ app.use('/api/gen-traffic', function(req, res, next) {
       content: content.content,
       sentiment: content.sentiment,
       color: color,
-      time: Date.now()
+      time: Date.now(),
+      id: generateId()
     };
 
     sendOverSocket('sentiment-data', payload);
@@ -267,6 +307,10 @@ app.use('/api/gen-traffic', function(req, res, next) {
 });
 
 //Some useful helper functions
+function generateId(){
+  return '_' + Math.random().toString(36).substr(2, 9);
+}
+
 function getRandomElement(arr) {
   var rand = arr[Math.floor(Math.random()*arr.length)];
   return rand;
