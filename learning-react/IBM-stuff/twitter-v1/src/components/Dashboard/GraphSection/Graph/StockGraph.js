@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactHighcharts from 'react-highcharts';
-import './Graph.css';
+import './StockGraph.css';
 
-class Graph extends Component {
+class StockGraph extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -50,8 +50,8 @@ class Graph extends Component {
             gridLineWidth: 1,
             labels: {
                 style: {
-                    color: 'rgba(255,255,255,0.2)',
-                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.7)',
+                    fontSize: '16px',
                 },
                 x: -15,
                 y: 5
@@ -72,16 +72,6 @@ class Graph extends Component {
             animation: false,
             zIndex: 2,
             lineWidth: 5
-        },
-        {
-            name: 'BAO Twitter Sentiment',
-            dashStyle: "dot",
-            type: "spline",
-            animation: false,
-            zIndex: 1,
-            area: {
-              fillOpacity: 0.5
-            }
         }],
         responsive: {
             rules: [{
@@ -108,25 +98,15 @@ class Graph extends Component {
         try {
             if(this.props.isReceivingData) {
               const graph_data = this.props.graph_data;
-              const tweet_data = this.props.tweet_data;
+
               const last_graph_point = graph_data.length-1;
               const stock_x = graph_data[last_graph_point].time;
               const stock_y =  graph_data[last_graph_point].stock;
 
-              const tweet_x = tweet_data[0].time;
-              const tweet_y = tweet_data[0].sentiment;
-
               const timeFlag = this.props.graph_data[last_graph_point].time - this.props.graph_data[last_graph_point-1].time;
-
               const shiftFlagStock =  chart.series[0].data.length > 150;
-              const shiftFlagTweet =  chart.series[1].data.length > 150;
 
               const stock_point = [stock_x,stock_y];
-              const tweet_point = [tweet_x,tweet_y];
-
-              const tweetStrokeColor = this.props.tweet_data[0].sentiment < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
-              const tweetPointColor = this.props.tweet_data[0].color.cssColor;
-
               const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
 
               //Object options, (bool) Redraw, (bool) Shift
@@ -134,11 +114,6 @@ class Graph extends Component {
               chart.series[0].color = stockColor;
               chart.series[0].options.color = stockColor;
               chart.series[0].update(chart.series[0].options);
-
-              chart.series[1].addPoint(tweet_point, false, shiftFlagStock);
-              chart.series[1].color = tweetPointColor;
-              chart.series[1].options.color = tweetStrokeColor;
-              chart.series[1].update(chart.series[1].options);
           }
         }  catch(e) {
           console.log(e);
@@ -156,4 +131,4 @@ class Graph extends Component {
   }
 }
 
-export default Graph;
+export default StockGraph;

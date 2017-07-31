@@ -5,9 +5,11 @@ import LiveInjection from './LiveInjection/LiveInjection'
 import SocialMedia from './SocialMedia/SocialMedia'
 import ButtonPanel from './ButtonPanel/ButtonPanel'
 import axios from 'axios';
+import io from 'socket.io-client'
 import './DashboardControl.css'
 
 var updateCountdownInterval;
+const socket = io("http://localhost:3001");
 
 class DashboardControl extends Component {
   constructor(props){
@@ -227,7 +229,8 @@ class DashboardControl extends Component {
 
   onClearStore() {
     this.onStopFeed();
-    axios.delete('api/clear-store');
+    // axios.delete('api/clear-store');
+    socket.emit('on-clear-store', {});
   }
 
   render () {
@@ -289,7 +292,10 @@ class DashboardControl extends Component {
         </div>
 
         <SocialMedia updateHighlight = {this.updateHighlight}
-                     isHighlighted = {this.state.social_media_highlighted}/>
+                     isHighlighted = {this.state.social_media_highlighted}
+                     pinned_tweets = {this.props.pinned_tweets}
+                     filters = {this.props.filters}
+                     />
 
       </div>
     );

@@ -58,3 +58,11 @@ export function editPinnedTweet(data) {
     payload: data,
   }
 }
+
+//Filters
+export function editFilters(data){
+  return {
+    type: types.EDIT_FILTERS,
+    payload: data,
+  }
+}

@@ -1,14 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 import axios from 'axios'
+import io from 'socket.io-client'
+import FlipMove from 'react-flip-move'
+import PinnedTweet from './PinnedTweet/PinnedTweet'
+import TagsInput from 'react-tagsinput'
+import 'react-tagsinput/react-tagsinput.css'
 import './SocialMedia.css'
+
+const socket = io("http://localhost:3001");
 
 class SocialMedia extends Component {
   constructor(props){
     super(props);
     this.state = {
       currentTweetContent: "",
-      currentTweetSentiment: 0
+      currentTweetSentiment: 0,
+      tags: []
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.clearAllFilters = this.clearAllFilters.bind(this);
 
     this.onCreatePinnedTweet = this.onCreatePinnedTweet.bind(this);
     this.onEditPinnedTweet = this.onEditPinnedTweet.bind(this);
@@ -17,6 +28,18 @@ class SocialMedia extends Component {
     this.handleTweetContentChange = this.handleTweetContentChange.bind(this);
     this.handleTweetSentimentChange = this.handleTweetSentimentChange.bind(this);
   }
+
+  handleChange(tags) {
+    console.log(tags);
+    //this is where you send all of the current tags to the redux store.
+    socket.emit('filter-change', tags);
+    this.setState({tags})
+  }
+
+  clearAllFilters(){
+    this.handleChange([]);
+  }
+
 
   handleClick(e) {
     this.setState({open: !this.state.open});
@@ -40,24 +63,38 @@ class SocialMedia extends Component {
 
   onCreatePinnedTweet(){
     console.log("Creating new pinned tweet");
-    let requestBody = {
+    let new_tweet = {
       content: this.state.currentTweetContent,
       sentiment: this.state.currentTweetSentiment,
     };
 
-     axios({
-       method: 'post',
-       url: '/api/pinned-tweets',
-       data: requestBody
-     });
+    socket.emit('pinned-tweet-create', new_tweet);
   }
 
-  onEditPinnedTweet(id){
+  onEditPinnedTweet(payload){
 
   }
 
   onDeletePinnedTweet(id){
+    socket.emit('pinned-tweet-delete', id);
+  }
 
+  renderPinnedTweets(){
+    return this.props.pinned_tweets.map( (data) => {
+      return (
+          <PinnedTweet
+            onDeletePinnedTweet = {this.onDeletePinnedTweet}
+            id = {data.id}
+            key= {data.id}
+            handle= {data.handle}
+            time= {data.time}
+            image = {data.image}
+            content={data.content}
+            sentiment={data.sentiment}
+            color = {data.color.cssColor}>
+          </PinnedTweet>
+        );
+    });
   }
 
   render () {
@@ -76,13 +113,21 @@ class SocialMedia extends Component {
             <div className = "social-media-filters">
               <div className = "label-control-header">
                 <div className = "corner-label">FILTERS</div>
-                <button className = "add-new-button">+</button>
+                <button onClick = {this.clearAllFilters} className = "clear-all-button">CLEAR</button>
               </div>
+
+              <TagsInput
+                value={this.props.filters}
+                onChange={this.handleChange}
+                inputProps = {{className: 'react-tagsinput-input',
+  placeholder: 'Add a filter' }}
+                />
             </div>
 
             <div className = "social-media-pinned-tweets">
               <div className = "label-control-header">
                 <div className = "corner-label">PINNED TWEETS</div>
+                <button className = "clear-all-button">CLEAR</button>
               </div>
               <div className = "new-pinned-tweet-entry">
                 <input className = "pinned-tweet-input" onChange = {this.handleTweetContentChange} placeholder = "content"></input>
@@ -91,7 +136,9 @@ class SocialMedia extends Component {
               </div>
 
               <div className = "pinned-tweets-content">
-                //here will populate a list from the redux store
+                <FlipMove duration={750} easing="ease-in-out" style={{overflow: 'auto', maxHeight: 800}}>
+                  {this.renderPinnedTweets()}
+                </FlipMove>
               </div>
             </div>
           </div>

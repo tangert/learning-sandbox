@@ -25,26 +25,77 @@ db.once('open', function (callback) {
 //Socket from client
 var io = require('socket.io')(server, { origins: 'http://localhost:3000'});
 
-//Attach socket to app for use within routes
-app.io = io;
-io.on('connection', function (socket) {
-  socket.emit('server-connect', { connectedToServer: 'true' });
-  socket.on('client-connect', function (data) {
-    console.log('SHOULD RECEIVE A CLIENT EVENT');
-    console.log(data);
-  });
-});
-
-
 //Global variables for traffic generation
 var requestSent = false;
 var pollSentimentData;
 var pollStockData;
+var pollTimer;
 var timerTimeout;
 var tweet_handles = [];
 var tweet_contents = [];
 
+//Attach socket to app for use within routes
+app.io = io;
+io.on('connection', function (socket) {
+  socket.emit('server-connect', { connectedToServer: 'true' });
+  db.collection('tweet_handles').find({}).toArray().then(function(data){
+    tweet_handles = data;
+  });
 
+  socket.on('client-connect', function (data) {
+    console.log('SHOULD RECEIVE A CLIENT EVENT');
+    console.log(data);
+  });
+
+  /******PINNED TWEETS *******/
+var usernames = [ "aritter93", "goldmeister", "nsilverman", "gnarlesbarlow", "willrocky12", "jonahwilde", "ericmenana", "bananaphonez"];
+  socket.on('pinned-tweet-create', function(data){
+
+    let sent = Number(data.sentiment);
+    let hand = getRandomElement(tweet_handles);
+
+    let payload = {
+      id: generateId(),
+      handle: getRandomElement(usernames),
+      image: getRandomElement([0,1,2,3,4,5,6,7]),
+      content: data.content,
+      sentiment: sent,
+      color: convertPercentToColor(red, blue, sent),
+      time: Date.now()
+    };
+
+    let to_create = { action: 'CREATE', payload: payload };
+    app.io.emit('pinned-tweets', to_create);
+  });
+
+  socket.on('filter-change', function(data){
+    app.io.emit('filter', data);
+  });
+
+  socket.on('pinned-tweet-edit', function(data){
+    let sent = Number(data.sentiment);
+    let payload = {
+      id: data.id,
+      content: data.content,
+      sentiment: sent,
+      color: convertPercentToColor(red,blue,sent),
+      time: Date.now()
+    }
+
+    let to_edit = { action: 'EDIT', payload: payload }
+    app.io.emit('pinned-tweets', to_edit);
+  });
+
+  socket.on('pinned-tweet-delete', function(data){
+    let to_delete = { action: 'DELETE', payload: data}
+    app.io.emit('pinned-tweets', to_delete);
+  });
+
+  /******CLEARING STORE*******/
+  socket.on('on-clear-store', function(data){
+    app.io.emit('clear-store', { clearingStore: 'true' });
+  });
+});
 
 //Root websocket route
 app.get('/', function (req, res) {
@@ -61,47 +112,6 @@ app.delete('/api/clear-store', function(req, res)  {
   console.log("ABOUT TO CLEAR STORE");
   req.app.io.emit('clear-store', { clearingStore: 'true' });
 });
-
-
-/*******************************************************************/
-/***********************PINNED TWEET ROUTES*************************/
-/*******************************************************************/
-app.post('/api/pinned-tweets',function(req,res){
-
-  var sent = Number(req.body.sentiment);
-
-  var payload = {
-    id: generateId(),
-    handle: verifyHandle(),
-    image: getRandomElement([0,1,2,3,4,5,6,7]),
-    content: req.body.content,
-    sentiment: sent,
-    color: convertPercentToColor(red, blue, sent),
-    time: Date.now()
-  };
-
-  console.log("PAYLOAD PINNED TWEET: ", payload);
-
-  let data = { action: 'CREATE', payload: payload };
-  req.app.io.emit('pinned-tweets', data);
-});
-
-app.put('/api/pinned-tweets/edit/:id', function(req,res){
-  let new_tweet = req.body.content;
-  let data = { action: 'EDIT', payload: new_tweet };
-});
-
-app.delete('/api/pinned-tweets/delete/:id', function(req,res){
-  let data = { action: 'DELETE', payload: req.body.id };
-});
-
-function verifyHandle() {
-  if (tweet_handles === undefined) {
-    return '';
-  } else {
-    getRandomElement(tweet_handles)
-  }
-}
 
 /*******************************************************************/
 /***********************TWEET DB ROUTES*****************************/

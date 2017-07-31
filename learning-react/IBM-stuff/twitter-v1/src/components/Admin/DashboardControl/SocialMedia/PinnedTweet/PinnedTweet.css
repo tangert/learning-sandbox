@@ -1,0 +1,63 @@
+.pinned-tweet-container {
+  min-height: 50px;
+  margin: 5px 10px 5px 10px;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+}
+
+.pinned-tweet-content-container {
+  flex: 6;
+  background-color: rgba(255,255,255,0.2);
+  margin: 5px;
+  border-radius: 10px;
+  display: flex;
+  color: white;
+  align-items: center;
+  overflow: auto;
+}
+
+.pinned-tweet-content {
+  margin-left: 20px;
+}
+
+  .pinned-tweet-content-input {
+    margin-left: 10px;
+    margin-top: 10px;
+    color: white;
+    opacity: 0.5;
+    background-color: transparent;
+    border-style: none;
+    font-size: 1em;
+    width: 100%;
+  }
+
+.pinned-tweet-sentiment {
+  flex: 1;
+  margin: 5px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1em;
+  font-weight: bold;
+  position: relative;
+}
+
+.pinned-tweet-more {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: -10px;
+  margin-top: -5px;
+  border-radius: 2.5px;
+  border-style: none;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  padding: 0px 5px 5px 5px;
+
+  background-color: rgba(0,0,0,0.5);
+}

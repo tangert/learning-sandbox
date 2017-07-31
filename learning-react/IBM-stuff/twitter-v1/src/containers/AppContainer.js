@@ -67,13 +67,18 @@ class AppContainer extends Component {
               return;
         }
       }.bind(this));
+
+      //Filters
+      socket.on('filter', function(data){
+        this.props.actions.editFilters(data);
+      }.bind(this));
   }
 
   render(){
     return(
         <Router history = {history}>
           <div className = "app-container">
-              <div className="App-header-1">
+              <div className="App-header">
                 <Link to={'/'}> <img src={logo} className="App-logo" alt="logo" /> </Link>
                 <Link to={'/admin'} className="admin-logo">Admin</Link>
               </div>

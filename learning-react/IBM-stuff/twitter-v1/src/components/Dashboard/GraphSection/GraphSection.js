@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Overdrive from 'react-overdrive';
 import GraphHeader from './GraphHeader/GraphHeader';
-import Graph from './Graph/Graph';
+import StockGraph from './Graph/StockGraph';
+import SentGraph from './Graph/SentGraph';
 import MarketListItem from './MarketListItem/MarketListItem';
 import './GraphSection.css';
 
@@ -56,7 +57,7 @@ class GraphSection extends Component {
         />
 
         <div className = "graph-wrapper">
-          <Graph className= "stock-graph"
+          <StockGraph className= "stock-graph"
             graph_data = {this.props.graph_data}
             tweet_data = {this.props.tweet_data}
             isReceivingData = {this.props.isReceivingData}/>
@@ -70,6 +71,17 @@ class GraphSection extends Component {
             <MarketListItem type = 'PE_RATIO' data = {points} title = 'P/E Ratio'/>
             <MarketListItem type = 'DIV_YIELD' data = {points} title = 'Div Yield'/>
         </div>
+
+        <div className = "under-graph">
+          <div className = "under-graph-viz">
+            <div className = "sent-graph-wrapper">
+              <SentGraph className = "sent-graph"
+                tweet_data = {this.props.tweet_data}
+                isReceivingData = {this.props.isReceivingData}/>
+            </div>
+          </div>
+        </div>
+
       </div>
     )
   }

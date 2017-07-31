@@ -15,7 +15,7 @@ const TweetsSection = (props) => {
       />
     <PinnedTweetsContainer pinned_tweets = {props.pinned_tweets}/>
     <div className = "tweet-feed-separator"></div>
-    <TweetFeedContainer tweet_data = {props.tweet_data}/>
+    <TweetFeedContainer tweet_data = { props.filters.length > 0 ? props.filtered_tweets : props.tweet_data}/>
     </div>
   )
 }

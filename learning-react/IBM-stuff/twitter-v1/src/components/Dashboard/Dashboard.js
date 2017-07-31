@@ -13,6 +13,8 @@ class Dashboard extends Component {
           <TweetsSection tweet_data = {this.props.tweet_data}
                          pinned_tweets = {this.props.pinned_tweets}
                          isReceivingData = {this.props.isReceivingData}
+                         filtered_tweets = {this.props.filtered_tweets}
+                         filters = {this.props.filters}
                          last_request_body = {this.props.last_request_body}/>
 
           <GraphSection graph_data = {this.props.graph_data}
@@ -29,6 +31,8 @@ function mapStateToProps(state){
     graph_data: state.dashboard.stock_data,
     tweet_data: state.dashboard.tweet_data,
     pinned_tweets: state.dashboard.pinned_tweets,
+    filtered_tweets: state.dashboard.filtered_tweets,
+    filters: state.dashboard.filters,
     isReceivingData: state.dashboard.isReceivingData,
     last_request_body: state.api.last_request_body
   };

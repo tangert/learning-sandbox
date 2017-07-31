@@ -80,13 +80,11 @@ TIME CREATED
   flex-direction: row;
   justify-content: space-between;
   order: 1;
-  /*background-color: blue;*/
-
 }
 
 .handle {
   order: 1;
-  font-size: 18px;
+  font-size: 1em;
   opacity: 0.7;
 }
 
@@ -110,7 +108,7 @@ TIME CREATED
 }
 
 .tweet-content {
-  font-size: 0.9em;
+  font-size: 1em;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;

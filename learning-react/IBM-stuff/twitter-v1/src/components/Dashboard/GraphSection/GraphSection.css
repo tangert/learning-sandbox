@@ -25,6 +25,7 @@
 .under-graph {
   display: flex;
   flex-direction: column;
+
 }
 
   .under-graph-header {
@@ -50,10 +51,15 @@
   .under-graph-viz {
     order: 2;
     margin-top: 10px;
-    height: 100px;
+    margin-bottom: 10px;
     z-index: -1;
     border-radius: 15px;
     background-image: linear-gradient(to bottom right, #222 0%, rgba(63,66,54,0.1) 100%);
+  }
+
+  .sent-graph-wrapper {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
 .market-info {

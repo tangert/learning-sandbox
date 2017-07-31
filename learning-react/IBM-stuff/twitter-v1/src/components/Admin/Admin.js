@@ -18,6 +18,8 @@ class Admin extends Component {
       <div className = "admin">
         <DashboardControl tweet_data = {this.props.tweet_data}
                           graph_data = {this.props.graph_data}
+                          pinned_tweets = {this.props.pinned_tweets}
+                          filters = {this.props.filters}
                           isReceivingData = {this.props.isReceivingData}
                           last_request_body = {this.props.last_request_body}
         />
@@ -36,8 +38,11 @@ function mapStateToProps(state){
   return {
     graph_data: state.dashboard.stock_data,
     tweet_data: state.dashboard.tweet_data,
+    filtered_tweets: state.dashboard.filtered_tweets,
+    filters: state.dashboard.filters,
+    pinned_tweets: state.dashboard.pinned_tweets,
     isReceivingData: state.dashboard.isReceivingData,
-    last_request_body: state.api.last_request_body
+    last_request_body: state.api.last_request_body,
   };
 }
 
