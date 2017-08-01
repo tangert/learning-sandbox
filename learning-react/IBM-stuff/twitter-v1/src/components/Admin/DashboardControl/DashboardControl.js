@@ -218,18 +218,16 @@ class DashboardControl extends Component {
   onStopFeed() {
     console.log("ABOUT TO STOP DATA");
     this.setState({
-      isRunning: false
-    },()=>{
-      console.log(this.state.isRunning);
-      this.updateCountdown();
+      isRunning: false,
+      timeLeft: 0
     });
-
+    clearInterval(updateCountdownInterval);
+    console.log(this.state.timeLeft);
     axios.delete('api/gen-traffic');
   }
 
   onClearStore() {
     this.onStopFeed();
-    // axios.delete('api/clear-store');
     socket.emit('on-clear-store', {});
   }
 
@@ -244,7 +242,7 @@ class DashboardControl extends Component {
               <button className = "reset-feed-button" onClick = {this.onClearStore}>RESET</button>
             </div>
 
-            <CurrentFeedHeader time = { this.props.isReceivingData ? this.parseMSIntoReadableTime(this.state.timeLeft) : this.updateCountdown() }
+            <CurrentFeedHeader time = { this.parseMSIntoReadableTime(this.state.timeLeft) }
                                graph_data = {this.props.graph_data.length > 0 ? this.props.graph_data : 0}
                                tweet_data = {this.props.tweet_data.length > 0 ? this.props.tweet_data : 0}
                                isRunning = {this.props.isReceivingData}
@@ -277,9 +275,6 @@ class DashboardControl extends Component {
                              onRangeAfterChange = {this.onRangeAfterChange}
                              onStockTimeReleaseChange = {this.onStockTimeReleaseChange}
                              />
-
-             <Presets updateHighlight = {this.updateHighlight}
-                    isHighlighted = {this.state.presets_highlighted} />
 
            </div>
 

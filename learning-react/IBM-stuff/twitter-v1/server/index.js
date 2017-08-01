@@ -4,7 +4,13 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const app = express();
+const http = require('http');
 const mongoose = require('mongoose');
+const csv = require('fast-csv');
+const fs = require('fs');
+const blobUtil = require('blob-util');
+const FileReader = require('filereader');
+const request = require('superagent');
 
 //Server
 const PORT = process.env.PORT || 3001;
@@ -48,7 +54,9 @@ io.on('connection', function (socket) {
   });
 
   /******PINNED TWEETS *******/
-var usernames = [ "aritter93", "goldmeister", "nsilverman", "gnarlesbarlow", "willrocky12", "jonahwilde", "ericmenana", "bananaphonez"];
+  //oh god fix this
+  var usernames = [ "aritter93", "goldmeister", "nsilverman", "gnarlesbarlow", "willrocky12", "jonahwilde", "ericmenana", "bananaphonez"];
+
   socket.on('pinned-tweet-create', function(data){
 
     let sent = Number(data.sentiment);
@@ -116,56 +124,24 @@ app.delete('/api/clear-store', function(req, res)  {
 /*******************************************************************/
 /***********************TWEET DB ROUTES*****************************/
 /*******************************************************************/
-//Get all tweets
-app.get('/api/tweets',function(req,res){
+app.post('/api/upload-tweets', function(req,res){
 
+  let request = req.body;
+  let new_tweets = [];
+
+  for (var i = 1; i < request.length; i++) {
+    let post = {
+      "content": request[i][0],
+      "sentiment": request[i][1]
+    };
+    new_tweets.push(post);
+  }
+
+  console.log(new_tweets);
+  db.collection('tweet_content').deleteMany({});
+  db.collection('tweet_content').insertMany(new_tweets);
 });
 
-//Gets a specific tweet
-app.get('/api/tweets/:id',function(req,res){
-
-});
-
-//Edit a specific tweet
-app.put('api/tweets/edit/:id', function(req,res){
-
-});
-
-//Create a tweet
-app.post('/api/tweets/create', function(req,res) {
-  //parse through the request body and place each individual part into each
-});
-
-//Delete a tweet
-app.delete('api/tweets/delete/:id', function(req,res){
-
-});
-
-/*******************************************************************/
-/***********************PRESET DB ROUTES*****************************/
-/*******************************************************************/
-app.get('/api/presets', function(req,res){
-  //return all the presets from the db as an array
-});
-
-app.post('/api/presets/create', function(req,res){
-  const newPreset = req.body;
-  //get new preset in terms of a json object
-  //create a new mongoose model
-  //update the db
-  //send a socket event to the store with the same object
-});
-
-app.put('/api/presets/edit/:id', function(req,res){
-  //grab the appropriate preset from DB according to the id
-  //reassign the mdoel to the new req body
-  //save the model!
-});
-
-app.delete('/api/presets/delete/:id', function(req,res){
-  //grab the appropriate preset from DB according to the id
-  //delete it
-});
 
 /*******************************************************************/
 /**********************TRAFFIC GENERATION***************************/

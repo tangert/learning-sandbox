@@ -26,8 +26,7 @@ class PinnedTweet extends Component {
         </div>
         <div className = "pinned-tweet-sentiment" style = {{backgroundColor: this.props.color}}>
           {this.props.sentiment}
-          <button className = "pinned-tweet-more">...</button>
-          <button onClick = {this.onDelete}></button>
+          <button onClick = {this.onDelete} className = "pinned-tweet-more">x</button>
         </div>
       </div>
     );

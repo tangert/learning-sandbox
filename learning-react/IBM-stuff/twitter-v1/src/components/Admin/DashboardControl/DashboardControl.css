@@ -54,7 +54,7 @@
   .dashboard-content-left {
     display: flex;
     flex-direction: column;
-    flex: 1.75;
+    flex: 1;
   }
 
   .dashboard-content-left-bottom {

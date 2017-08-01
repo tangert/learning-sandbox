@@ -13,7 +13,7 @@ class SparklineViz extends Component {
           <div className = "sparkline-viz-value">{this.props.value}</div>
         </div>
         <div className = "sparkline-viz-chart">
-          <Sparklines data={[5, 10, 5, 20]} height = {50}>
+          <Sparklines data={this.props.data} height = {50}>
             <SparklinesLine color="blue" />
             <SparklinesReferenceLine type="mean" />
             <SparklinesSpots />

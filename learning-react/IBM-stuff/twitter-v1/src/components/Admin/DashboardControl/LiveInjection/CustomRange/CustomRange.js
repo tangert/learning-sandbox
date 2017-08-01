@@ -76,7 +76,7 @@ class CustomRange extends React.Component {
             min={0.05}
             max={5}
             step={0.05}
-            defaultValue={0.1}
+            defaultValue={0}
             value={this.props.timeValue}
             onChange={this.props.onTimeChange}
             onAfterChange={this.props.onAfterTimeChange}

@@ -104,7 +104,7 @@ class StockGraph extends Component {
               const stock_y =  graph_data[last_graph_point].stock;
 
               const timeFlag = this.props.graph_data[last_graph_point].time - this.props.graph_data[last_graph_point-1].time;
-              const shiftFlagStock =  chart.series[0].data.length > 150;
+              const shiftFlagStock =  chart.series[0].data.length > 75;
 
               const stock_point = [stock_x,stock_y];
               const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
