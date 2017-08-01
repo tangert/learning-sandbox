@@ -58,7 +58,8 @@ class CustomRange extends React.Component {
 
         <Range
           className = "range stock"
-          min={5}
+          min={0}
+          step={10}
           max={100}
           defaultValue={0}
           value={this.props.value}

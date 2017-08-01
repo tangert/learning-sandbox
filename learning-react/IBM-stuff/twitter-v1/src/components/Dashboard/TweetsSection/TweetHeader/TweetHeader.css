@@ -2,8 +2,6 @@
   order: 1;
   color:white;
 
-  /*background-color: blue;*/
-
   height: 100px;
   display: flex;
   margin-left: 20px;
@@ -27,7 +25,6 @@
     }
 
         .text-wrap {
-          /*background-color: green;*/
           display: flex;
           flex-direction: row;
 
@@ -106,19 +103,19 @@
   }
 
   .tweet-header-button {
-    height: 4em;
-    width: 4em;
+    height: 3em;
+    width: 3em;
     background: transparent;
     border-style: solid;
-    border-radius: 10px;
+    border-width: 1px;
+    border-radius: 5px;
     margin: -20px;
 
     text-align: center;
     color: white;
 
     transition: 0.25s ease-in-out;
-
-    opacity: 0.7;
+    opacity: 0.5;
   }
 
   .tweet-header-button:hover {

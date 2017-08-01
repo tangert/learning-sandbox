@@ -4,15 +4,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const http = require('http');
 const mongoose = require('mongoose');
-const csv = require('fast-csv');
 const fs = require('fs');
-const blobUtil = require('blob-util');
-const FileReader = require('filereader');
-const request = require('superagent');
 
-//Server
+//Server constants
 const PORT = process.env.PORT || 3001;
 const server = require('http').Server(app);
 const red = {r: 212, g: 75, b: 60};
@@ -21,6 +16,7 @@ const blue = {r: 158, g: 222, b: 242};
 app.use(bodyParser.json());
 
 //MongoDB
+//Change to remote URL
 mongoose.connect('mongodb://localhost/BaneAndOx/');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -112,17 +108,10 @@ app.get('/api', function (req, res) {
   res.status(200).send('API is working.');
 });
 
-//clear store
-app.delete('/api/clear-store', function(req, res)  {
-  console.log("ABOUT TO CLEAR STORE");
-  req.app.io.emit('clear-store', { clearingStore: 'true' });
-});
-
 /*******************************************************************/
 /***********************TWEET DB ROUTES*****************************/
 /*******************************************************************/
 app.post('/api/upload-tweets', function(req,res){
-
   let request = req.body;
   let new_tweets = [];
 
@@ -144,7 +133,6 @@ app.post('/api/upload-tweets', function(req,res){
 /**********************TRAFFIC GENERATION***************************/
 /*******************************************************************/
 app.use('/api/gen-traffic', function(req, res, next) {
-
   //Query variables
   const sent = Number(req.body.sentiment);
   const sentFlux = Number(req.body.sentFlux);
@@ -245,31 +233,31 @@ app.use('/api/gen-traffic', function(req, res, next) {
   var images = [];
 
   function sendSentimentData(sentiment){
-    var handle = getRandomElement(tweet_handles);
-    var content = getRandomElement(tweet_contents);
-    var image_id = getRandomElement([0,1,2,3,4,5,6,7]);
-    var color = convertPercentToColor(red, blue, Number(content.sentiment));
+    let handle = getRandomElement(tweet_handles);
+    let content = getRandomElement(tweet_contents);
+    let image_id = getRandomElement([0,1,2,3,4,5,6,7]);
 
-    var payload = {
-      handle: handle.handle,
-      image: image_id,
-      content: content.content,
-      sentiment: content.sentiment,
-      color: color,
-      time: Date.now(),
-      id: generateId()
-    };
+    let color = convertPercentToColor(red, blue, Number(content.sentiment));
+      let payload = {
+        handle: handle.handle,
+        image: image_id,
+        content: content.content,
+        sentiment: content.sentiment,
+        color: color,
+        time: Date.now(),
+        id: generateId()
+      };
 
-    sendOverSocket('sentiment-data', payload);
+      sendOverSocket('sentiment-data', payload);
   }
 
   function sendStockData(stock, flux){
-    var delta = stock*flux;
-    var calculatedStock = getRandomFromRange(stock-delta, stock+delta);
-    var color = convertPercentToColor(red, blue, calculatedStock);
-    var newTime = new Date().getTime();
+    let delta = stock*flux;
+    let calculatedStock = getRandomFromRange(stock-delta, stock+delta);
+    let color = convertPercentToColor(red, blue, calculatedStock);
+    let newTime = new Date().getTime();
 
-    var payload = {
+    let payload = {
       stock: calculatedStock,
       color: color,
       time: newTime
@@ -280,7 +268,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
 
   function grabSentimentSensitiveData(sentiment, flux) {
     // console.log('Sending sentiment data: ' + sentiment);
-    var delta = sentiment*flux;
+    let delta = sentiment*flux;
 
     db.collection('tweet_handles').find({}).toArray().then(function(data){
       tweet_handles = data;
@@ -295,7 +283,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
             ]
               }).toArray().then(function(data){
                 console.log("FOUND SENTIMENT DATA: ", data);
-                tweet_contents = data;
+                  tweet_contents = data;
     });
 
     db.collection('images').find({}).toArray().then(function(data){
