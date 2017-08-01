@@ -57,9 +57,8 @@ class SocialMedia extends Component {
     this.clearAllFilters = this.clearAllFilters.bind(this);
 
     this.onCreatePinnedTweet = this.onCreatePinnedTweet.bind(this);
-    this.onEditPinnedTweet = this.onEditPinnedTweet.bind(this);
     this.onDeletePinnedTweet = this.onDeletePinnedTweet.bind(this);
-    this.onClearAllPinnedTweets = this.onClearAllPinnedTweets.bind(this);
+    this.onClearPinnedTweets = this.onClearPinnedTweets.bind(this);
 
     this.handleTweetContentChange = this.handleTweetContentChange.bind(this);
     this.handleTweetSentimentChange = this.handleTweetSentimentChange.bind(this);
@@ -129,15 +128,11 @@ class SocialMedia extends Component {
     }
   }
 
-  onEditPinnedTweet(payload){
-
-  }
-
   onDeletePinnedTweet(id){
     socket.emit('pinned-tweet-delete', id);
   }
 
-  onClearAllPinnedTweets(){
+  onClearPinnedTweets(){
     socket.emit('pinned-tweets-clear', {});
   }
 
@@ -199,7 +194,7 @@ class SocialMedia extends Component {
             <div className = "social-media-pinned-tweets">
               <div className = "label-control-header">
                 <div className = "corner-label">PINNED TWEETS</div>
-                <button onClick = {this.onClearAllPinnedTweets} className = "clear-all-button">CLEAR</button>
+                <button onClick = {this.onClearPinnedTweets} className = "clear-all-button">CLEAR</button>
               </div>
               <div className = "new-pinned-tweet-entry">
                 <input className = "pinned-tweet-input" onChange = {this.handleTweetContentChange}></input>

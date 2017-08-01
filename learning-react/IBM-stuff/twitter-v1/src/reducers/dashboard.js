@@ -2,7 +2,7 @@ import { UPDATE_STOCK,
          UPDATE_SENTIMENT,
          UPDATE_TRAFFIC_GEN,
          CREATE_PINNED_TWEET,
-         EDIT_PINNED_TWEET,
+         CLEAR_PINNED_TWEETS,
          DELETE_PINNED_TWEET,
          EDIT_FILTERS } from '../constants/ActionTypes';
 
@@ -57,6 +57,9 @@ export default function dashboard(state = initialState, action) {
     case DELETE_PINNED_TWEET:
       return { ...state,
                pinned_tweets : state.pinned_tweets.filter( (tweet, index) => tweet.id !== action.payload) }
+    case CLEAR_PINNED_TWEETS:
+      return { ...state,
+                pinned_tweets: [] }
     case EDIT_FILTERS:
       return { ...state,
                filters: action.payload,

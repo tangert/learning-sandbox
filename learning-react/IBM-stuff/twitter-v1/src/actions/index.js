@@ -52,10 +52,9 @@ export function deletePinnedTweet(data) {
   }
 }
 
-export function editPinnedTweet(data) {
+export function clearPinnedTweets(data) {
   return {
-    type: types.EDIT_PINNED_TWEET,
-    payload: data,
+    type: types.CLEAR_PINNED_TWEETS,
   }
 }
 
@@ -64,5 +63,13 @@ export function editFilters(data){
   return {
     type: types.EDIT_FILTERS,
     payload: data,
+  }
+}
+
+//time
+export function updateTime(data){
+  return {
+    type: types.UPDATE_TIME,
+    payload: data
   }
 }

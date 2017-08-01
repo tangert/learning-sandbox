@@ -34,6 +34,4 @@ def clearDB():
 
 if __name__ == '__main__':
     db.tweet_handles.delete_many({})
-    db.tweet_content.delete_many({})
-
-    insertContent()
+    insertUsernames()

@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import SparklineViz from './SparklineViz/SparklineViz'
 import './CurrentFeedHeader.css'
 
 class CurrentFeedHeader extends React.Component {

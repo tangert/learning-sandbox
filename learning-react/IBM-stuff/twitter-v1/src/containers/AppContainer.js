@@ -57,11 +57,10 @@ class AppContainer extends Component {
           case 'CREATE':
             this.props.actions.createPinnedTweet(data.payload);
             break;
-          case 'EDIT':
-            this.props.actions.editPinnedTweet(data.payload);
-            break;
           case 'DELETE':
             this.props.actions.deletePinnedTweet(data.payload);
+          case 'CLEAR_ALL':
+            this.props.actions.clearPinnedTweets()
             break;
           default:
               return;
@@ -71,6 +70,12 @@ class AppContainer extends Component {
       //Filters
       socket.on('filter', function(data){
         this.props.actions.editFilters(data);
+      }.bind(this));
+
+      //Time change
+      socket.on('time-change', function(data){
+        console.log("TIME CHANGING: ", data);
+        this.props.actions.updateTime(data);
       }.bind(this));
   }
 

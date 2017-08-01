@@ -93,18 +93,31 @@ class StockGraph extends Component {
   }
   componentDidMount() {
       var chart = this.refs.chart.getChart();
+      var shiftFlagStock;
+
+      // setTimeout(function(){
+      //   if(this.props.isReceivingData){
+      //     for(var i = 0; i < this.props.graph_data.length; i++) {
+      //       console.log("ADDING", this.props.graph_data.length);
+      //       shiftFlagStock = chart.series[0].data.length > 75;
+      //       let x = this.props.graph_data[i].time;
+      //       let y = this.props.graph_data[i].stock;
+      //       let stock_point = [x,y];
+      //       chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+      //     }
+      //   }
+      // }.bind(this),1000);
 
       setInterval(function(){
         try {
             if(this.props.isReceivingData) {
               const graph_data = this.props.graph_data;
-
               const last_graph_point = graph_data.length-1;
               const stock_x = graph_data[last_graph_point].time;
               const stock_y =  graph_data[last_graph_point].stock;
 
               const timeFlag = this.props.graph_data[last_graph_point].time - this.props.graph_data[last_graph_point-1].time;
-              const shiftFlagStock =  chart.series[0].data.length > 75;
+              const shiftFlagStock =  chart.series[0].data.length > 100;
 
               const stock_point = [stock_x,stock_y];
               const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
@@ -119,7 +132,7 @@ class StockGraph extends Component {
           console.log(e);
           console.log("Wait for your fucking data");
         }
-      }.bind(this),2000);
+      }.bind(this), this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000);
   }
 
   render(){

@@ -22,6 +22,7 @@ class Admin extends Component {
                           filters = {this.props.filters}
                           isReceivingData = {this.props.isReceivingData}
                           last_request_body = {this.props.last_request_body}
+                          time_left = {this.props.time_left}
         />
       </div>
     );
@@ -43,6 +44,7 @@ function mapStateToProps(state){
     pinned_tweets: state.dashboard.pinned_tweets,
     isReceivingData: state.dashboard.isReceivingData,
     last_request_body: state.api.last_request_body,
+    time_left: state.api.time_left
   };
 }
 

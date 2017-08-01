@@ -19,7 +19,8 @@ class Dashboard extends Component {
 
           <GraphSection graph_data = {this.props.graph_data}
                         tweet_data = {this.props.tweet_data}
-                        isReceivingData = {this.props.isReceivingData}/>
+                        isReceivingData = {this.props.isReceivingData}
+                        last_request_body = {this.props.last_request_body}/>
         </div>
       </div>
     );

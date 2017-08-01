@@ -57,7 +57,7 @@ class LiveInjection extends Component {
                 onChange={this.props.onTimeChange}
                 max = "500"
                 min = "1"
-                placeholder="0"
+                placeholder={this.props.last_request_body.time}
                 >
               </input>
               minutes

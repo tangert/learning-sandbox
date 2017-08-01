@@ -19,23 +19,19 @@ class DashboardControl extends Component {
       time: 0,
       sentiment: 0,
       sentFlux: 0,
-      sentTimeRelease: 1,
+      sentTimeRelease: 0,
       stock: 0,
       stockFlux: 0,
-      stockTimeRelease: 1,
+      stockTimeRelease: 0,
       last_request_body: {},
 
       social_media_highlighted: false,
       presets_highlighted: false,
       live_injection_highlighted: false,
-      timeLeft: 0,
       isMounted: false
     };
 
     this.updateHighlight = this.updateHighlight.bind(this);
-
-    this.updateCountdown = this.updateCountdown.bind(this);
-    this.startCountdown = this.startCountdown.bind(this);
     this.parseMSIntoReadableTime = this.parseMSIntoReadableTime.bind(this);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -78,34 +74,7 @@ class DashboardControl extends Component {
     }
   }
 
-  updateCountdown() {
-    clearInterval(updateCountdownInterval);
-    this.startCountdown(this.props.last_request_body.time);
-  }
-
-  startCountdown(time) {
-    clearInterval(updateCountdownInterval);
-    var end = (time)*60*1000;
-    var now = new Date().getTime();
-    var endTime = now + end;
-
-      updateCountdownInterval = setInterval(function(){
-          //local now used on each update.
-          let now = new Date().getTime();
-          var difference = endTime - now;
-
-          this.setState({
-            timeLeft: difference
-          });
-
-          if(difference < 1000) {
-            clearInterval(updateCountdownInterval);
-          }
-        }.bind(this),1000);
-    }
-
   parseMSIntoReadableTime = (milliseconds) => {
-    //Get hours from milliseconds
     var hours = milliseconds / (1000*60*60);
     var absoluteHours = Math.floor(hours);
     var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
@@ -196,18 +165,6 @@ class DashboardControl extends Component {
       stockTimeRelease: this.state.stockTimeRelease
     };
 
-    this.startCountdown();
-
-    this.setState({
-      last_request_body: requestBody,
-      isRunning: true
-    },()=>{
-        if(this.state.isRunning) {
-          this.updateCountdown();
-        }
-        this.startCountdown(this.state.last_request_body.time);
-    });
-
     axios({
       method: 'post',
       url: '/api/gen-traffic',
@@ -217,12 +174,6 @@ class DashboardControl extends Component {
 
   onStopFeed() {
     console.log("ABOUT TO STOP DATA");
-    this.setState({
-      isRunning: false,
-      timeLeft: 0
-    });
-    clearInterval(updateCountdownInterval);
-    console.log(this.state.timeLeft);
     axios.delete('api/gen-traffic');
   }
 
@@ -242,7 +193,7 @@ class DashboardControl extends Component {
               <button className = "reset-feed-button" onClick = {this.onClearStore}>RESET</button>
             </div>
 
-            <CurrentFeedHeader time = { this.parseMSIntoReadableTime(this.state.timeLeft) }
+            <CurrentFeedHeader time = { this.parseMSIntoReadableTime(this.props.time_left)}
                                graph_data = {this.props.graph_data.length > 0 ? this.props.graph_data : 0}
                                tweet_data = {this.props.tweet_data.length > 0 ? this.props.tweet_data : 0}
                                isRunning = {this.props.isReceivingData}
@@ -254,10 +205,8 @@ class DashboardControl extends Component {
                              isHighlighted = {this.state.live_injection_highlighted}
 
                              isReceivingData = {this.props.isReceivingData}
-                             updateCountdown = {this.updateCountdown}
-                             startCountdown = {this.startCountdown}
 
-                             last_request_body = {this.state.last_request_body}
+                             last_request_body = {this.props.last_request_body}
                              time = {this.state.time}
                              onTimeChange = {this.onTimeChange}
 

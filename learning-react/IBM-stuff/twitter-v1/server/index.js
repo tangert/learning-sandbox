@@ -44,6 +44,7 @@ var tweet_contents = [];
 app.io = io;
 io.on('connection', function (socket) {
   socket.emit('server-connect', { connectedToServer: 'true' });
+
   db.collection('tweet_handles').find({}).toArray().then(function(data){
     tweet_handles = data;
   });
@@ -54,18 +55,15 @@ io.on('connection', function (socket) {
   });
 
   /******PINNED TWEETS *******/
-  //oh god fix this
-  var usernames = [ "aritter93", "goldmeister", "nsilverman", "gnarlesbarlow", "willrocky12", "jonahwilde", "ericmenana", "bananaphonez"];
-
   socket.on('pinned-tweet-create', function(data){
-
+    console.log(tweet_handles);
     let sent = Number(data.sentiment);
-    let hand = getRandomElement(tweet_handles);
+    let handle = getRandomElement(tweet_handles);
 
     let payload = {
       id: generateId(),
-      handle: getRandomElement(usernames),
-      image: getRandomElement([0,1,2,3,4,5,6,7]),
+      handle: handle.handle,
+      image: getRandomElement([0,1,2,3,4,5,6,7,8]),
       content: data.content,
       sentiment: sent,
       color: convertPercentToColor(red, blue, sent),
@@ -76,32 +74,31 @@ io.on('connection', function (socket) {
     app.io.emit('pinned-tweets', to_create);
   });
 
-  socket.on('filter-change', function(data){
-    app.io.emit('filter', data);
-  });
-
-  socket.on('pinned-tweet-edit', function(data){
-    let sent = Number(data.sentiment);
-    let payload = {
-      id: data.id,
-      content: data.content,
-      sentiment: sent,
-      color: convertPercentToColor(red,blue,sent),
-      time: Date.now()
-    }
-
-    let to_edit = { action: 'EDIT', payload: payload }
-    app.io.emit('pinned-tweets', to_edit);
-  });
-
   socket.on('pinned-tweet-delete', function(data){
     let to_delete = { action: 'DELETE', payload: data}
     app.io.emit('pinned-tweets', to_delete);
   });
 
+  socket.on('pinned-tweets-clear', function(data){
+    let to_clear = { action: 'CLEAR_ALL' }
+    app.io.emit('pinned-tweets', to_clear);
+  });
+
+  //FILTERS
+  socket.on('filter-change', function(data){
+    app.io.emit('filter', data);
+  });
+
+
   /******CLEARING STORE*******/
   socket.on('on-clear-store', function(data){
     app.io.emit('clear-store', { clearingStore: 'true' });
+  });
+
+  /******TIME CHANGE********/
+  socket.on('on-time-change', function(data){
+    console.log("SERVER SIDE TIME CHANGE: ", data);
+    app.io.emit('time-change', data);
   });
 });
 
@@ -166,6 +163,7 @@ app.use('/api/gen-traffic', function(req, res, next) {
     clearInterval(pollSentimentData);
     clearInterval(pollStockData);
     clearTimeout(timerTimeout);
+    clearInterval(pollTimer);
   }
 
   //Generate traffic
@@ -188,11 +186,28 @@ app.use('/api/gen-traffic', function(req, res, next) {
 
         clearInterval(pollSentimentData);
         clearInterval(pollStockData);
+        clearInterval(pollTimer);
 
         req.app.io.emit('traffic-gen', false );
       }, incomingTimeout);
 
       requestSent = true;
+
+      //TIMER FOR ADMIN SCREEN
+      const timer_start = new Date().getTime();
+      var end = minutesToMs(time)
+      var now = new Date().getTime();
+      var endTime = now + end;
+
+      if(time > 0) {
+        if (timerIsRunning) {
+          pollTimer = setInterval(function(){
+            let now = new Date().getTime();
+            let difference = endTime - now;
+            req.app.io.emit('time-change', difference);
+            }, 1000);
+          }
+      }
 
       //2: SENTIMENT
       //First grab all the data from the DB
@@ -218,6 +233,8 @@ app.use('/api/gen-traffic', function(req, res, next) {
     clearInterval(pollSentimentData);
     clearInterval(pollStockData);
     clearTimeout(timerTimeout);
+    clearInterval(pollTimer);
+    req.app.io.emit('time-change', 0);
     req.app.io.emit('traffic-gen', false );
   }
 

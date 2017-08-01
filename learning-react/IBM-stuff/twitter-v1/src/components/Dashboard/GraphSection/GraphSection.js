@@ -6,7 +6,6 @@ import SentGraph from './Graph/SentGraph';
 import MarketListItem from './MarketListItem/MarketListItem';
 import './GraphSection.css';
 
-
 class GraphSection extends Component {
   constructor(props){
     super(props);
@@ -60,7 +59,8 @@ class GraphSection extends Component {
           <StockGraph className= "stock-graph"
             graph_data = {this.props.graph_data}
             tweet_data = {this.props.tweet_data}
-            isReceivingData = {this.props.isReceivingData}/>
+            isReceivingData = {this.props.isReceivingData}
+            last_request_body = {this.props.last_request_body}/>
         </div>
 
         <div className= "market-info">
