@@ -3,6 +3,7 @@
   color: white;
   display: flex;
   flex-direction: column;
+  margin-bottom: 25px;
 }
 
 
@@ -80,5 +81,18 @@ input:focus {
   padding-bottom: 20px;
   margin: 10px;
   width: 100%;
-  /*background-color: white;*/
+}
+
+.range-time-container {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+}
+
+.range-time {
+  flex: 2;
+}
+
+.time-release-label {
+  flex: 1;
 }

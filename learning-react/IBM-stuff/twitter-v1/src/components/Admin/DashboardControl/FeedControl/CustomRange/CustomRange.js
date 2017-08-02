@@ -59,7 +59,7 @@ class CustomRange extends React.Component {
         <Range
           className = "range stock"
           min={0}
-          step={10}
+          step={1}
           max={100}
           defaultValue={0}
           value={this.props.value}
@@ -71,22 +71,24 @@ class CustomRange extends React.Component {
           tipFormatter={value => `${value}%`}
         />
 
-      <div>Time release: {this.formatTime(this.props.timeValue)}</div>
-          <Range
-            className = "range time"
-            min={0.05}
-            max={5}
-            step={0.05}
-            defaultValue={0}
-            value={this.props.timeValue}
-            onChange={this.props.onTimeChange}
-            onAfterChange={this.props.onAfterTimeChange}
-            trackStyle={{ backgroundColor: 'rgba(255,255,255,0.5)', height: 5 }}
-            railStyle={{ backgroundColor: 'rgba(255,255,255,0.1)', height: 5 }}
-            handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 10, height: 10 }]}
-            tipFormatter={value => `${value}m`}
-          />
+      <div className = "range-time-container">
+          <div className = "time-release-label">Release: {this.formatTime(this.props.timeValue)}</div>
+              <Range
+                className = "range-time"
+                min={0.1}
+                max={5}
+                step={0.1}
+                defaultValue={0.1}
+                value={this.props.timeValue}
+                onChange={this.props.onTimeChange}
+                onAfterChange={this.props.onAfterTimeChange}
+                trackStyle={{ backgroundColor: 'rgba(255,255,255,0.5)', height: 5 }}
+                railStyle={{ backgroundColor: 'rgba(255,255,255,0.1)', height: 5 }}
+                handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 10, height: 10 }]}
+                tipFormatter={value => `${value}m`}
+              />
         </div>
+      </div>
     );
   }
 }

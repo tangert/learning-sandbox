@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import CurrentFeedHeader from './CurrentFeedHeader/CurrentFeedHeader'
 import Presets from './Presets/Presets'
-import LiveInjection from './LiveInjection/LiveInjection'
+import FeedControl from './FeedControl/FeedControl'
 import SocialMedia from './SocialMedia/SocialMedia'
 import ButtonPanel from './ButtonPanel/ButtonPanel'
 import axios from 'axios';
@@ -16,24 +16,24 @@ class DashboardControl extends Component {
     super(props);
 
     this.state = {
-      time: 0,
       sentiment: 0,
-      sentFlux: 0,
-      sentTimeRelease: 0,
+      sentFlux: 0.5,
+      sentTimeRelease: 0.1,
       stock: 0,
-      stockFlux: 0,
-      stockTimeRelease: 0,
+      stockFlux: 0.5,
+      stockTimeRelease: 0.1,
       last_request_body: {},
 
       social_media_highlighted: false,
       presets_highlighted: false,
-      live_injection_highlighted: false,
+      feed_control_highlighted: false,
       isMounted: false
     };
 
     this.updateHighlight = this.updateHighlight.bind(this);
     this.parseMSIntoReadableTime = this.parseMSIntoReadableTime.bind(this);
 
+    this.onQuickUpdate = this.onQuickUpdate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onStopFeed = this.onStopFeed.bind(this);
     this.onClearStore = this.onClearStore.bind(this);
@@ -51,14 +51,14 @@ class DashboardControl extends Component {
       if(!this.state.presets_highlighted){
         this.setState({
           presets_highlighted: true,
-          live_injection_highlighted: false,
+          feed_control_highlighted: false,
           social_media_highlighted: false
         });
       }
-    } else if (section == 'LIVE_INJECTION') {
-      if(!this.state.live_injection_highlighted){
+    } else if (section == 'FEED_CONTROL') {
+      if(!this.state.feed_control_highlighted){
         this.setState({
-          live_injection_highlighted: true,
+          feed_control_highlighted: true,
           presets_highlighted: false,
           social_media_highlighted: false
         });
@@ -68,7 +68,7 @@ class DashboardControl extends Component {
         this.setState({
           social_media_highlighted: true,
           presets_highlighted: false,
-          live_injection_highlighted: false
+          feed_control_highlighted: false
         });
       }
     }
@@ -90,6 +90,63 @@ class DashboardControl extends Component {
     var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
 
     return (h + ':' + m + ':' + s);
+  }
+
+  /******** BUTTON FUNCTIONS *********/
+  onSubmit() {
+    console.log("ABOUT TO UPDATE DATA");
+    let data = {
+      sentiment: this.state.sentiment,
+      sentFlux: this.state.sentFlux/100,
+      sentTimeRelease: this.state.sentTimeRelease,
+
+      stock: this.state.stock,
+      stockFlux: this.state.stockFlux/500,
+      stockTimeRelease: this.state.stockTimeRelease
+    };
+    socket.emit('traffic-gen', data);
+  }
+
+  onQuickUpdate = (step, direction, title) => {
+    let update;
+
+    if(title === 'Stock') {
+      if(direction === 'pos') {
+        update = { stock: this.state.stock + step };
+      } else {
+        if (this.state.stock > 0) {
+          update = { stock: this.state.stock - step };
+        }
+      }
+    } else if (title === 'Sentiment') {
+      if(direction === 'pos') {
+        update = { sentiment: this.state.sentiment + step };
+      } else {
+        if (this.state.sentiment > 0) {
+          update = { sentiment: this.state.sentiment - step };
+        }
+      }
+    }
+
+    console.log("UPDATE: ", update);
+    this.setState(update, () => {
+      let data = {
+        sentiment: this.state.sentiment,
+        sentFlux: this.state.sentFlux/100,
+        sentTimeRelease: this.state.sentTimeRelease,
+
+        stock: this.state.stock,
+        stockFlux: this.state.stockFlux/500,
+        stockTimeRelease: this.state.stockTimeRelease
+      };
+      console.log(this.state);
+      socket.emit('traffic-gen', data);
+    });
+  }
+
+  onStopFeed() {
+    console.log("ABOUT TO STOP DATA");
+    socket.emit('traffic-stop');
   }
 
 
@@ -150,33 +207,6 @@ class DashboardControl extends Component {
     console.log(value);
   }
 
-  onSubmit() {
-    console.log("ABOUT TO UPDATE DATA");
-
-    let requestBody = {
-      time: this.state.time,
-
-      sentiment: this.state.sentiment,
-      sentFlux: this.state.sentFlux/100,
-      sentTimeRelease: this.state.sentTimeRelease,
-
-      stock: this.state.stock,
-      stockFlux: this.state.stockFlux/500,
-      stockTimeRelease: this.state.stockTimeRelease
-    };
-
-    axios({
-      method: 'post',
-      url: '/api/gen-traffic',
-      data: requestBody
-    });
-  }
-
-  onStopFeed() {
-    console.log("ABOUT TO STOP DATA");
-    axios.delete('api/gen-traffic');
-  }
-
   onClearStore() {
     this.onStopFeed();
     socket.emit('on-clear-store', {});
@@ -194,16 +224,15 @@ class DashboardControl extends Component {
             </div>
 
             <CurrentFeedHeader time = { this.parseMSIntoReadableTime(this.props.time_left)}
-                               graph_data = {this.props.graph_data.length > 0 ? this.props.graph_data : 0}
-                               tweet_data = {this.props.tweet_data.length > 0 ? this.props.tweet_data : 0}
                                isRunning = {this.props.isReceivingData}
                                lastStock = {this.props.graph_data.length > 0 ? this.props.graph_data[this.props.graph_data.length-1].stock : 0}
                                lastSentiment = {this.props.tweet_data.length > 0 ? this.props.tweet_data[0].sentiment : 0}/>
 
             <div className = "dashboard-content-left-bottom">
-              <LiveInjection updateHighlight = {this.updateHighlight}
-                             isHighlighted = {this.state.live_injection_highlighted}
+              <FeedControl updateHighlight = {this.updateHighlight}
+                             isHighlighted = {this.state.feed_control_highlighted}
 
+                             onQuickUpdate = {this.onQuickUpdate}
                              isReceivingData = {this.props.isReceivingData}
 
                              last_request_body = {this.props.last_request_body}

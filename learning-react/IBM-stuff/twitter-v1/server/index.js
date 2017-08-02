@@ -50,7 +50,157 @@ io.on('connection', function (socket) {
     console.log(data);
   });
 
-  /******PINNED TWEETS *******/
+  /*******************************************************************/
+  /**********************TRAFFIC GENERATION***************************/
+  /*******************************************************************/
+
+  socket.on('traffic-stop', function(data){
+    console.log('About to stop traffic.');
+    clearInterval(pollSentimentData);
+    clearInterval(pollStockData);
+    clearTimeout(timerTimeout);
+    clearInterval(pollTimer);
+    app.io.emit('time-change', 0);
+    app.io.emit('traffic-gen', false );
+  });
+
+  socket.on('traffic-gen', function(data){
+    console.log('About to start traffic');
+    const sent = data.sentiment;
+    const sentFlux = data.sentFlux;
+    const sentTimeRelease = data.sentTimeRelease * 1000 * 60;
+
+    const stock = data.stock;
+    const stockFlux = data.stockFlux;
+    const stockTimeRelease = data.stockTimeRelease * 1000 * 60;
+
+    if (requestSent) {
+      clearInterval(pollSentimentData);
+      clearInterval(pollStockData);
+      clearTimeout(timerTimeout);
+      clearInterval(pollTimer);
+    }
+
+      console.log("\n" + 'About to start countdown!');
+      app.io.emit('traffic-gen', true );
+      app.io.emit('update-graph', stockTimeRelease);
+      app.io.emit('send-request', data);
+
+      //Local variables
+      const pollTime = 1000;
+      let timerIsRunning = true;
+
+      //By default set to 5 hour timeout
+      timerTimeout = setTimeout(() => {
+        console.log("TIMED OUT");
+        timerIsRunning = false;
+        requestSent = false;
+
+        clearInterval(pollSentimentData);
+        clearInterval(pollStockData);
+        clearInterval(pollTimer);
+
+        app.io.emit('traffic-gen', false );
+      }, 18000000);
+
+      requestSent = true;
+
+      //TIMER FOR ADMIN SCREEN
+      const timer_start = new Date().getTime();
+
+      if (timerIsRunning) {
+        pollTimer = setInterval(function(){
+          let now = new Date().getTime();
+          let difference = now - timer_start;
+          app.io.emit('time-change', difference);
+          }, 1000);
+        }
+
+      //2: SENTIMENT
+      //First grab all the data from the DB
+      grabSentimentSensitiveData(sent, sentFlux);
+      pollSentimentData = setInterval(function(){
+        if (timerIsRunning) {
+          sendSentimentData(sent);
+        }
+      }, sentTimeRelease);
+
+      //3: STOCK
+      pollStockData = setInterval(function(){
+        if (timerIsRunning) {
+          sendStockData(stock, stockFlux);
+        }
+      }, stockTimeRelease);
+
+    /**********************************************************************/
+    /**********************************************************************/
+    /**********************************************************************/
+
+    var images = [];
+
+    function sendSentimentData(sentiment){
+      let handle = getRandomElement(tweet_handles);
+      let content = getRandomElement(tweet_contents);
+      let image_id = getRandomElement([0,1,2,3,4,5,6,7]);
+
+      let color = convertPercentToColor(red, blue, Number(content.sentiment));
+        let payload = {
+          handle: handle.handle,
+          image: image_id,
+          content: content.content,
+          sentiment: content.sentiment,
+          color: color,
+          time: Date.now(),
+          id: generateId()
+        };
+
+        app.io.emit('sentiment-data', payload);
+    }
+
+    function sendStockData(stock, flux){
+      let delta = stock*flux;
+      let calculatedStock = getRandomFromRange(stock-delta, stock+delta);
+      let color = convertPercentToColor(red, blue, calculatedStock);
+      let newTime = new Date().getTime();
+
+      let payload = {
+        stock: calculatedStock,
+        color: color,
+        time: newTime
+      };
+
+      app.io.emit('stock-data', payload);
+    }
+
+    function grabSentimentSensitiveData(sentiment, flux) {
+      // console.log('Sending sentiment data: ' + sentiment);
+      let delta = sentiment*flux;
+
+      db.collection('tweet_handles').find({}).toArray().then(function(data){
+        tweet_handles = data;
+      });
+
+      //FIXME: Doesn't return when sentiment is out of a certain range
+      //FIXME: incorporate finding hashtags
+      db.collection('tweet_content').find({
+          $and: [
+          { sentiment: { $lte: sentiment+delta } },
+          { sentiment: { $gte: sentiment-delta } }
+              ]
+                }).toArray().then(function(data){
+                  console.log("FOUND SENTIMENT DATA: ", data);
+                    tweet_contents = data;
+      });
+
+      db.collection('images').find({}).toArray().then(function(data){
+        images = data;
+      });
+    }
+  });
+
+  /*******************************************************************/
+  /**********************PINNED TWEETS***************************/
+  /*******************************************************************/
   socket.on('pinned-tweet-create', function(data){
     console.log(tweet_handles);
     let sent = Number(data.sentiment);
@@ -76,8 +226,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('pinned-tweets-clear', function(data){
-    let to_clear = { action: 'CLEAR_ALL' }
-    app.io.emit('pinned-tweets', to_clear);
+    app.io.emit('pinned-tweets', { action: 'CLEAR_ALL' });
   });
 
   //FILTERS
@@ -86,12 +235,16 @@ io.on('connection', function (socket) {
   });
 
 
-  /******CLEARING STORE*******/
+  /*******************************************************************/
+  /**********************CLEARING STORE***************************/
+  /*******************************************************************/
   socket.on('on-clear-store', function(data){
     app.io.emit('clear-store', { clearingStore: 'true' });
   });
 
-  /******TIME CHANGE********/
+  /*******************************************************************/
+  /**********************TIME KEEPING*********************************/
+  /*******************************************************************/
   socket.on('on-time-change', function(data){
     console.log("SERVER SIDE TIME CHANGE: ", data);
     app.io.emit('time-change', data);
@@ -111,6 +264,7 @@ app.get('/api', function (req, res) {
 /*******************************************************************/
 /***********************TWEET DB ROUTES*****************************/
 /*******************************************************************/
+
 app.post('/api/upload-tweets', function(req,res){
   let request = req.body;
   let new_tweets = [];
@@ -125,177 +279,11 @@ app.post('/api/upload-tweets', function(req,res){
 
   console.log(new_tweets);
   db.collection('tweet_content').deleteMany({});
-  db.collection('tweet_content').insertMany(new_tweets);
+  setTimeout(function(){
+    db.collection('tweet_content').insertMany(new_tweets);
+  },2000);
 });
 
-
-/*******************************************************************/
-/**********************TRAFFIC GENERATION***************************/
-/*******************************************************************/
-app.use('/api/gen-traffic', function(req, res, next) {
-  //Query variables
-  const sent = Number(req.body.sentiment);
-  const sentFlux = Number(req.body.sentFlux);
-  const sentTimeRelease = Number(req.body.sentTimeRelease) * 1000 * 60;
-
-  const stock = Number(req.body.stock);
-  const stockFlux = Number(req.body.stockFlux);
-  const stockTimeRelease = Number(req.body.stockTimeRelease) * 1000 * 60;
-
-  const time = Number(req.body.time);
-
-  console.log("REQUEST BODY: ");
-  console.log(req.body);
-
-  if (requestSent) {
-    clearInterval(pollSentimentData);
-    clearInterval(pollStockData);
-    clearTimeout(timerTimeout);
-    clearInterval(pollTimer);
-  }
-
-  //Generate traffic
-    if (req.method === 'POST') {
-      console.log("\n" + 'About to start countdown!');
-      req.app.io.emit('traffic-gen', true );
-      req.app.io.emit('send-request', req.body);
-      res.send(req.body);
-
-      //Local variables
-      var timerIsRunning = true;
-      const pollTime = 1000;
-
-      //third placeholder variable for timeout comparisons
-      const incomingTimeout = minutesToMs(time);
-      timerTimeout = setTimeout(() => {
-        console.log("TIMED OUT");
-        timerIsRunning = false;
-        requestSent = false;
-
-        clearInterval(pollSentimentData);
-        clearInterval(pollStockData);
-        clearInterval(pollTimer);
-
-        req.app.io.emit('traffic-gen', false );
-      }, incomingTimeout);
-
-      requestSent = true;
-
-      //TIMER FOR ADMIN SCREEN
-      const timer_start = new Date().getTime();
-      var end = minutesToMs(time)
-      var now = new Date().getTime();
-      var endTime = now + end;
-
-      if(time > 0) {
-        if (timerIsRunning) {
-          pollTimer = setInterval(function(){
-            let now = new Date().getTime();
-            let difference = endTime - now;
-            req.app.io.emit('time-change', difference);
-            }, 1000);
-          }
-      }
-
-      //2: SENTIMENT
-      //First grab all the data from the DB
-      grabSentimentSensitiveData(sent, sentFlux);
-      pollSentimentData = setInterval(function(){
-        if (timerIsRunning) {
-          sendSentimentData(sent);
-        }
-      }, sentTimeRelease);
-
-      //3: STOCK
-      pollStockData = setInterval(function(){
-        if (timerIsRunning) {
-          sendStockData(stock, stockFlux);
-        }
-      }, stockTimeRelease);
-    }
-
-  //Stop all current traffic
-  else if (req.method === 'DELETE') {
-    console.log('About to stop traffic.');
-    res.send('Stopping traffic.');
-    clearInterval(pollSentimentData);
-    clearInterval(pollStockData);
-    clearTimeout(timerTimeout);
-    clearInterval(pollTimer);
-    req.app.io.emit('time-change', 0);
-    req.app.io.emit('traffic-gen', false );
-  }
-
-  /**********************************************************************/
-  /**********************************************************************/
-  /**********************************************************************/
-
-  var images = [];
-
-  function sendSentimentData(sentiment){
-    let handle = getRandomElement(tweet_handles);
-    let content = getRandomElement(tweet_contents);
-    let image_id = getRandomElement([0,1,2,3,4,5,6,7]);
-
-    let color = convertPercentToColor(red, blue, Number(content.sentiment));
-      let payload = {
-        handle: handle.handle,
-        image: image_id,
-        content: content.content,
-        sentiment: content.sentiment,
-        color: color,
-        time: Date.now(),
-        id: generateId()
-      };
-
-      sendOverSocket('sentiment-data', payload);
-  }
-
-  function sendStockData(stock, flux){
-    let delta = stock*flux;
-    let calculatedStock = getRandomFromRange(stock-delta, stock+delta);
-    let color = convertPercentToColor(red, blue, calculatedStock);
-    let newTime = new Date().getTime();
-
-    let payload = {
-      stock: calculatedStock,
-      color: color,
-      time: newTime
-    };
-
-    sendOverSocket('stock-data', payload);
-  }
-
-  function grabSentimentSensitiveData(sentiment, flux) {
-    // console.log('Sending sentiment data: ' + sentiment);
-    let delta = sentiment*flux;
-
-    db.collection('tweet_handles').find({}).toArray().then(function(data){
-      tweet_handles = data;
-    });
-
-    //FIXME: Doesn't return when sentiment is out of a certain range
-    //FIXME: incorporate finding hashtags
-    db.collection('tweet_content').find({
-        $and: [
-        { sentiment: { $lte: sentiment+delta } },
-        { sentiment: { $gte: sentiment-delta } }
-            ]
-              }).toArray().then(function(data){
-                console.log("FOUND SENTIMENT DATA: ", data);
-                  tweet_contents = data;
-    });
-
-    db.collection('images').find({}).toArray().then(function(data){
-      images = data;
-    });
-  }
-
-  function sendOverSocket(socket, payload) {
-    req.app.io.emit(socket, payload);
-  }
-
-});
 
 //Some useful helper functions
 function generateId(){

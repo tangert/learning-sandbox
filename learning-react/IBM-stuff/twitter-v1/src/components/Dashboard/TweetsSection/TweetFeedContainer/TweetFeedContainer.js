@@ -29,7 +29,7 @@ class TweetFeedContainer extends Component {
 
   render(){
     return (
-      <div className="Tweets-Container" style={{overflow: 'auto', maxHeight: 750, minHeight: 750}}>
+      <div className="Tweets-Container" style={{overflow: 'auto', maxHeight: 900}}>
         <FlipMove duration={750} easing="ease-in-out">
           { this.renderTweets() }
         </FlipMove>

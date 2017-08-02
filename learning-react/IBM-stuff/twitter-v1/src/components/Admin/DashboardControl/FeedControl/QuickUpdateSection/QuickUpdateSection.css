@@ -1,0 +1,93 @@
+.quick-update-content {
+  order: 1;
+  background-color: #222;
+  border-radius: 5px;
+  flex: 1;
+  transition: 0.2s ease-in-out;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+  .quick-update-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: -20px;
+  }
+
+    .quick-update-section-container {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+      .quick-update-title {
+        margin-bottom: 10px;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .quick-update-step-label {
+        margin-bottom: 5px;
+      }
+      .quick-update-slider {
+        width: 100px;
+        margin-bottom: 15px;
+      }
+
+      .quick-update-section-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+      }
+
+        .quick-update-section-top {
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .quick-update-buttons-section {
+          display: flex;
+          flex-direction: row;
+        }
+
+        .quick-update-button {
+          font-family: 'Maven Pro';
+          height: 80px;
+          width: 150px;
+          font-size: 3em;
+          align-self: center;
+          display: inline-block;
+          border-style: none;
+          border-radius: 10px;
+          background-color: transparent;
+          color: white;
+          margin: 5px;
+          transition: 0.1s ease-in-out;
+        }
+
+        .quick-update-button.pos{
+          order: 2;
+          background-color: rgba(158,222,242,0.5);
+        }
+
+        .quick-update-button.pos:hover{
+          background-color: rgba(158,222,242,0.8);
+        }
+
+        .quick-update-button.neg {
+          order: 1;
+          background-color: rgba(212,75,60,0.5);
+        }
+
+        .quick-update-button.neg:hover {
+          background-color: rgba(212,75,60,0.8);
+        }
+
+        .quick-update-button:active{
+          transform: scale(0.95);
+        }

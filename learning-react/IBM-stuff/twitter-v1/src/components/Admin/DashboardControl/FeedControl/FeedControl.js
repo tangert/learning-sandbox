@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import CustomRange from './CustomRange/CustomRange'
-import LastUpdatePanel from './LastUpdatePanel/LastUpdatePanel'
-import axios from 'axios';
-import './LiveInjection.css'
+import QuickUpdateSection from './QuickUpdateSection/QuickUpdateSection'
+import './FeedControl.css'
 
-class LiveInjection extends Component {
+class FeedControl extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,19 +14,25 @@ class LiveInjection extends Component {
 
   render() {
     return(
-      <div className = "live-injection-container">
-        <div className = "live-injection-content"
-             onMouseOver = {()=>this.props.updateHighlight('LIVE_INJECTION')}
-             style ={ this.props.isHighlighted ? {opacity: 1} : {opacity: 0.5}}>
+      <div className = "feed-control-container"
+      onMouseOver = {()=>this.props.updateHighlight('FEED_CONTROL')}
+      style ={ this.props.isHighlighted ? {opacity: 1} : {opacity: 0.5}}>
+
+        <div className = "quick-update-content">
+        <div className = "label-control-header">
+          <div className = "corner-label">QUICK UPDATE</div>
+        </div>
+
+        <div className = "quick-update-buttons">
+          <QuickUpdateSection title = "Sentiment" quickUpdate = {this.props.onQuickUpdate}/>
+          <QuickUpdateSection title = "Stock" quickUpdate = {this.props.onQuickUpdate}/>
+        </div>
+      </div>
+        <div className = "full-injection-content">
 
             <div className = "label-control-header">
-              <div className = "corner-label">LIVE INJECTION</div>
+              <div className = "corner-label">FULL INJECTION</div>
             </div>
-
-            <LastUpdatePanel time = {this.props.last_request_body.time}
-                             sentiment = {this.props.last_request_body.sentiment}
-                             stock = {this.props.last_request_body.stock}
-                             trading = {this.props.last_request_body.stock}/>
 
             <div className = "sliders-container">
                <CustomRange title = "Sentiment"
@@ -48,24 +53,10 @@ class LiveInjection extends Component {
                  onTimeChange = {this.props.onStockTimeReleaseChange}
                  />
             </div>
-
-
-            <div className = "time-set">
-              Traffic:
-              <input className ="time-input" name="time" type="number"
-                value={this.props.time != 0 ? this.props.time : ""}
-                onChange={this.props.onTimeChange}
-                max = "500"
-                min = "1"
-                placeholder={this.props.last_request_body.time}
-                >
-              </input>
-              minutes
-            </div>
         </div>
         </div>
     );
   }
 }
 
-export default LiveInjection;
+export default FeedControl;

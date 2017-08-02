@@ -113,7 +113,7 @@ class SocialMedia extends Component {
 
 
   generateId(){
-    return '_' + Math.random().toString(36).substr(2, 9);
+    return '_' + Math.random().toString(36).substr(2, 12);
   }
 
   onCreatePinnedTweet(){
@@ -133,7 +133,7 @@ class SocialMedia extends Component {
   }
 
   onClearPinnedTweets(){
-    socket.emit('pinned-tweets-clear', {});
+    socket.emit('pinned-tweets-clear');
   }
 
   renderPinnedTweets(){

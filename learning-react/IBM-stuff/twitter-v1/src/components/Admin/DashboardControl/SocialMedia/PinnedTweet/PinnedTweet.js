@@ -5,16 +5,11 @@ import Popover from './../../../Popover';
 class PinnedTweet extends Component {
   constructor(props){
     super(props);
-    this.openMore = this.openMore.bind(this);
     this.onDelete = this.onDelete.bind(this);
   }
 
-  //more button handler
-  openMore(){
-
-  }
-
   onDelete(){
+    console.log("ID: ", this.props.id);
     this.props.onDeletePinnedTweet(this.props.id);
   }
 

@@ -33,7 +33,7 @@
           justify-content: flex-start;
         }
         .twitter-title {
-          font-size: 25px;
+          font-size: 1.4em;
           /*background-color: red;*/
           font-weight: bold;
           opacity: 0.8;
@@ -103,8 +103,8 @@
   }
 
   .tweet-header-button {
-    height: 3em;
-    width: 3em;
+    height: 3.5em;
+    width: 3.5em;
     background: transparent;
     border-style: solid;
     border-width: 1px;
@@ -124,5 +124,5 @@
     border-color: white;
     color: #222;
     opacity: 1;
-    transform: scale(1.25);
+    transform: scale(1.1);
   }

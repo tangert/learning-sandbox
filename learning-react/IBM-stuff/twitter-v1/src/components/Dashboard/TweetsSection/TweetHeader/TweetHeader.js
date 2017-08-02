@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import AnimatedNumber from 'react-animated-number';
 import axios from 'axios';
 import './TweetHeader.css';
+import io from 'socket.io-client'
+
+const socket = io("http://localhost:3001");
 
 class TweetHeader extends Component {
   constructor(props){
@@ -40,15 +43,10 @@ class TweetHeader extends Component {
   playButtonHandler(){
     console.log("play button");
     const requestExists = Object.keys(this.props.last_request_body).length > 0;
-
     if(!this.props.isReceivingData && requestExists){
-      axios({
-        method: 'post',
-        url: '/api/gen-traffic',
-        data: this.props.last_request_body
-      });
+      socket.emit('traffic-gen', this.props.last_request_body);
     } else {
-      axios.delete('api/gen-traffic');
+      socket.emit('traffic-stop');
     }
   }
 

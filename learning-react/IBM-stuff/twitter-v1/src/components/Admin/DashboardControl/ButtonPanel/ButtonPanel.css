@@ -1,5 +1,4 @@
 .button-section {
-  margin-top: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -19,20 +18,22 @@
   font-size: 30px;
   transition: 0.25s ease-in-out;
   width: 100%;
+  font-family: 'Maven Pro';
+  text-transform: uppercase;
 }
 
   .button.update:hover {
-    background-color: white;
+    background-color: rgba(255,255,255,0.8);
     border-color: white;
     color: rgb(17,17,17);
   }
 
   .button.start {
-    border-color: rgb(155, 229, 130);
+    border-color: rgba(155, 229, 130,0.8);
   }
 
   .button.start:hover {
-    background-color: rgb(155, 229, 130);
+    background-color: rgba(155, 229, 130,0.8);
     color: white;
   }
 
@@ -41,8 +42,12 @@
   }
 
   .button.stop:hover, .button.reset:hover {
-    background-color: rgb(255, 97, 76);
+    background-color: rgba(255, 97, 76,0.8);
     color: white;
+  }
+
+  .button:active {
+    transform: scale(0.95);
   }
 
   button:focus {outline:0;}

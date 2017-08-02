@@ -59,6 +59,7 @@ class AppContainer extends Component {
             break;
           case 'DELETE':
             this.props.actions.deletePinnedTweet(data.payload);
+            break;
           case 'CLEAR_ALL':
             this.props.actions.clearPinnedTweets()
             break;
@@ -74,7 +75,6 @@ class AppContainer extends Component {
 
       //Time change
       socket.on('time-change', function(data){
-        console.log("TIME CHANGING: ", data);
         this.props.actions.updateTime(data);
       }.bind(this));
   }

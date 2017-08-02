@@ -60,7 +60,8 @@ class GraphSection extends Component {
             graph_data = {this.props.graph_data}
             tweet_data = {this.props.tweet_data}
             isReceivingData = {this.props.isReceivingData}
-            last_request_body = {this.props.last_request_body}/>
+            last_request_body = {this.props.last_request_body}
+            />
         </div>
 
         <div className= "market-info">
@@ -75,9 +76,6 @@ class GraphSection extends Component {
         <div className = "under-graph">
           <div className = "under-graph-viz">
             <div className = "sent-graph-wrapper">
-              <SentGraph className = "sent-graph"
-                tweet_data = {this.props.tweet_data}
-                isReceivingData = {this.props.isReceivingData}/>
             </div>
           </div>
         </div>

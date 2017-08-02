@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import ReactHighcharts from 'react-highcharts';
 import './StockGraph.css';
 
+import io from 'socket.io-client'
+const socket = io("http://localhost:3001");
+
 class StockGraph extends Component {
   constructor(props){
     super(props);
@@ -9,6 +12,9 @@ class StockGraph extends Component {
       config: {
         rangeSelector: {
           selected: 1
+        },
+        global: {
+            useUTC: false
         },
         title: {
           text: ""
@@ -26,6 +32,9 @@ class StockGraph extends Component {
           backgroundColor: "transparent",
           borderColor: "#111111",
           renderTo: 'chart',
+          style: {
+            fontFamily: 'Maven Pro'
+          }
         },
         credits: false,
         xAxis: {
@@ -38,9 +47,8 @@ class StockGraph extends Component {
                 y: 30,
             },
             lineColor: 'rgba(255,255,255,0.2)',
-            minRange: 10 * 2000,
-            tickLength: 10,
-            tickInterval: 10000,
+            tickLength: null,
+            tickInterval: null,
             type: 'datetime',
         },
 
@@ -71,8 +79,9 @@ class StockGraph extends Component {
             name: 'BAO Stock Data',
             animation: false,
             zIndex: 2,
-            lineWidth: 5
-        }],
+            lineWidth: 7.5,
+            pointInterval: 25000,
+          }],
         responsive: {
             rules: [{
                 condition: {
@@ -89,50 +98,74 @@ class StockGraph extends Component {
             }]
         }
       }
-    }
+    };
+    this.createInterval = this.createInterval.bind(this);
   }
+
+  createInterval(interval, time, chart) {
+    return
+  }
+
   componentDidMount() {
       var chart = this.refs.chart.getChart();
       var shiftFlagStock;
+      var interval;
 
-      // setTimeout(function(){
-      //   if(this.props.isReceivingData){
-      //     for(var i = 0; i < this.props.graph_data.length; i++) {
-      //       console.log("ADDING", this.props.graph_data.length);
-      //       shiftFlagStock = chart.series[0].data.length > 75;
-      //       let x = this.props.graph_data[i].time;
-      //       let y = this.props.graph_data[i].stock;
-      //       let stock_point = [x,y];
-      //       chart.series[0].addPoint(stock_point, false, shiftFlagStock);
-      //     }
-      //   }
-      // }.bind(this),1000);
+      setTimeout(function(){
+        interval = setInterval(function(){
+            try {
+              if(this.props.isReceivingData) {
+                console.log("CURRENT DATA LENGTH: ", chart.series[0].data.length);
+                const graph_data = this.props.graph_data;
+                const last_graph_point = graph_data.length-1;
+                const stock_x = graph_data[last_graph_point].time;
+                const stock_y =  graph_data[last_graph_point].stock;
 
-      setInterval(function(){
-        try {
-            if(this.props.isReceivingData) {
-              const graph_data = this.props.graph_data;
-              const last_graph_point = graph_data.length-1;
-              const stock_x = graph_data[last_graph_point].time;
-              const stock_y =  graph_data[last_graph_point].stock;
+                const shiftFlagStock =  chart.series[0].data.length > 250;
+                const stock_point = [stock_x,stock_y];
+                const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
 
-              const timeFlag = this.props.graph_data[last_graph_point].time - this.props.graph_data[last_graph_point-1].time;
-              const shiftFlagStock =  chart.series[0].data.length > 100;
+                //Object options, (bool) Redraw, (bool) Shift
+                chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+                chart.series[0].color = stockColor;
+                chart.series[0].options.color = stockColor;
+                chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000; // one day
+                chart.series[0].update(chart.series[0].options);
+              }
+          } catch(e) {}
+        }.bind(this), this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000);
+      }.bind(this), 2000);
 
-              const stock_point = [stock_x,stock_y];
-              const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+      //listen for changes to traffic generation to update the graph
+      socket.on('update-graph', function(data){
+        let time = data;
+        console.log("TIME: ", time);
+        clearInterval(interval);
 
-              //Object options, (bool) Redraw, (bool) Shift
-              chart.series[0].addPoint(stock_point, false, shiftFlagStock);
-              chart.series[0].color = stockColor;
-              chart.series[0].options.color = stockColor;
-              chart.series[0].update(chart.series[0].options);
+        interval = setInterval(function(){
+          try {
+          if(this.props.isReceivingData) {
+            console.log("CURRENT DATA LENGTH: ", chart.series[0].data.length);
+            const graph_data = this.props.graph_data;
+            const last_graph_point = graph_data.length-1;
+            const stock_x = graph_data[last_graph_point].time;
+            const stock_y =  graph_data[last_graph_point].stock;
+
+            const shiftFlagStock =  chart.series[0].data.length > 250;
+            const stock_point = [stock_x,stock_y];
+            const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+
+            //Object options, (bool) Redraw, (bool) Shift
+            chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+            chart.series[0].color = stockColor;
+            chart.series[0].options.color = stockColor;
+            chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000; // one day
+            chart.series[0].update(chart.series[0].options);
           }
-        }  catch(e) {
-          console.log(e);
-          console.log("Wait for your fucking data");
-        }
-      }.bind(this), this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000);
+        } catch(e) {}
+        }.bind(this),time);
+
+      }.bind(this));
   }
 
   render(){

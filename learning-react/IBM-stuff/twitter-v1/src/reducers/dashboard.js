@@ -43,7 +43,7 @@ export default function dashboard(state = initialState, action) {
   switch(action.type) {
     case UPDATE_STOCK:
       return {...state,
-              stock_data: [ ...state.stock_data.splice(0,100), action.payload ] }
+              stock_data: [ ...state.stock_data.splice(0,300), action.payload ] }
     case UPDATE_SENTIMENT:
       return { ...state,
               tweet_data: [ action.payload, ...state.tweet_data ],
