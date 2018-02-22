@@ -25,7 +25,7 @@ class GraphSection extends Component {
               const last = this.props.graph_data.length-1;
               const currentPoint = this.props.graph_data[last].stock;
               const priceDelta = currentPoint - this.props.graph_data[last-1].stock;
-              const percentDelta = priceDelta/currentPoint;
+              const percentDelta = (priceDelta/currentPoint) * 100;
               this.setState({
                 currentStock: currentPoint,
                 priceDelta: priceDelta,
@@ -61,6 +61,7 @@ class GraphSection extends Component {
             tweet_data = {this.props.tweet_data}
             isReceivingData = {this.props.isReceivingData}
             last_request_body = {this.props.last_request_body}
+            percent_delta = {this.state.percentDelta}
             />
         </div>
 

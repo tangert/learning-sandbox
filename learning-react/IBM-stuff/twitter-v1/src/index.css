@@ -22,10 +22,8 @@ body {
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
   height: 35px;
-  -webkit-animation: pulsate 5s ease-in-out;
-  -webkit-animation-iteration-count: infinite;
+  animation: pulsate 5s ease-in-out;
   transition: 0.15s linear;
 }
 

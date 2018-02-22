@@ -44,7 +44,7 @@ class GraphHeader extends Component {
           NYSE BAO
         </div>
 
-        <div className= { this.props.currentStock < 50 ? "bottom-neg" : "bottom-pos" }>
+        <div className= { this.props.percentDelta < 0 ? "bottom-neg" : "bottom-pos" }>
             <div className = "detail current-stock">
                 <AnimatedNumber
                   component="text"

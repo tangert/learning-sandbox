@@ -5,9 +5,11 @@ import { combineReducers } from 'redux';
 
 const appReducer = combineReducers({ api, dashboard });
 
-const rootReducer = (state, action) => {
+const emptyState = {};
+
+const rootReducer = (state = emptyState, action) => {
   if (action.type === CLEAR_STORE) {
-    state = undefined
+    state = {};
   } else {
     return appReducer(state, action)
   }

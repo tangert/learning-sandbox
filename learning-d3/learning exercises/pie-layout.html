@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Layout practice</title>
+        <script src = "../d3.js"></script>
+    </head>
+    
+    <style>
+        
+    </style>
+    
+    <body></body>
+    
+    <script>
+        
+        var dataSet = [1,3,4,2,5,6,1,2,3];
+        var width = 1000;
+        var height = 750;
+        
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width",width)
+                    .attr("height",height);
+        
+        var pie = d3.pie();
+        var outerRadius = width/3;
+        var innerRadius = width/5;
+        
+        //Form the arc for th entire pie
+        var arc = d3.arc()
+                    .innerRadius(innerRadius)
+                    .outerRadius(outerRadius);
+        
+        //Get a range of colors
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+        
+        var arcs = svg.selectAll("g.arc")
+                    .data(pie(dataSet))
+                    .enter()
+        
+                    //didn't exist yet, now it does
+                    .append("g")
+                    .attr("class","arc")
+        
+                    //need to translate it to the center of the screen using the radius
+                    .attr("transform","translate(" + outerRadius + "," + outerRadius + ")");
+        
+        arcs.append("path")
+            .attr("fill",function(d,i){
+                return color(i);
+            })
+            .attr("d",arc);
+        
+                    
+        
+    </script>
+</html>

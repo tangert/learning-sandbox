@@ -13,7 +13,6 @@ import GlobalStore from './store';
 
 import Dashboard from './components/Dashboard/Dashboard';
 import Admin from './components/Admin/Admin';
-import logo from './logo.svg';
 import io from 'socket.io-client';
 import AppContainer from './containers/AppContainer';
 import './index.css';

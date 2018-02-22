@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import history from 'history'
 
 import { createStore, combineReducers } from 'redux';
 import { bindActionCreators } from 'redux';
@@ -11,7 +10,9 @@ import * as Actions from './../actions/index.js';
 
 import Dashboard from './../components/Dashboard/Dashboard';
 import Admin from './../components/Admin/Admin';
-import logo from './../logo.svg';
+import logo_white from './../logo-white.svg';
+import logo_color from './../logo-color.svg';
+
 import io from 'socket.io-client';
 import './../index.css';
 
@@ -31,6 +32,11 @@ class AppContainer extends Component {
       }.bind(this));
 
       socket.on('stock-data', function(data){
+        this.props.actions.updateStock(data);
+      }.bind(this));
+
+      socket.on('quick-update-graph', function(data){
+        console.log("QUICK UPDATE FROM APP CONTAINER");
         this.props.actions.updateStock(data);
       }.bind(this));
 
@@ -81,10 +87,10 @@ class AppContainer extends Component {
 
   render(){
     return(
-        <Router history = {history}>
+        <Router>
           <div className = "app-container">
               <div className="App-header">
-                <Link to={'/'}> <img src={logo} className="App-logo" alt="logo" /> </Link>
+                <Link to={'/'}> <img src={logo_color} className="App-logo" /> </Link>
                 <Link to={'/admin'} className="admin-logo">Admin</Link>
               </div>
 

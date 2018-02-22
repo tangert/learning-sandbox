@@ -18,10 +18,10 @@ class DashboardControl extends Component {
     this.state = {
       sentiment: 0,
       sentFlux: 0.5,
-      sentTimeRelease: 0.1,
+      sentTimeRelease: 5,
       stock: 0,
       stockFlux: 0.5,
-      stockTimeRelease: 0.1,
+      stockTimeRelease: 5,
       last_request_body: {},
 
       social_media_highlighted: false,
@@ -32,6 +32,7 @@ class DashboardControl extends Component {
 
     this.updateHighlight = this.updateHighlight.bind(this);
     this.parseMSIntoReadableTime = this.parseMSIntoReadableTime.bind(this);
+    this.formatTimeValue = this.formatTimeValue.bind(this);
 
     this.onQuickUpdate = this.onQuickUpdate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -140,6 +141,7 @@ class DashboardControl extends Component {
         stockTimeRelease: this.state.stockTimeRelease
       };
       console.log(this.state);
+      socket.emit('on-quick-update-graph', data.stock);
       socket.emit('traffic-gen', data);
     });
   }
@@ -181,17 +183,18 @@ class DashboardControl extends Component {
   }
 
   onSentTimeReleaseChange = (value) => {
-    console.log("CHANGING");
+    console.log("CHANGING SENT TIME RELEASE: ", value);
     //in seconds
     this.setState({
-      sentTimeRelease: value
+      sentTimeRelease: this.formatTimeValue(value)
     });
   }
 
   onStockTimeReleaseChange = (value) => {
+    console.log("CHANGING STOCK TIME RELEASE: ", value);
     //in seconds
     this.setState({
-      stockTimeRelease: value
+      stockTimeRelease: this.formatTimeValue(value)
     });
   }
 
@@ -209,7 +212,28 @@ class DashboardControl extends Component {
 
   onClearStore() {
     this.onStopFeed();
-    socket.emit('on-clear-store', {});
+    socket.emit('on-clear-store');
+  }
+
+  formatTimeValue(value){
+    let new_value;
+    switch(value){
+      case 0:
+        new_value = 5;
+        break;
+      case 25:
+        new_value = 15;
+        break;
+      case 50:
+        new_value = 30;
+        break;
+      case 75:
+        new_value = 45;
+        break;
+      case 100:
+        new_value = 60;
+    }
+    return new_value;
   }
 
   render () {

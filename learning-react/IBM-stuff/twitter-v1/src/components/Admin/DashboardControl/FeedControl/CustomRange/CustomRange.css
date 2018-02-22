@@ -90,9 +90,9 @@ input:focus {
 }
 
 .range-time {
-  flex: 2;
+  flex: 1;
 }
 
 .time-release-label {
-  flex: 1;
+  min-width: 100px;
 }

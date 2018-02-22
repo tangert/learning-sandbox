@@ -4,6 +4,8 @@ import './StockGraph.css';
 
 import io from 'socket.io-client'
 const socket = io("http://localhost:3001");
+const blue = "rgb(137, 182, 255)";
+const red = "rgb(255, 97, 76)";
 
 class StockGraph extends Component {
   constructor(props){
@@ -110,12 +112,14 @@ class StockGraph extends Component {
       var chart = this.refs.chart.getChart();
       var shiftFlagStock;
       var interval;
+      let stockColor;
 
       setTimeout(function(){
         interval = setInterval(function(){
             try {
               if(this.props.isReceivingData) {
                 console.log("CURRENT DATA LENGTH: ", chart.series[0].data.length);
+                console.log("PERCENT DELTA ", this.props.percent_delta);
                 const graph_data = this.props.graph_data;
                 const last_graph_point = graph_data.length-1;
                 const stock_x = graph_data[last_graph_point].time;
@@ -123,20 +127,40 @@ class StockGraph extends Component {
 
                 const shiftFlagStock =  chart.series[0].data.length > 250;
                 const stock_point = [stock_x,stock_y];
-                const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+                this.props.percent_delta < 0 ? stockColor = red : stockColor = blue;
 
                 //Object options, (bool) Redraw, (bool) Shift
                 chart.series[0].addPoint(stock_point, false, shiftFlagStock);
                 chart.series[0].color = stockColor;
                 chart.series[0].options.color = stockColor;
-                chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000; // one day
+                chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 1000 : 1000; // one day
                 chart.series[0].update(chart.series[0].options);
               }
           } catch(e) {}
-        }.bind(this), this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000);
+        }.bind(this), this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 1000 : 1000);
       }.bind(this), 2000);
 
       //listen for changes to traffic generation to update the graph
+      socket.on('quick-update-graph', function(data){
+        if(this.props.isReceivingData) {
+          console.log("CURRENT DATA LENGTH: ", chart.series[0].data.length);
+          const graph_data = this.props.graph_data;
+          const last_graph_point = graph_data.length-1;
+          const stock_x = graph_data[last_graph_point].time;
+          const stock_y =  graph_data[last_graph_point].stock;
+
+          const shiftFlagStock =  chart.series[0].data.length > 250;
+          const stock_point = [stock_x,stock_y];
+          this.props.percent_delta < 0 ? stockColor = red : stockColor = blue;
+          //Object options, (bool) Redraw, (bool) Shift
+          chart.series[0].addPoint(stock_point, false, shiftFlagStock);
+          chart.series[0].color = stockColor;
+          chart.series[0].options.color = stockColor;
+          chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 1000 : 1000; // one day
+          chart.series[0].update(chart.series[0].options);
+        }
+      }.bind(this));
+
       socket.on('update-graph', function(data){
         let time = data;
         console.log("TIME: ", time);
@@ -146,6 +170,7 @@ class StockGraph extends Component {
           try {
           if(this.props.isReceivingData) {
             console.log("CURRENT DATA LENGTH: ", chart.series[0].data.length);
+            console.log("PERCENT DELTA ", this.props.percent_delta);
             const graph_data = this.props.graph_data;
             const last_graph_point = graph_data.length-1;
             const stock_x = graph_data[last_graph_point].time;
@@ -153,13 +178,14 @@ class StockGraph extends Component {
 
             const shiftFlagStock =  chart.series[0].data.length > 250;
             const stock_point = [stock_x,stock_y];
-            const stockColor = this.props.graph_data[last_graph_point].stock < 50 ? "rgb(255, 97, 76)" : "rgb(137, 182, 255)";
+
+            this.props.percent_delta < 0 ? stockColor = red : stockColor = blue;
 
             //Object options, (bool) Redraw, (bool) Shift
             chart.series[0].addPoint(stock_point, false, shiftFlagStock);
             chart.series[0].color = stockColor;
             chart.series[0].options.color = stockColor;
-            chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 60 * 1000 : 1000; // one day
+            chart.series[0].pointInterval = this.props.isReceivingData ? this.props.last_request_body.stockTimeRelease * 1000 : 1000; // one day
             chart.series[0].update(chart.series[0].options);
           }
         } catch(e) {}

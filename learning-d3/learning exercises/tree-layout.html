@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Layout practice</title>
+        <script src = "../d3.js"></script>
+    </head>
+    
+    <style>
+        .text-node {
+            font-family: Futura;
+        }
+        
+        .svg-container {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
+    </style>
+    
+    <body>
+        <input placeholder="input text here"></input>
+        <button onclick="transitionState()">Transition</button>
+        <div class = "viz-container"></div>
+    </body>
+    <script>
+        
+        const WORDS = 0;
+        const TREE = 1;
+        
+        var inputSentence = "I bought the flight to Miami";
+        var words = inputSentence.split(" ");
+        
+        function makeTreeObj(words){
+            
+            return {};
+        }
+        
+        var flatTree = {
+            "name": "Sentence",
+            "children": words
+        };
+        
+        var expandedTree = {
+            "name": words[1],
+            "children": [
+                { "name": words[0] },
+                {
+                    "name": words[3],
+                    "children": [
+                        { "name": words[2] },
+                        { "name": words[5],
+                          "children": [
+                              { "name": words[4] }
+                          ]
+                        }
+                    ]
+                }
+            ]
+        };
+                        
+        var width = 1000;
+        var height = 750;
+        var wordMargin = 50;
+        var currentState = WORDS;
+        
+        var svg = d3.select(".viz-container")
+                    .append("svg")
+                    .attr("class","svg-container")
+                    .attr("width",width)
+                    .attr("height",height);
+        
+        
+        var g = svg.append("g");
+            
+        g.attr("width",width).attr("height",height);
+        
+        console.log("Initial flat tree: " + flatTree);
+
+        
+        var treeLayout = d3.tree().size([height*0.8, width*0.5]);
+        var nodes = d3.hierarchy(flatTree);
+        nodes = treeLayout(nodes);
+
+        
+        var node = g.selectAll(".text-node")
+            .data(nodes.descendants())
+            .enter()
+            .filter(function(d,i){
+                return d.parent;
+            })
+            .append("g")
+            .attr("class", "text-node")
+            .attr("transform", function(d,i) { 
+                return "translate(" + d.x/2 + "," + d.y/2 + ")";  
+            });
+
+        //Add circles to each node
+//        node.append("circle").attr("r",10);
+
+        //Add text to each node
+        node.append("text")
+            .attr("dy", ".35em")
+            .attr("y", 20)
+            .attr("text-anchor","middle")
+            .text(function(d,i){
+                  return d.data; 
+            });
+        
+        
+        // Called to transition between text elements and tree 
+        function transitionState(){
+            
+            //Transition to expanded tree
+            if (currentState === WORDS) {
+                
+                //Need to take current data laid out
+                //transition based on some sort of ID
+                console.log("transitioning");
+                var nodes = treeLayout(d3.hierarchy(expandedTree));
+                                
+                g.selectAll(".text-node")
+                    .data(nodes.descendants())
+                    .transition()
+                    .duration(500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("transform", function(d) {
+                        return "translate(" + d.x + "," + d.y/2 + ")";
+                    });
+                
+                currentState = TREE;
+                
+            }
+            
+            //Transition to flattened tree
+            else {  
+                
+                var nodes = d3.hierarchy(flatTree);
+                nodes = treeLayout(nodes);                
+                
+                //Use node.leaves() going back because of the new root
+                g.selectAll(".text-node")
+                    .data(nodes.leaves())
+                    .transition()
+                    .duration(500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("transform", function(d) {
+                        return "translate(" + d.x + "," + d.y/2 + ")";  
+                    });
+                
+                currentState = WORDS;
+            }
+        }
+        
+        function focusOnLevel(level){
+            //takes in a level and calcualtes new sizes for each item
+        }
+        
+
+        
+         
+    </script>
+</html>

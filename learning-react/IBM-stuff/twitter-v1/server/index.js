@@ -7,6 +7,7 @@ const app = express();
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+const image_dir = './profile-pics';
 //Server constants
 const PORT = process.env.PORT || 3001;
 const server = require('http').Server(app);
@@ -42,7 +43,11 @@ io.on('connection', function (socket) {
   socket.emit('server-connect', { connectedToServer: 'true' });
 
   db.collection('tweet_handles').find({}).toArray().then(function(data){
-    tweet_handles = data;
+    if(data.length < 1) {
+      tweet_handles = false;
+    } else {
+      tweet_handles = data;
+    }
   });
 
   socket.on('client-connect', function (data) {
@@ -64,15 +69,27 @@ io.on('connection', function (socket) {
     app.io.emit('traffic-gen', false );
   });
 
+  //graph quick update
+  socket.on('on-quick-update-graph', function(data){
+    let color = convertPercentToColor(red, blue, data);
+    let newTime = new Date().getTime();
+    let payload = {
+      stock: data,
+      color: color,
+      time: newTime
+    };
+    app.io.emit('quick-update-graph', payload);
+  });
+
   socket.on('traffic-gen', function(data){
     console.log('About to start traffic');
     const sent = data.sentiment;
     const sentFlux = data.sentFlux;
-    const sentTimeRelease = data.sentTimeRelease * 1000 * 60;
+    const sentTimeRelease = data.sentTimeRelease * 1000;
 
     const stock = data.stock;
     const stockFlux = data.stockFlux;
-    const stockTimeRelease = data.stockTimeRelease * 1000 * 60;
+    const stockTimeRelease = data.stockTimeRelease * 1000;
 
     if (requestSent) {
       clearInterval(pollSentimentData);
@@ -121,7 +138,11 @@ io.on('connection', function (socket) {
       grabSentimentSensitiveData(sent, sentFlux);
       pollSentimentData = setInterval(function(){
         if (timerIsRunning) {
-          sendSentimentData(sent);
+          if(tweet_contents !== false && tweet_handles !== false) {
+            sendSentimentData(sent);
+          } else {
+            clearInterval(pollSentimentData);
+          }
         }
       }, sentTimeRelease);
 
@@ -146,7 +167,7 @@ io.on('connection', function (socket) {
       let color = convertPercentToColor(red, blue, Number(content.sentiment));
         let payload = {
           handle: handle.handle,
-          image: image_id,
+          image: 9,
           content: content.content,
           sentiment: content.sentiment,
           color: color,
@@ -177,7 +198,11 @@ io.on('connection', function (socket) {
       let delta = sentiment*flux;
 
       db.collection('tweet_handles').find({}).toArray().then(function(data){
-        tweet_handles = data;
+        if(data.length < 1) {
+          tweet_handles = false;
+        } else {
+          tweet_handles = data;
+        }
       });
 
       //FIXME: Doesn't return when sentiment is out of a certain range
@@ -188,12 +213,15 @@ io.on('connection', function (socket) {
           { sentiment: { $gte: sentiment-delta } }
               ]
                 }).toArray().then(function(data){
-                  console.log("FOUND SENTIMENT DATA: ", data);
-                    tweet_contents = data;
-      });
+                  console.log("DATA FROM RESULTS:", data);
 
-      db.collection('images').find({}).toArray().then(function(data){
-        images = data;
+                  if(data.length < 1) {
+                    console.log("no data: length: ", data.length);
+                    tweet_contents = false;
+                  } else {
+                    console.log("FOUND SOME DATA?", data);
+                    tweet_contents = data;
+                  }
       });
     }
   });
@@ -202,14 +230,13 @@ io.on('connection', function (socket) {
   /**********************PINNED TWEETS***************************/
   /*******************************************************************/
   socket.on('pinned-tweet-create', function(data){
-    console.log(tweet_handles);
     let sent = Number(data.sentiment);
     let handle = getRandomElement(tweet_handles);
 
     let payload = {
       id: generateId(),
       handle: handle.handle,
-      image: getRandomElement([0,1,2,3,4,5,6,7,8]),
+      image: getRandomElement([0,1,2,3,4,5,6,7,8,9]),
       content: data.content,
       sentiment: sent,
       color: convertPercentToColor(red, blue, sent),
@@ -279,6 +306,7 @@ app.post('/api/upload-tweets', function(req,res){
 
   console.log(new_tweets);
   db.collection('tweet_content').deleteMany({});
+
   setTimeout(function(){
     db.collection('tweet_content').insertMany(new_tweets);
   },2000);

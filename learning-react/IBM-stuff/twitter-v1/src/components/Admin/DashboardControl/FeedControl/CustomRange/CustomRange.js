@@ -10,11 +10,21 @@ const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider);
 const Handle = Slider.Handle;
 
-const marks = {
+const flux_marks = {
   0: 'Flat',
+  25: "25%",
   50: '50%',
+  75: "75%",
   100: 'Max flux'
 };
+
+const time_marks = {
+  0: '5s',
+  25: '15s',
+  50: '30s',
+  75: '45s',
+  100: '1m'
+}
 
 const handle = (props) => {
   const { value, dragging, index, ...restProps } = props;
@@ -38,10 +48,10 @@ class CustomRange extends React.Component {
   }
 
   formatTime(time) {
-    if(time < 1) {
-      return this.props.timeValue*60 + "s";
+    if(time > 45) {
+      return Math.floor(this.props.timeValue/60) + "m";
     } else {
-      return this.props.timeValue + "m";
+      return this.props.timeValue + "s";
     }
   }
 
@@ -52,7 +62,7 @@ class CustomRange extends React.Component {
           <h1 className="main-value">{this.props.title}: <span className = "val-detail">{this.props.value}</span></h1>
             <div className ="flux">
               <div className = "flux-title">Flux: </div>
-              <Slider className = "slider" min={0} marks={marks} step={5} onChange={this.props.onFluxChange} defaultValue={0} />
+              <Slider className = "slider" min={0} marks={flux_marks} step={10} onChange={this.props.onFluxChange} defaultValue={0} />
             </div>
         </div>
 
@@ -71,22 +81,9 @@ class CustomRange extends React.Component {
           tipFormatter={value => `${value}%`}
         />
 
-      <div className = "range-time-container">
+        <div className = "range-time-container">
           <div className = "time-release-label">Release: {this.formatTime(this.props.timeValue)}</div>
-              <Range
-                className = "range-time"
-                min={0.1}
-                max={5}
-                step={0.1}
-                defaultValue={0.1}
-                value={this.props.timeValue}
-                onChange={this.props.onTimeChange}
-                onAfterChange={this.props.onAfterTimeChange}
-                trackStyle={{ backgroundColor: 'rgba(255,255,255,0.5)', height: 5 }}
-                railStyle={{ backgroundColor: 'rgba(255,255,255,0.1)', height: 5 }}
-                handleStyle={[{ backgroundColor: 'rgba(255,255,255,0.9)', width: 10, height: 10 }]}
-                tipFormatter={value => `${value}m`}
-              />
+            <Slider className = "slider" min={0} marks={time_marks} step={25} onChange={this.props.onTimeChange} defaultValue={0} />
         </div>
       </div>
     );

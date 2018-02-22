@@ -14,6 +14,7 @@ class Tweet extends Component {
       var updateInterval;
       this.updateTime = this.updateTime.bind(this);
       this.formatTime = this.formatTime.bind(this);
+      this.formatContent = this.formatContent.bind(this);
     }
 
     updateTime() {
@@ -40,6 +41,14 @@ class Tweet extends Component {
       this.setState({
         formattedTime: newTime
       });
+    }
+
+    formatContent(content){
+      if(content.length > 50) {
+        return content.substring(0, 50) + "...";
+      } else {
+        return content;
+      }
     }
 
     componentDidMount() {
@@ -80,7 +89,7 @@ class Tweet extends Component {
                </div>
 
                <div className = "bottom-wrapper">
-                 <p className="tweet-content">{this.props.content}</p>
+                 <p className="tweet-content">{this.formatContent(this.props.content)}</p>
                </div>
              </div>
 
