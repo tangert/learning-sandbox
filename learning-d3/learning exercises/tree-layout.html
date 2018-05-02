@@ -24,22 +24,21 @@
     </body>
     <script>
         
+        //Different states for the transition
         const WORDS = 0;
         const TREE = 1;
         
+        //Input variables
         var inputSentence = "I bought the flight to Miami";
         var words = inputSentence.split(" ");
         
-        function makeTreeObj(words){
-            
-            return {};
-        }
-        
+        //Initial state of the "tree". Essentially just the sentence
+        //represented as a 1 level tree.
         var flatTree = {
-            "name": "Sentence",
             "children": words
         };
         
+        //The expanded and processed version of the tree.
         var expandedTree = {
             "name": words[1],
             "children": [
@@ -57,12 +56,16 @@
                 }
             ]
         };
-                        
+          
+        //Basic sizing
         var width = 1000;
         var height = 750;
         var wordMargin = 50;
+        
+        //Store the state of the transition
         var currentState = WORDS;
         
+        //Setup the SVG container
         var svg = d3.select(".viz-container")
                     .append("svg")
                     .attr("class","svg-container")
@@ -71,52 +74,51 @@
         
         
         var g = svg.append("g");
-            
-        g.attr("width",width).attr("height",height);
         
-        console.log("Initial flat tree: " + flatTree);
-
         
+        //Calculate the initial tree layout
         var treeLayout = d3.tree().size([height*0.8, width*0.5]);
         var nodes = d3.hierarchy(flatTree);
         nodes = treeLayout(nodes);
-
         
+        //Create the nodes
         var node = g.selectAll(".text-node")
             .data(nodes.descendants())
             .enter()
             .filter(function(d,i){
+                //only return nodes with a parent, e.g. not the root node
+                // for the flat tree
                 return d.parent;
             })
             .append("g")
             .attr("class", "text-node")
             .attr("transform", function(d,i) { 
-                return "translate(" + d.x/2 + "," + d.y/2 + ")";  
+                return "translate(" + d.x + "," + d.y/2 + ")";  
             });
-
-        //Add circles to each node
-//        node.append("circle").attr("r",10);
-
+        
         //Add text to each node
         node.append("text")
             .attr("dy", ".35em")
             .attr("y", 20)
             .attr("text-anchor","middle")
-            .text(function(d,i){
+            .text(function(d){
                   return d.data; 
             });
         
+        //Add circles to each node
+        //node.append("circle").attr("r",10);
         
-        // Called to transition between text elements and tree 
+        
+        /**********************
+        TRANSITION FUNCTION
+        **********************/
+        // MARK: Called to transition between text elements and tree 
         function transitionState(){
             
             //Transition to expanded tree
             if (currentState === WORDS) {
                 
-                //Need to take current data laid out
-                //transition based on some sort of ID
-                console.log("transitioning");
-                var nodes = treeLayout(d3.hierarchy(expandedTree));
+                nodes = treeLayout(d3.hierarchy(expandedTree));
                                 
                 g.selectAll(".text-node")
                     .data(nodes.descendants())
@@ -134,10 +136,8 @@
             //Transition to flattened tree
             else {  
                 
-                var nodes = d3.hierarchy(flatTree);
-                nodes = treeLayout(nodes);                
-                
-                //Use node.leaves() going back because of the new root
+                nodes = treeLayout(d3.hierarchy(flatTree));                
+
                 g.selectAll(".text-node")
                     .data(nodes.leaves())
                     .transition()
@@ -151,12 +151,17 @@
             }
         }
         
+        // MARK: expands the size of a selected level of the tree
         function focusOnLevel(level){
-            //takes in a level and calcualtes new sizes for each item
+            if(currentState === TREE) {
+                
+            }
         }
         
-
+        // FIXME: write this eventually
+        function expandFlatTree(flatTree){
+            
+        }
         
-         
     </script>
 </html>

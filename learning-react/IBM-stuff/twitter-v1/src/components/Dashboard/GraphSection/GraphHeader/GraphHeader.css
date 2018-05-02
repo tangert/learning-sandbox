@@ -22,6 +22,35 @@
       font-weight: 600;
     }
 
+    .title-detail-livefeed {
+      margin-left: 20px;
+      background-color: rgba(255,255,255,0.20);
+      padding: 10px 10px 10px 7.5px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-size: 0.55em;
+      border-radius: 5px;
+      opacity: 0.65;
+      font-weight: 600;
+
+      animation-duration: 2500ms;
+      animation-name: blink;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes blink {
+      0% {
+          color:rgba(255,255,255,0.25);
+      }
+      75% {
+          color:rgba(255,255,255,0.85);
+        }
+      100% {
+        color:rgba(255,255,255,0.25);
+
+      }
+    }
+
     .current-time {
       font-weight: lighter;
       opacity: 0.5;

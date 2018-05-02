@@ -79,7 +79,7 @@ class Tweet extends Component {
         <div>
            <div className= "tweet-container" style={{backgroundColor: this.props.color}}>
                <div className = "left">
-               <div className="pic"><img src= {require('../../../../static/profile-pics/image' + this.props.image + '.jpeg')}/></div>
+                <div className="pic"></div>
              </div>
 
              <div className = "right">

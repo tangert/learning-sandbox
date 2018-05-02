@@ -35,7 +35,7 @@ class GraphHeader extends Component {
 
         <div className="top">
           <h1 className="stock-title">Bane&Ox
-            <span className="title-detail"> Live Feed</span>
+            <span className="title-detail-livefeed"> Live Feed</span>
           </h1>
           <Clock/>
         </div>

@@ -32,6 +32,7 @@ class StockGraph extends Component {
         },
         chart: {
           backgroundColor: "transparent",
+          height: "55%",
           borderColor: "#111111",
           renderTo: 'chart',
           style: {
@@ -189,7 +190,7 @@ class StockGraph extends Component {
             chart.series[0].update(chart.series[0].options);
           }
         } catch(e) {}
-        }.bind(this),time);
+      }.bind(this),time);
 
       }.bind(this));
   }
